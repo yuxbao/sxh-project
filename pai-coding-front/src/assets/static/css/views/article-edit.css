@@ -1,13 +1,14 @@
 .edit-nav {
-  background-color: #fff;
+  background-color: var(--pai-bg-white-fff);
   height: 50px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 5%);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
   z-index: 3;
   padding: 0 10px;
+  border-bottom: 1px solid var(--pai-border-color-1);
 }
 
 .edit-title-input::placeholder{
@@ -21,7 +22,7 @@
 
 .edit-save {
   background: var(--pai-brand-4-disable);
-  border-color: #d9d9d9;
+  border-color: var(--pai-border-color-1);
   text-shadow: none;
   box-shadow: none;
   width: 66px;
@@ -31,7 +32,7 @@
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  color: #ccc;
+  color: var(--pai-color-3-gray);
   cursor: not-allowed;
   margin-right: 20px;
 }
@@ -75,32 +76,33 @@
 }
 
 .editor-toolbar {
-  border-bottom: 1px solid #e1e4e8 !important;
-  border-top: 1px solid #e1e4e8 !important;
-  background-color: #fafbfc !important;
+  border-bottom: 1px solid var(--pai-border-color-1) !important;
+  border-top: 1px solid var(--pai-border-color-1) !important;
+  background-color: var(--pai-bg-light-2) !important;
+  border-radius: 12px 12px 0 0;
 }
 
 .editor-preview-active {
-  background-color: #fff !important;
+  background-color: var(--pai-bg-white-fff) !important;
 }
 
 .editor-preview-side .editor-preview-active-side .editor-statusbar {
   text-align: left !important;
-  border-top: 1px solid #fff !important;
+  border-top: 1px solid var(--pai-bg-white-fff) !important;
   font-size: 12px !important;
-  background-color: #fff !important;
+  background-color: var(--pai-bg-white-fff) !important;
 }
 
 .editor-preview-active-side {
-  background-color: #fff !important;
+  background-color: var(--pai-bg-white-fff) !important;
 }
 
 blockquote {
-  color: #666;
+  color: var(--pai-color-4-gray);
   padding: 1px 23px;
   margin: 22px 0;
-  border-left: 4px solid #cbcbcb;
-  background-color: #f8f8f8;
+  border-left: 4px solid var(--pai-border-color-1);
+  background-color: var(--pai-bg-light-2);
 }
 
 .modal-content {
@@ -162,9 +164,11 @@ blockquote {
   line-height: 32px;
   text-align: center;
   margin-right: 10px;
-  background-color: var(--pai-bg-light-2);
+  background-color: var(--pai-bg-neutral);
   color: var(--pai-color-4-gray);
   cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 999px;
 }
 
 .form-check {
@@ -175,7 +179,7 @@ blockquote {
   height: 30px;
   border-radius: 4px;
   /* margin-right: 10px; */
-  background-color: #f8f9fa;
+  background-color: var(--pai-bg-neutral);
   color: #919aa6;
   cursor: pointer;
   position: relative;
@@ -196,13 +200,14 @@ blockquote {
 }
 .form-selectgroup-item--active,
 .form-check--active {
-  background-color: var(--pai-brand-7-light);
+  background-color: var(--pai-bg-neutral);
   color: var(--pai-brand-1-normal);
+  border: 1px solid var(--pai-brand-1-normal);
 }
 
 .form-selectgroup-item:hover,
 .form-check:hover {
-  background-color: var(--pai-brand-7-light);
+  background-color: var(--pai-bg-neutral);
 }
 
 .form-selectgroup-input {
@@ -212,10 +217,17 @@ blockquote {
 
 .form-textarea {
   height: 100px !important;
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background-color: var(--pai-bg-neutral);
+  border: 1px solid var(--pai-border-color-1);
   resize: none;
   line-height: 22px;
+  border-radius: 12px;
+}
+
+.editor-toolbar,
+.editor-preview-active,
+.editor-preview-active-side {
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
 }
 
 .form-textarea-limit {
@@ -384,7 +396,7 @@ blockquote {
 }
 
 .btn-getdistill:hover {
-  background-color: var(--pai-brand-7-light);
+  background-color: var(--pai-bg-neutral);
   color: var(--pai-brand-2-hover);
 }
 

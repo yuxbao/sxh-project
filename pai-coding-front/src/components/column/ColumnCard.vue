@@ -1,8 +1,8 @@
 <template>
   <!-- 专栏详情 -->
   <div>
-    <a
-      :href="'/column/' + column.columnId + '/1'"
+    <RouterLink
+      :to="'/column/' + column.columnId + '/1'"
       class="item"
     >
       <div class="poster">
@@ -23,7 +23,7 @@
         </div>
 
         <div class="author">
-            <a :href="'/user/' + column.author" class="flex">
+            <RouterLink :to="'/user/' + column.author" class="flex" @click.stop>
               <div class="flex justify-around">
                 <el-avatar size="small">
                   <img :src="column.authorAvatar"
@@ -45,7 +45,7 @@
               </div>
 
 
-            </a>
+            </RouterLink>
         </div>
         <div class="other">
           <div class="messages">
@@ -76,11 +76,12 @@
           {{column.introduction}}
         </span>
       </div>
-    </a>
+    </RouterLink>
   </div>
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 
 import type { ColumnVoType } from '@/http/ResponseTypes/ColumnType/ColumnListVoType'
 

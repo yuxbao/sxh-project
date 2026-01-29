@@ -3,8 +3,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000;
-  color: #fff;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--pai-color-3-black);
+  border-top: 1px solid var(--pai-border-color-1);
+  box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(16px);
   flex-direction: column;
   font-size: 14px;
 }
@@ -40,7 +43,7 @@
 }
 
 .foot .visit_cnt {
-  color: #e96900;
+  color: var(--pai-brand-1-normal);
 }
 
 /* 宽屏布局 */

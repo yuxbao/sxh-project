@@ -2,14 +2,16 @@
   <el-card>
     <template #default>
       <div class="flex text-sm justify-between">
-        <span class="flex">
-          <el-avatar size="large">
+        <span class="flex items-center">
+          <el-avatar size="large" @click="goToUserHome" class="cursor-pointer">
             <img :src="user.avatar">
           </el-avatar>
-          <span class="center-content ml-2 text-lg">{{user.userName}}</span>
+          <span class="center-content ml-2 text-lg cursor-pointer hover:text-blue-500"
+            @click="goToUserHome">{{ user.userName }}</span>
         </span>
         <span class="center-content" v-if="global.user.id == route.params['userId']">
-          <el-button @click="follow" :disabled="btnDisabled" round>{{userFollowed? '取消关注': '关注'}}</el-button>
+
+          <el-button @click="follow" :disabled="btnDisabled" round>{{ userFollowed ? '取消关注' : '关注' }}</el-button>
         </span>
       </div>
     </template>
@@ -23,7 +25,7 @@ import { doPost } from '@/http/BackendRequests'
 import type { CommonResponse } from '@/http/ResponseTypes/CommonResponseType'
 import { USER_FOLLOW_URL } from '@/http/URL'
 import { useGlobalStore } from '@/stores/global'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
 const globalStore = useGlobalStore()
 const global = globalStore.global
@@ -33,7 +35,13 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
+const router = useRouter()
+
 const userFollowed = ref(props.user.followed)
+
+const goToUserHome = () => {
+  router.push({ path: `/user/${props.user.userId}` })
+}
 
 // 关注/取消关注
 const btnDisabled = ref(false)
@@ -52,12 +60,10 @@ const follow = () => {
     })
     .finally(() => {
       btnDisabled.value = false
-  })
+    })
 }
 
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

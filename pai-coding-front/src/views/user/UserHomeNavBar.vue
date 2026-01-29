@@ -1,54 +1,54 @@
 <template>
-  <el-tabs
-    v-model="activeName"
-    type="card"
-    class="demo-tabs"
-    @tab-click="handleClick"
-    @tab-change="handleChange"
-  >
-    <el-tab-pane label="文章" name="articlesTab" lazy >
+  <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick" @tab-change="handleChange">
+    <el-tab-pane label="文章" name="articlesTab" lazy>
       <template #default>
         <UserHomeNavBarArticleList :articles="articles" empty-description="暂无发布的文章"></UserHomeNavBarArticleList>
         <!--        分页组件-->
-        <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentArticlesPage" v-model:page-size="articlesPageSize" layout="sizes, prev, pager, next" :page-count="totalArticlesPage" :default-current-page="1"
-                       @update:page-size="onArticlesPageSizeChange" @update:current-page="onArticlesCurrentPageChange"
-        />
+        <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentArticlesPage"
+          v-model:page-size="articlesPageSize" layout="sizes, prev, pager, next" :page-count="totalArticlesPage"
+          :default-current-page="1" @update:page-size="onArticlesPageSizeChange"
+          @update:current-page="onArticlesCurrentPageChange" />
       </template>
     </el-tab-pane>
-    <el-tab-pane v-if="global.user.id == userId" label="浏览记录" name="historyTab" lazy>
+    <el-tab-pane v-if="global.user.id == route.params.userId" label="浏览记录" name="historyTab" lazy>
       <UserHomeNavBarArticleList :articles="historyArticles" empty-description="暂无浏览记录"></UserHomeNavBarArticleList>
       <!--        分页组件-->
-      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentHistoryArticlesPage" v-model:page-size="historyArticlesPageSize" layout="sizes, prev, pager, next" :page-count="totalHistoryArticlesPage" :default-current-page="1"
-                     @update:page-size="onHistoryArticlesPageSizeChange" @update:current-page="onHistoryArticlesCurrentPageChange"
-      />
+      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentHistoryArticlesPage"
+        v-model:page-size="historyArticlesPageSize" layout="sizes, prev, pager, next"
+        :page-count="totalHistoryArticlesPage" :default-current-page="1"
+        @update:page-size="onHistoryArticlesPageSizeChange" @update:current-page="onHistoryArticlesCurrentPageChange" />
     </el-tab-pane>
     <el-tab-pane label="关注列表" name="followTab" lazy>
       <UserFollowedList :user="followUsers" empty-description="暂无关注的用户"></UserFollowedList>
       <!--        分页组件-->
-      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentFollowersPage" v-model:page-size="followersPageSize" layout="sizes, prev, pager, next" :page-count="totalFollowersPage" :default-current-page="1"
-                     @update:page-size="onFollowersPageSizeChange" @update:current-page="onFollowersCurrentPageChange"
-      />
+      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentFollowersPage"
+        v-model:page-size="followersPageSize" layout="sizes, prev, pager, next" :page-count="totalFollowersPage"
+        :default-current-page="1" @update:page-size="onFollowersPageSizeChange"
+        @update:current-page="onFollowersCurrentPageChange" />
     </el-tab-pane>
     <el-tab-pane label="粉丝列表" name="fansTab" lazy>
       <UserFollowedList :user="fans" empty-description="暂无粉丝"></UserFollowedList>
       <!--        分页组件-->
-      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentFansPage" v-model:page-size="fansPageSize" layout="sizes, prev, pager, next" :page-count="totalFansPage" :default-current-page="1"
-                     @update:page-size="onFansPageSizeChange" @update:current-page="onFansCurrentPageChange">
+      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentFansPage"
+        v-model:page-size="fansPageSize" layout="sizes, prev, pager, next" :page-count="totalFansPage"
+        :default-current-page="1" @update:page-size="onFansPageSizeChange"
+        @update:current-page="onFansCurrentPageChange">
       </el-pagination>
     </el-tab-pane>
     <el-tab-pane label="收藏" name="starsTab" lazy>
       <UserHomeNavBarArticleList :articles="starsArticles" empty-description="暂无收藏的文章"></UserHomeNavBarArticleList>
       <!--        分页组件-->
-      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentStarArticlesPage" v-model:page-size="starArticlesPageSize" layout="sizes, prev, pager, next" :page-count="totalStarArticlesPage" :default-current-page="1"
-                     @update:page-size="onStarArticlesPageSizeChange" @update:current-page="onStarArticlesCurrentPageChange"
-      />
+      <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentStarArticlesPage"
+        v-model:page-size="starArticlesPageSize" layout="sizes, prev, pager, next" :page-count="totalStarArticlesPage"
+        :default-current-page="1" @update:page-size="onStarArticlesPageSizeChange"
+        @update:current-page="onStarArticlesCurrentPageChange" />
     </el-tab-pane>
   </el-tabs>
 
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import UserHomeNavBarArticleList from '@/views/user/nav-bar/UserHomeNavBarArticleList.vue'
@@ -70,18 +70,39 @@ const route = useRoute()
 const router = useRouter()
 const globalStore = useGlobalStore()
 const global = globalStore.global
-const userId = route.params.userId
 
 const activeName = ref(route.params.typeName || 'articlesTab')
+
+watch(() => route.params.userId, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    currentArticlesPage.value = 1
+    currentHistoryArticlesPage.value = 1
+    currentStarArticlesPage.value = 1
+    currentFollowersPage.value = 1
+    currentFansPage.value = 1
+    if (activeName.value == 'articlesTab') {
+      getArticles()
+    } else if (activeName.value == 'historyTab') {
+      getHistoryArticles()
+    } else if (activeName.value == 'starsTab') {
+      getStarsArticles()
+    } else if (activeName.value == 'followTab') {
+      getFollowUsers()
+    } else if (activeName.value == 'fansTab') {
+      getFans()
+    }
+  }
+})
+
 // 用户发表的文章的列表
 const currentArticlesPage = ref(1)
 const totalArticlesPage = ref(0)
 const articlesPageSize = ref(10)
 
-const articles = ref<BasicPageType<ArticleType>>({...defaultBasicPage})
+const articles = ref<BasicPageType<ArticleType>>({ ...defaultBasicPage })
 const getArticles = () => {
   doGet<CommonResponse>(USER_ARTICLE_LIST_URL, {
-    userId: userId,
+    userId: route.params.userId,
     currentPage: currentArticlesPage.value,
     pageSize: articlesPageSize.value
   })
@@ -106,10 +127,10 @@ const onArticlesPageSizeChange = (newPageSize: number) => {
 const currentHistoryArticlesPage = ref(1)
 const totalHistoryArticlesPage = ref(0)
 const historyArticlesPageSize = ref(10)
-const historyArticles = ref<BasicPageType<ArticleType>>({...defaultBasicPage})
+const historyArticles = ref<BasicPageType<ArticleType>>({ ...defaultBasicPage })
 const getHistoryArticles = () => {
   doGet<CommonResponse>(USER_HISTORY_LIST_URL, {
-    userId: userId,
+    userId: route.params.userId,
     currentPage: currentHistoryArticlesPage.value,
     pageSize: historyArticlesPageSize.value
   })
@@ -134,10 +155,10 @@ const onHistoryArticlesPageSizeChange = (newPageSize: number) => {
 const currentStarArticlesPage = ref(1)
 const totalStarArticlesPage = ref(0)
 const starArticlesPageSize = ref(10)
-const starsArticles = ref<BasicPageType<ArticleType>>({...defaultBasicPage})
+const starsArticles = ref<BasicPageType<ArticleType>>({ ...defaultBasicPage })
 const getStarsArticles = () => {
   doGet<CommonResponse>(USER_STAR_LIST_URL, {
-    userId: userId,
+    userId: route.params.userId,
     currentPage: currentStarArticlesPage.value,
     pageSize: starArticlesPageSize.value
   })
@@ -163,10 +184,10 @@ const onStarArticlesPageSizeChange = (newPageSize: number) => {
 const currentFollowersPage = ref(1)
 const totalFollowersPage = ref(0)
 const followersPageSize = ref(10)
-const followUsers = ref<BasicPageType<FollowUserInfoType>>({...defaultBasicPage})
+const followUsers = ref<BasicPageType<FollowUserInfoType>>({ ...defaultBasicPage })
 const getFollowUsers = () => {
   doGet<CommonResponse>(USER_FOLLOW_LIST_URL, {
-    userId: userId,
+    userId: route.params.userId,
     currentPage: currentFollowersPage.value,
     pageSize: followersPageSize.value
   })
@@ -194,10 +215,10 @@ const onFollowersPageSizeChange = (newPageSize: number) => {
 const currentFansPage = ref(1)
 const totalFansPage = ref(0)
 const fansPageSize = ref(10)
-const fans = ref<BasicPageType<FollowUserInfoType>>({...defaultBasicPage})
+const fans = ref<BasicPageType<FollowUserInfoType>>({ ...defaultBasicPage })
 const getFans = () => {
   doGet<CommonResponse>(USER_FANS_LIST_URL, {
-    userId: userId,
+    userId: route.params.userId,
     currentPage: currentFansPage.value,
     pageSize: fansPageSize.value
   })
@@ -226,35 +247,35 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 }
 
 const handleChange = (val: string) => {
-  if(val == 'articlesTab'){
-    router.push(`/user/${userId}/articlesTab`)
+  if (val == 'articlesTab') {
+    router.push(`/user/${route.params.userId}/articlesTab`)
     getArticles()
-  }else if(val == 'historyTab'){
-    router.push(`/user/${userId}/historyTab`)
+  } else if (val == 'historyTab') {
+    router.push(`/user/${route.params.userId}/historyTab`)
     getHistoryArticles()
-  }else if (val == 'starsTab'){
-    router.push(`/user/${userId}/starsTab`)
+  } else if (val == 'starsTab') {
+    router.push(`/user/${route.params.userId}/starsTab`)
     getStarsArticles()
-  }else if(val == 'followTab'){
-    router.push(`/user/${userId}/followTab`)
+  } else if (val == 'followTab') {
+    router.push(`/user/${route.params.userId}/followTab`)
     getFollowUsers()
-  }else if(val == 'fansTab'){
-    router.push(`/user/${userId}/fansTab`)
+  } else if (val == 'fansTab') {
+    router.push(`/user/${route.params.userId}/fansTab`)
     getFans()
   }
 }
 
 // 用户发表的文章的列表
 onMounted(() => {
-  if(activeName.value === 'articlesTab'){
+  if (activeName.value === 'articlesTab') {
     getArticles()
-  }else if(activeName.value === 'historyTab'){
+  } else if (activeName.value === 'historyTab') {
     getHistoryArticles()
-  }else if (activeName.value === 'starsTab'){
+  } else if (activeName.value === 'starsTab') {
     getStarsArticles()
-  }else if(activeName.value === 'followTab'){
+  } else if (activeName.value === 'followTab') {
     getFollowUsers()
-  }else if(activeName.value === 'fansTab'){
+  } else if (activeName.value === 'fansTab') {
     getFans()
   }
 
@@ -263,12 +284,50 @@ onMounted(() => {
 </script>
 
 <style>
-.demo-tabs > .el-tabs__content {
-  padding: 10px;
-  color: #6b778c;
-  font-size: 32px;
-  font-weight: 600;
+.demo-tabs {
+  --el-border-radius-base: 16px;
 }
 
+.demo-tabs > .el-tabs__header {
+  margin: 0 0 12px;
+}
 
+.demo-tabs .el-tabs__nav-wrap::after {
+  height: 0;
+}
+
+.demo-tabs .el-tabs__nav {
+  border: 1px solid var(--pai-border-color-1);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+  border-radius: 999px;
+  padding: 6px;
+  gap: 6px;
+}
+
+.demo-tabs .el-tabs__item {
+  border-radius: 999px;
+  padding: 0 18px;
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+  color: var(--pai-color-4-gray);
+  transition: all 0.2s ease;
+}
+
+.demo-tabs .el-tabs__item.is-active {
+  color: var(--pai-color-3-black);
+  background: rgba(45, 125, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(45, 125, 255, 0.35);
+}
+
+.demo-tabs .el-tabs__content {
+  padding: 8px 4px 0;
+  color: #6b778c;
+}
+
+.demo-tabs .el-pagination {
+  margin-top: 18px;
+  justify-content: center;
+}
 </style>

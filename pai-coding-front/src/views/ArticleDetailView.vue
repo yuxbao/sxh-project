@@ -3,19 +3,19 @@
 
   <div class="home article-detail" v-if="ifUsualArticle">
     <div class="col-body pg-2-article" id="article-detail-body-div">
-      <div class="com-3-layout" >
+      <div class="com-3-layout">
         <div class="layout-main">
 
           <!-- 正文 -->
-          <ArticleDetail  :global="global" :articleVo="articleVo"></ArticleDetail>
+          <ArticleDetail :global="global" :articleVo="articleVo"></ArticleDetail>
 
           <!--  评论  -->
-          <CommentList :comments="articleVo.comments" :hot-comment="articleVo.hotComment" :article="articleVo.article"></CommentList>
+          <div id="comment-list-wrapper">
+            <CommentList :comments="articleVo.comments" :hot-comment="articleVo.hotComment"
+              :article="articleVo.article"></CommentList>
+          </div>
 
-          <div
-            class="correlation-article bg-color-white"
-            id="relatedRecommend"
-          >
+          <div class="correlation-article bg-color-white" id="relatedRecommend">
             <!-- 关联推荐 -->
             <h4 class="correlation-article-title">相关推荐</h4>
             <div class="bg-color-white">
@@ -51,6 +51,12 @@
     <!-- 底部信息 -->
     <Footer></Footer>
   </div>
+  <div class="home article-detail article-loading" v-else-if="pageLoading">
+    <el-skeleton animated :rows="8" />
+  </div>
+  <div class="home article-detail article-loading" v-else>
+    <p>文章加载失败，请稍后重试。</p>
+  </div>
   <LoginDialog :clicked="clicked"></LoginDialog>
 
 </template>
@@ -58,7 +64,7 @@
 <script setup lang="ts">
 import Footer from '@/components/layout/Footer.vue'
 import HeaderBar from '@/components/layout/HeaderBar.vue'
-import { onMounted, provide, reactive, ref } from 'vue'
+import { onMounted, provide, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   type CommonResponse,
@@ -82,12 +88,13 @@ import type { ArticleType } from '@/http/ResponseTypes/ArticleType/ArticleType'
 
 const route = useRoute()
 // let global = reactive<GlobalResponse>({...defaultGlobalResponse})
-let articleVo = reactive<ArticleDetailResponse>({...defaultArticleDetailResponse})
+let articleVo = reactive<ArticleDetailResponse>({ ...defaultArticleDetailResponse })
 const relatedArticles = ref<ArticleType[]>([])
 const globalStore = useGlobalStore()
+const pageLoading = ref(true)
 
 const global = globalStore.global
-const articleId = route.params.articleId
+const articleId = ref(route.params.articleId)
 
 const scrollElement = document.documentElement;
 
@@ -112,8 +119,10 @@ provide('updateArticleComment', getArticleDetail)
 // ifUsualArticle 为true时，表示文章正常，为false时，表示文章是专栏文章，需要重定向，引入此变量从而避免在重定向过程中的闪烁情况
 const ifUsualArticle = ref(false)
 const router = useRouter()
-onMounted(async () => {
-  doGet<CommonResponse>(ARTICLE_DETAIL_URL + `/${articleId}`, {})
+const loadArticleDetail = () => {
+  pageLoading.value = true
+  ifUsualArticle.value = false
+  doGet<CommonResponse>(ARTICLE_DETAIL_URL + `/${articleId.value}`, {})
     .then((response) => {
       console.log(response)
       if (!response.data.redirect) {
@@ -122,23 +131,40 @@ onMounted(async () => {
         Object.assign(articleVo, response.data.result)
         setTitle(articleVo.article.title)
         ifUsualArticle.value = true
-        doGet<CommonResponse>(ARTICLE_RELATED_URL, { articleId })
+        pageLoading.value = false
+        doGet<CommonResponse>(ARTICLE_RELATED_URL, { articleId: articleId.value })
           .then((recommendResponse) => {
             if (recommendResponse.data) {
               // @ts-ignore
               relatedArticles.value = recommendResponse.data.result.list || []
             }
           })
-      }else{
+      } else {
         router.replace("/column/" + response.data.result.columnId + '/' + response.data.result.sectionId)
+        pageLoading.value = false
       }
     })
+    .catch(() => {
+      pageLoading.value = false
+    })
+}
+
+onMounted(async () => {
+  loadArticleDetail()
 })
+
+watch(
+  () => route.params.articleId,
+  (nextId) => {
+    if (!nextId) return
+    articleId.value = nextId
+    loadArticleDetail()
+  }
+)
 </script>
 
 <style scoped>
-
-div.layout-main{
+div.layout-main {
   padding: 0 60px 0;
 }
 
@@ -147,12 +173,17 @@ div.layout-main{
   div.layout-side {
     display: none;
   }
-  div.layout-main{
-    padding: 0 ;
+
+  div.layout-main {
+    padding: 0;
   }
 }
 
-div#content-menu{
+div#content-menu {
   height: calc(100vh - 70px);
+}
+
+.article-loading {
+  padding: 24px;
 }
 </style>

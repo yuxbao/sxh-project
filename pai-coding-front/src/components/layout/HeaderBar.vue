@@ -5,10 +5,10 @@
   >
     <div class="nav-body">
       <div class="nav-logo-wrap-lg">
-        <a class="navbar-logo-wrap" href="/">
+        <RouterLink class="navbar-logo-wrap" to="/">
           <img class="logo hidden-when-screen-small" src="/src/assets/static/img/logo.png"/>
 <!--          <img src="/src/assets/static/img/icon.png" class="logo-lg display-when-screen-small" alt="" />-->
-        </a>
+        </RouterLink>
 
         <el-dropdown :hide-on-click="false" class="display-when-screen-small center-content">
           <a class="el-dropdown-link nav-link display-when-screen-small">
@@ -16,13 +16,13 @@
           </a>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item><a class="dropdown-item" href="/">首页</a></el-dropdown-item>
-              <el-dropdown-item><a class="dropdown-item" href="/column">教程</a></el-dropdown-item>
-              <el-dropdown-item><a class="dropdown-item" href="/rank/month">排行榜</a></el-dropdown-item>
-              <el-dropdown-item><a class="dropdown-item" href="/chat">LLM</a></el-dropdown-item>
-              <el-dropdown-item v-if="global.isLogin"><a class="dropdown-item" href="/tools/">工具</a></el-dropdown-item>
-              <el-dropdown-item><a class="dropdown-item" href="/about">关于作者</a></el-dropdown-item>
-              <el-dropdown-item><a class="dropdown-item" href="/plan">更新计划</a></el-dropdown-item>
+              <el-dropdown-item><RouterLink class="dropdown-item" to="/">首页</RouterLink></el-dropdown-item>
+              <el-dropdown-item><RouterLink class="dropdown-item" to="/column">教程</RouterLink></el-dropdown-item>
+              <el-dropdown-item><RouterLink class="dropdown-item" to="/rank/month">排行榜</RouterLink></el-dropdown-item>
+              <el-dropdown-item><RouterLink class="dropdown-item" to="/chat">LLM</RouterLink></el-dropdown-item>
+              <el-dropdown-item v-if="global.isLogin"><RouterLink class="dropdown-item" to="/tools/">工具</RouterLink></el-dropdown-item>
+              <el-dropdown-item><RouterLink class="dropdown-item" to="/about">关于作者</RouterLink></el-dropdown-item>
+              <el-dropdown-item><RouterLink class="dropdown-item" to="/plan">更新计划</RouterLink></el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -31,25 +31,25 @@
         <ul class="navbar-nav">
           <el-space size="small">
             <li :class="{'selected-domain': activeTab == '/'}">
-              <a class="nav-link" href="/">首页</a>
+              <RouterLink class="nav-link" to="/">首页</RouterLink>
             </li>
             <li :class="{'selected-domain': activeTab == '/column'}">
-              <a class="nav-link" href="/column">教程</a>
+              <RouterLink class="nav-link" to="/column">教程</RouterLink>
             </li>
             <li :class="{'selected-domain': activeTab.startsWith('/rank')}">
-              <a class="nav-link" href="/rank/month">排行榜</a>
+              <RouterLink class="nav-link" to="/rank/month">排行榜</RouterLink>
             </li>
             <li :class="{'selected-domain': activeTab == '/chat'}">
-              <a class="nav-link" href="/chat">LLM</a>
+              <RouterLink class="nav-link" to="/chat">LLM</RouterLink>
             </li>
             <li v-if="global.isLogin" :class="{'selected-domain': activeTab.startsWith('/tools')}">
-              <a class="nav-link" href="/tools/">工具</a>
+              <RouterLink class="nav-link" to="/tools/">工具</RouterLink>
             </li>
             <li :class="{'selected-domain': activeTab == '/about'}">
-              <a class="nav-link" href="/about">关于作者</a>
+              <RouterLink class="nav-link" to="/about">关于作者</RouterLink>
             </li>
             <li class="max-lg:hidden" :class="{'selected-domain': activeTab == '/plan'}">
-              <a class="nav-link" href="/plan">更新计划</a>
+              <RouterLink class="nav-link" to="/plan">更新计划</RouterLink>
             </li>
           </el-space>
         </ul>
@@ -80,7 +80,7 @@
         <ul v-if="global.isLogin" class="nav-right-user">
           <!--  已登录 -->
           <li class="nav-item nav-notice">
-            <a class="nav-link navbar-count-msg-box" href="/notice/">
+            <RouterLink class="nav-link navbar-count-msg-box" to="/notice/">
                 <span
                   v-if="global.msgNum != null && global.msgNum > 0"
                   class="navbar-count-msg"
@@ -106,7 +106,7 @@
                 ></path>
                 <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
               </svg>
-            </a>
+            </RouterLink>
           </li>
 
           <!-- 头像框 -->
@@ -140,7 +140,7 @@
 
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 import { doGet} from '@/http/BackendRequests'

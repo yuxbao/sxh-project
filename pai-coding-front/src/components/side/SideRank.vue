@@ -16,7 +16,7 @@
                         ]">
                         {{ index + 1 }}
                     </div>
-                    <a :href="item.url" class="flex items-center gap-2 hover:opacity-80 overflow-hidden">
+                    <RouterLink :to="item.url" class="flex items-center gap-2 hover:opacity-80 overflow-hidden">
                         <img v-if="item.img" :src="item.img" alt="Avatar"
                             class="w-8 h-8 rounded-full object-cover border border-gray-100" />
                         <div v-else
@@ -26,7 +26,7 @@
                         <span class="text-sm font-medium text-gray-700 truncate max-w-[120px]" :title="item.name || ''">
                             {{ item.name }}
                         </span>
-                    </a>
+                    </RouterLink>
                 </div>
                 <div class="text-xs text-gray-500 font-mono whitespace-nowrap">
                     {{ resolveVisit(item) }}
@@ -34,15 +34,16 @@
             </li>
         </ul>
         <div class="mt-4 flex justify-end">
-            <a href="/rank/month"
+            <RouterLink to="/rank/month"
                class="text-sm text-blue-600 hover:text-blue-700 hover:underline">
                 查看详情
-            </a>
+            </RouterLink>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import type { SideBarItem, SideBarVisit } from '@/http/ResponseTypes/SideBarItemType'
 
 defineProps<{

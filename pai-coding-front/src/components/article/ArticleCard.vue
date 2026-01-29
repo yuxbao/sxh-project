@@ -2,12 +2,11 @@
   <!-- 文章卡片 -->
   <div
     class="cdc-article-panel user-article-item"
+    role="button"
+    tabindex="0"
+    @click="clickArticle"
+    @keydown.enter.prevent="clickArticle"
   >
-    <a
-      class="cdc-article-panel__link"
-      rel="noreferrer"
-      @click="clickArticle"
-    ></a>
     <div class="cdc-article-panel__inner">
       <div class="user-article-item-content cdc-article-panel__main">
         <div class="user-article-item-title-wrap cdc-article-panel__title">
@@ -34,19 +33,26 @@
             <span
               class="article-title-other-name cdc-avatar large cdc-article-panel__user-avatar circle"
             >
-              <a
+              <RouterLink
                 class="cdc-avatar__inner"
                 :style="{'background-image': 'url(' +article.authorAvatar + ')' }"
-                :href="'/user/' + article.author"
-              ></a>
+                :to="'/user/' + article.author"
+                @click.stop
+              ></RouterLink>
             </span>
-            <a class="article-title-wrap cdc-article-panel__user-name" :href="'/user/' + article.author">{{article.authorName}}</a>
+            <RouterLink
+              class="article-title-wrap cdc-article-panel__user-name"
+              :to="'/user/' + article.author"
+              @click.stop
+            >
+              {{article.authorName}}
+            </RouterLink>
           </div>
           <div class="cdc-article-panel__date">
             {{format(new Date(Number(article.createTime)), "yyyy年MM月dd日 HH:mm")}}
           </div>
 
-          <div class="cdc-icon__list cdc-article-panel__operate d-flex" @click="router.push('/article/detail/'+article.articleId)">
+          <div class="cdc-icon__list cdc-article-panel__operate d-flex" @click.stop="router.push('/article/detail/'+article.articleId)">
             <div class="article-show-wrap">
               <!--  阅读计数  -->
                 <img
@@ -114,11 +120,14 @@
             </svg>
 
             <div class="cdc-tag-links__item" v-for="tag in article.tags" :key="tag.tagId">
-              <a
-                :href="'/article/tag/' + tag.tagId"
+              <RouterLink
+                :to="'/article/tag/' + tag.tagId"
                 rel="article-tag"
                 class="user-article-item-tag cdc-tag-links__item ml-2 mr-0"
-              >{{tag.tag}}</a>
+                @click.stop
+              >
+                {{tag.tag}}
+              </RouterLink>
             </div>
           </div>
         </div>
@@ -142,7 +151,7 @@
 <script setup lang="ts">
 
 import { format } from 'date-fns';
-import { useRouter } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import type { ArticleType } from '@/http/ResponseTypes/ArticleType/ArticleType'
 import {ArticleTypeNumberEnum} from "@/constants/ArticleTypeEnumConstants";
 import {doGet} from "@/http/BackendRequests";

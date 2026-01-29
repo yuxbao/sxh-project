@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
@@ -49,6 +51,24 @@
 /*  用户页的主体内容控制*/
   --max-width-1024: 1024px;
   --max-width-1200: 1200px;
+
+  --app-font-sans: "Plus Jakarta Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --app-font-display: "Fraunces", "Songti SC", serif;
+  --app-bg: #f4f7fb;
+  --app-surface: #ffffff;
+  --app-border: rgba(15, 23, 42, 0.08);
+  --app-text: #0f172a;
+  --app-muted: #556070;
+  --app-accent: #2d7dff;
+  --app-accent-soft: rgba(45, 125, 255, 0.16);
+  --app-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+
+  /* Element Plus theme alignment */
+  --el-color-primary: #2d7dff;
+  --el-color-primary-light-3: rgba(45, 125, 255, 0.35);
+  --el-color-primary-light-5: rgba(45, 125, 255, 0.22);
+  --el-color-primary-light-7: rgba(45, 125, 255, 0.12);
+  --el-border-radius-base: 12px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -74,7 +94,14 @@
 }
 
 body {
-  background-color: #F7F8FA;
+  background: linear-gradient(180deg, #fafafa 0%, #f5f6f8 45%, #f0f1f3 100%);
+  background-attachment: fixed;
+  color: var(--app-text);
+  font-family: var(--app-font-sans);
+  line-height: 1.7;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   /*min-height: 100vh;*/
   /*color: var(--color-text);*/
   /*background: var(--color-background);*/

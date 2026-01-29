@@ -1,57 +1,61 @@
 /*编程汇的整体色系*/
 body {
   /*正常色*/
-  --pai-brand-1-normal: #ff6900;
+  --pai-brand-1-normal: #2d7dff;
   /*鼠标放上去后的颜色*/
-  --pai-brand-2-hover: #ff8721;
+  --pai-brand-2-hover: #1f6ae6;
   /*点击后激活后的颜色*/
-  --pai-brand-3-click: #f59e2f;
+  --pai-brand-3-click: #1a5bd0;
   /*不可用的颜色*/
-  --pai-brand-4-disable: #d1a278;
+  --pai-brand-4-disable: #a8c4f5;
   /*备用色 非常深的颜色*/
-  --pai-brand-5-bak: #fe6617;
+  --pai-brand-5-bak: #16b3a6;
   /*消息提醒点*/
-  --pai-brand-6-mq: #f85959;
-  --pai-brand-7-light: rgba(255, 105, 0, 0.15);
+  --pai-brand-6-mq: #ff6b6b;
+  --pai-brand-7-light: rgba(45, 125, 255, 0.12);
   /*浅色时由上一个过度到下一个*/
-  --pai-brand-8-light: rgba(255, 105, 0, 0.35);
+  --pai-brand-8-light: rgba(45, 125, 255, 0.25);
   /*颜色白色*/
   --pai-color-fff-normal: #fff;
   /*浅灰色*/
-  --pai-color-999-gray: #999;
+  --pai-color-999-gray: #8a94a6;
   /*另外一种灰*/
-  --pai-color-3-gray: #8a919f;
+  --pai-color-3-gray: #6b7280;
   /*另外一种灰 深一点*/
-  --pai-color-4-gray: #515767;
+  --pai-color-4-gray: #556070;
   /*disable 的灰*/
-  --pai-color-5-gray: #ddd;
+  --pai-color-5-gray: #d7dde8;
   /*非常浅的灰*/
-  --pai-color-6-gray: #f3f5f8;
+  --pai-color-6-gray: #f3f6fb;
   /*比上面更灰一点*/
-  --pai-color-7-gray: #eff3f9;
+  --pai-color-7-gray: #eef2f8;
   /*偏黑色*/
-  --pai-color-3-black: #212529;
+  --pai-color-3-black: #0f172a;
   /*背景色*/
   --pai-bg-white-fff: #fff;
   /*淡黄色*/
-  --pai-bg-normal-1: #fff3db;
-  --pai-bg-light-1: #eeeeee;
+  --pai-bg-normal-1: #eef4ff;
+  --pai-bg-light-1: #f1f4f9;
   /*浅一点的颜色*/
-  --pai-bg-light-2: #f7f8fa;
+  --pai-bg-light-2: #f4f7fb;
+  --pai-bg-neutral: #f5f6f8;
   /*背景色浅一点*/
-  --pai-bg-dark-1: #373d41;
+  --pai-bg-dark-1: #1f2937;
   /*主题色深一点*/
-  --pai-bg-dark-2: #2c3134;
+  --pai-bg-dark-2: #111827;
   /*主题色更深一点*/
-  --pai-bg-dark-3: #000000;
+  --pai-bg-dark-3: #0b1220;
     /*讯飞星火的左侧聊天背景色*/
-  --pai-bg-smart-chat: #f5f5f5;
+  --pai-bg-smart-chat: #f6f8fb;
   /*横线的颜色*/
-  --pai-hr-color-1: #f0f0f0;
+  --pai-hr-color-1: #e6edf7;
   /*边框颜色*/
-  --pai-border-color-1: #d2d9e7;
+  --pai-border-color-1: #dbe3f2;
   /*字体*/
-  --pai-font-2: #515767;
+  --pai-font-2: #556070;
+
+  --pai-surface-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  --pai-surface-radius: 18px;
 
   /*边框*/
   --color-canvas-default: transparent;
@@ -67,6 +71,10 @@ body {
   --second: #e7f8ff;
   /*外边距*/
   margin: 0;
+  color: var(--pai-color-3-black);
+  background: linear-gradient(180deg, #fafafa 0%, #f5f6f8 45%, #f0f1f3 100%);
+  background-attachment: fixed;
+  font-family: var(--app-font-sans, "Plus Jakarta Sans", "PingFang SC", "Microsoft YaHei", sans-serif);
 }
 
 /*全局的色调往前面放*/
@@ -81,6 +89,7 @@ li {
 
 a {
   color: var(--pai-color-3-black);
+  transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 a.underline {
@@ -95,6 +104,37 @@ a:hover.underline {
 a:hover {
   text-decoration: none;
   color: var(--pai-brand-2-hover);
+}
+
+.el-button {
+  border-radius: 999px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.el-button:hover {
+  transform: translateY(-1px);
+}
+
+.el-card {
+  border-radius: var(--pai-surface-radius);
+  border: 1px solid var(--pai-border-color-1);
+  box-shadow: var(--pai-surface-shadow);
+  background-color: var(--pai-bg-white-fff);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.el-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
+}
+
+h1,
+h2,
+h3,
+.section-title,
+.article-title {
+  font-family: var(--app-font-display, "Fraunces", "Songti SC", serif);
+  letter-spacing: 0.2px;
 }
 
 input:focus,.form-control:focus {
@@ -308,7 +348,8 @@ button:focus {
 
 /*需要背景色主动添加，一种浅灰色，腾讯云社区的背景色*/
 .bg-color {
-  background-color: var(--pai-bg-light-2);
+  background: linear-gradient(180deg, #fafafa 0%, #f5f6f8 45%, #f0f1f3 100%);
+  background-attachment: fixed;
 }
 
 /*纯白色*/
@@ -329,12 +370,14 @@ button:focus {
 
 .dropdown-item:focus,
 .dropdown-item:hover {
-  background-color: var(--pai-bg-normal-1);
+  background-color: var(--pai-bg-neutral);
 }
 
 /*覆盖 bootstrap*/
 .card {
-  border: none;
+  border: 1px solid var(--pai-border-color-1);
+  border-radius: var(--pai-surface-radius);
+  box-shadow: var(--pai-surface-shadow);
   margin-bottom: 20px;
 }
 
@@ -342,7 +385,7 @@ button:focus {
 .home-right,
 .custom-home-right {
   width: 24%;
-  border-radius: 20px;
+  border-radius: var(--pai-surface-radius);
   position: relative;
 }
 
@@ -841,8 +884,10 @@ button:focus {
 .article-content h4,
 .article-content h5 {
   color: var(--pai-brand-1-normal);
-  margin-bottom: 10px;
-  padding-bottom: 7px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .article-detail .home-right-item-wrap .com-2-panel-title {
@@ -858,16 +903,16 @@ button:focus {
 }
 
 .article-content h1 {
-  border-bottom: 1px solid #eaecef;
-  font-size: 1.7em;
+  border-bottom: 1px solid var(--pai-border-color-1);
+  font-size: 1.85em;
 }
 
 .article-content h2 {
-  font-size: 1.5em;
+  font-size: 1.55em;
 }
 
 .article-content h3 {
-  font-size: 1.3em;
+  font-size: 1.32em;
 }
 
 .article-content h4 {
@@ -889,14 +934,68 @@ button:focus {
 .article-content pre,
 .article-content blockquote {
   /* font-weight: 400; */
-  line-height: 1.8;
-  margin-bottom: 15px;
+  line-height: 1.9;
+  margin-bottom: 16px;
+  color: var(--pai-color-4-gray);
 }
 
 .article-content blockquote {
-  padding: 0 1em;
-  color: #6a737d;
-  border-left: 0.25em solid #dfe2e5;
+  padding: 10px 16px;
+  color: var(--pai-color-4-gray);
+  border-left: 3px solid var(--pai-brand-1-normal);
+  background: rgba(45, 125, 255, 0.06);
+  border-radius: 10px;
+}
+
+.article-content code {
+  background: rgba(15, 23, 42, 0.06);
+  color: #1f2937;
+  padding: 0 6px;
+  border-radius: 6px;
+}
+
+.article-content pre {
+  border-radius: 12px;
+  background: #f6f7f9;
+  border: 1px solid var(--pai-border-color-1);
+}
+
+.article-content a {
+  color: var(--pai-brand-1-normal);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(45, 125, 255, 0.35);
+}
+
+.article-content a:hover {
+  color: var(--pai-brand-2-hover);
+  border-bottom-color: rgba(45, 125, 255, 0.55);
+}
+
+.article-content hr {
+  border: none;
+  height: 1px;
+  margin: 28px 0;
+  background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.2), transparent);
+}
+
+.article-content table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--pai-border-color-1);
+}
+
+.article-content table th {
+  background: #f6f7f9;
+  font-weight: 600;
+}
+
+.article-content table th,
+.article-content table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--pai-border-color-1);
 }
 
 .article-content ol,
@@ -955,6 +1054,16 @@ button:focus {
   text-align: center;
 }
 
+/* Remove markdown theme grid/pattern backgrounds that look like blue blocks */
+.md-editor .mk-cute-theme,
+.md-editor .smart-blue-theme,
+.md-editor .md-editor-preview,
+.md-editor-preview .md-editor-admonition,
+.md-editor .md-editor-admonition {
+  background-image: none !important;
+  background-color: transparent !important;
+}
+
 .article-content .hljs-left {
   text-align: left;
 }
@@ -977,7 +1086,8 @@ button:focus {
   z-index: 2;
   display: flex;
   justify-content: space-around;
-  background: #fff;
+  background: transparent;
+  border-top: none;
   padding: 12px 0;
   visibility: hidden;
 }

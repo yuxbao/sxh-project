@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import HeaderBar from '@/components/layout/HeaderBar.vue'
-import { onMounted, provide, reactive, ref } from 'vue'
+import { onMounted, provide, reactive, ref, watch } from 'vue'
 import { doGet } from '@/http/BackendRequests'
 import { CATEGORY_ARTICLE_LIST_URL, INDEX_URL } from '@/http/URL'
 import {
@@ -99,7 +99,10 @@ const route = useRoute()
 let global = reactive<GlobalResponse>({ ...defaultGlobalResponse })
 let vo = reactive<IndexVoResponse>({ ...defaultIndexVoResponse })
 let articles = reactive<BasicPageType<ArticleType>>({ ...defaultBasicPage })
-onMounted(() => {
+
+const loadHomeData = () => {
+  contentLoading.value = true
+  articlesLoading.value = true
   // 获取文章列表
   doGet<CommonResponse>(CATEGORY_ARTICLE_LIST_URL, {
     category: route.query['category']
@@ -135,7 +138,18 @@ onMounted(() => {
       }
     })
   }
+}
+
+onMounted(() => {
+  loadHomeData()
 })
+
+watch(
+  () => route.query['category'],
+  () => {
+    loadHomeData()
+  }
+)
 
 // 如下是分页操作
 const currentPage = ref(1)

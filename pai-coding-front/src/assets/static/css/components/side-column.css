@@ -4,6 +4,9 @@
     overflow: hidden;
     padding: 20px;
     margin-bottom: 20px;
+    border-radius: var(--pai-surface-radius);
+    border: 1px solid var(--pai-border-color-1);
+    box-shadow: var(--pai-surface-shadow);
   }
   .home-right-item-icon {
     height: 18px;
@@ -30,7 +33,7 @@
     flex: 1 1;
   }
   .home-right-item-post-time {
-    color: #adb5bd;
+    color: var(--pai-color-3-gray);
     font-size: 14px;
   }
   .home-right-item-article-title-txt {
@@ -38,6 +41,7 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
+    color: var(--pai-color-4-gray);
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -48,14 +52,14 @@
   .home-right-item-article-item i {
     flex-shrink: 0;
     font-size: 16px;
-    color: rgba(0, 0, 0, 0.06);
+    color: rgba(15, 23, 42, 0.16);
     margin-right: 8px;
   }
   .home-right-item-about-content {
     text-align: justify;
     font-size: 14px;
     line-height: 180%;
-    color: #333;
+    color: var(--pai-color-4-gray);
   }
   .home-QR-title {
     display: flex;
@@ -80,13 +84,13 @@
     font-size: 20px;
     height: 24px;
     line-height: 120%;
-    color: #333;
+    color: var(--pai-color-3-black);
     font-weight: 600;
     margin-bottom: 12px;
   }
   .home-QR-title-content-other {
     font-size: 14px;
-    color: #333;
+    color: var(--pai-color-4-gray);
   }
   .home-QR-content {
     display: flex;
@@ -95,7 +99,7 @@
   .home-QR-content span {
     font-size: 14px;
     line-height: 25px;
-    color: #333;
+    color: var(--pai-color-4-gray);
   }
 
   /*侧边栏的背景图*/
@@ -163,7 +167,7 @@
     margin-top: 4px;
     font-size: 14px;
     line-height: 24px;
-    color: var(--pai-color-999-gray);
+    color: var(--pai-color-3-gray);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -350,7 +354,7 @@
   .col-body {
     box-sizing: border-box;
     margin: 30px auto 60px;
-    padding: 0 10px;
+    padding: 0 16px;
     max-width: 1200px;
   }
   .pg-2-article {
@@ -397,9 +401,11 @@
   .com-2-panel {
     margin-bottom: 20px;
     box-sizing: border-box;
-    background-color: var(--pai-color-fff-normal);
+    background-color: var(--pai-bg-white-fff);
     padding: 32px;
-    box-shadow: 0 2px 4px 0 rgb(3 27 78 / 6%);
+    border-radius: var(--pai-surface-radius);
+    border: 1px solid var(--pai-border-color-1);
+    box-shadow: var(--pai-surface-shadow);
   }
 
 
@@ -566,8 +572,8 @@
     line-height: 30px;
   }
 
-  .c-btn-hole:hover {
-    background-color: var(--pai-brand-7-light);
+.c-btn-hole:hover {
+    background-color: var(--pai-bg-neutral);
   }
 
   /*阅读和点赞*/
@@ -847,4 +853,3 @@
   color: var(--pai-brand-6-mq);
   margin-bottom: 8px;
 }
-

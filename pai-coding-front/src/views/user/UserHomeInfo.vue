@@ -4,62 +4,72 @@
       <img :src="vo.userHome.photo" class="user-head-img" />
       <div class="user-head-title-wrap">
         <div class="user-head-title-name">
-          {{vo.userHome.userName}}
+          {{ vo.userHome.userName }}
         </div>
         <div class="user-head-title-classify hidden-when-screen-small">
           <div class="user-head-title-classify-item">
             <span class="text-base-pure">加入天数</span>
-            <span>{{vo.userHome.joinDayCount}}</span>
+            <span>{{ vo.userHome.joinDayCount }}</span>
           </div>
           <div class="user-head-cell"></div>
-          <div class="user-head-title-classify-item">
+          <div class="user-head-title-classify-item" @click="goToTab(UserHomeTabTypeEnum.FollowTab)">
             <span class="text-base-pure">关注数</span>
-            <span >{{vo.userHome.followCount}}</span>
+            <span>{{ vo.userHome.followCount }}</span>
           </div>
           <div class="user-head-cell"></div>
-          <div class="user-head-title-classify-item">
+          <div class="user-head-title-classify-item" @click="goToTab(UserHomeTabTypeEnum.FansTab)">
             <span class="text-base-pure">粉丝数</span>
-            <span >{{vo.userHome.fansCount}}</span>
+            <span>{{ vo.userHome.fansCount }}</span>
           </div>
         </div>
       </div>
       <div class="user-head-footer">
         <!-- 个人简介（包含公司和职位标签） -->
-        <div class="profile-wrapper" v-if="vo.userHome.profile || vo.userHome.company || vo.userHome.position || (global.isLogin && global.user.id == vo.userHome.userId)">
+        <div class="profile-wrapper"
+          v-if="vo.userHome.profile || vo.userHome.company || vo.userHome.position || (global.isLogin && global.user.id == vo.userHome.userId)">
           <div class="profile-label">
             <svg class="profile-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM16 18H8V16H16V18ZM16 14H8V12H16V14ZM13 9V3.5L18.5 9H13Z" fill="currentColor"/>
+              <path
+                d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM16 18H8V16H16V18ZM16 14H8V12H16V14ZM13 9V3.5L18.5 9H13Z"
+                fill="currentColor" />
             </svg>
             <span>个人简介</span>
           </div>
-          <div class="profile-content-box" @click="global.isLogin && global.user.id == vo.userHome.userId ? editInfoDialogVisible = true : null">
+          <div class="profile-content-box"
+            @click="global.isLogin && global.user.id == vo.userHome.userId ? editInfoDialogVisible = true : null">
             <!-- 公司和职位标签 -->
             <div class="profile-tags" v-if="vo.userHome.company || vo.userHome.position">
               <div class="profile-tag-item" v-if="vo.userHome.company">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAsklEQVR42mNgoBPI507vTbuU/g0OP6adSM+rZ8KpPO162n9MmL4Wh4b0XmzKwTAKqwbs5oPtWIJdA0Ryb4ZKmhwEZuql3QGLnsCivJ4J5uIajnomCCwUSrsEFn2cXpVelZGYoYJFA36Y0UqihrT/GYkkaki7hKEhfW/6DghMO4FNCzQi4Z7uRYmbvZgaajhQbbiTnpeeAYVV6R8JayAIR7KG9M3EakjfTJ4GiLMIQzKLCwBaavBCKUO/owAAAABJRU5ErkJggg=="
-                     class="profile-tag-icon">
-                <span>{{vo.userHome.company}}</span>
+                <img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAsklEQVR42mNgoBPI507vTbuU/g0OP6adSM+rZ8KpPO162n9MmL4Wh4b0XmzKwTAKqwbs5oPtWIJdA0Ryb4ZKmhwEZuql3QGLnsCivJ4J5uIajnomCCwUSrsEFn2cXpVelZGYoYJFA36Y0UqihrT/GYkkaki7hKEhfW/6DghMO4FNCzQi4Z7uRYmbvZgaajhQbbiTnpeeAYVV6R8JayAIR7KG9M3EakjfTJ4GiLMIQzKLCwBaavBCKUO/owAAAABJRU5ErkJggg=="
+                  class="profile-tag-icon">
+                <span>{{ vo.userHome.company }}</span>
               </div>
               <div class="profile-tag-item" v-if="vo.userHome.position">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABIUlEQVR42r1TLW/DQAw1OxgWUhypNCykZDS0P6GyLzmVHxzobxgpLAjt2FBJf0DR4UiVCkMLQjpdmt1XsiZkc1Dk92w/3zPAvwWleKIWH8OPWlT8LYAXEV3HwIbUbBceAcUreEfZ+QQ1RcCbO9BqEq575FbwYQ4Bjz1cxP12VJlgNah7KJPnwNSK+Dn/pk8qySSjr7CqZEah6Aj83VbTC8aLgZ8kA7Bd+01R6i9PxFh3f5ciAsAPJ5v+iN45QwiAMqEGaz2x7R68BO2tEWgNwLMy8Z+T9oE58NOk7jzriqwdbx0H5pOMztY5xcqF01mLH0QR/WIQpcWPxnYx4tk68KkffEmNb2u+nDgkntE9lD91e7lZcD7zXHmGFVazqv9BfAN523/xHVmeOQAAAABJRU5ErkJggg=="
-                     class="profile-tag-icon">
-                <span>{{vo.userHome.position}}</span>
+                <img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABIUlEQVR42r1TLW/DQAw1OxgWUhypNCykZDS0P6GyLzmVHxzobxgpLAjt2FBJf0DR4UiVCkMLQjpdmt1XsiZkc1Dk92w/3zPAvwWleKIWH8OPWlT8LYAXEV3HwIbUbBceAcUreEfZ+QQ1RcCbO9BqEq575FbwYQ4Bjz1cxP12VJlgNah7KJPnwNSK+Dn/pk8qySSjr7CqZEah6Aj83VbTC8aLgZ8kA7Bd+01R6i9PxFh3f5ciAsAPJ5v+iN45QwiAMqEGaz2x7R68BO2tEWgNwLMy8Z+T9oE58NOk7jzriqwdbx0H5pOMztY5xcqF01mLH0QR/WIQpcWPxnYx4tk68KkffEmNb2u+nDgkntE9lD91e7lZcD7zXHmGFVazqv9BfAN523/xHVmeOQAAAABJRU5ErkJggg=="
+                  class="profile-tag-icon">
+                <span>{{ vo.userHome.position }}</span>
               </div>
             </div>
             <!-- 个人简介文字 -->
-            <p class="profile-text" :class="{ 'profile-placeholder': !vo.userHome.profile, 'profile-editable': global.isLogin && global.user.id == vo.userHome.userId }">
+            <p class="profile-text"
+              :class="{ 'profile-placeholder': !vo.userHome.profile, 'profile-editable': global.isLogin && global.user.id == vo.userHome.userId }">
               {{ vo.userHome.profile || '点击添加简介，让大家更好地了解你...' }}
             </p>
-            <el-icon v-if="global.isLogin && global.user.id == vo.userHome.userId" class="edit-icon-small"><Edit /></el-icon>
+            <el-icon v-if="global.isLogin && global.user.id == vo.userHome.userId" class="edit-icon-small">
+              <Edit />
+            </el-icon>
           </div>
         </div>
 
         <!-- IP属地标签（保留在外部） -->
         <div class="tags-wrapper" v-if="vo.userHome.region">
           <div class="tag-item">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABFUlEQVR42mNgoBRkSaRnpC1PP5R+KG15ekaWBH7FPOnd6T/S/iNg+o/07iweXMpl0y4iK4ZrupAli0V5GW/6VWzKwVqulvFiaEibi0s5GM5Fd45m+l98GtL/ZmmiaMhoRZL+mV6eJpkjlV6e9hMhmtGK6qAzSKaVw0TTy5GMOYOq4TWSlCRcVBJJ9DWqhj/YNORIIYn+QdXwiqCTUG1I34/u6TRJVE+nHUbVUIk3FkCh1ICioVAo7SteDb8QPsMWE5gRNwUjaeSyp13DqeExlrTEwJBhiN1Z6b8zHHAk8LTQtH9YNGThyUJpBRjKmwlk0YwyFA3tROTq9AxoUv+XVkxkQZDum/Yp7VNaAAllR6FQpiB2GQBLang0fXCP5wAAAABJRU5ErkJggg=="
-                 class="tag-icon">
-            <span>IP属地：{{vo.userHome.region}}</span>
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABFUlEQVR42mNgoBRkSaRnpC1PP5R+KG15ekaWBH7FPOnd6T/S/iNg+o/07iweXMpl0y4iK4ZrupAli0V5GW/6VWzKwVqulvFiaEibi0s5GM5Fd45m+l98GtL/ZmmiaMhoRZL+mV6eJpkjlV6e9hMhmtGK6qAzSKaVw0TTy5GMOYOq4TWSlCRcVBJJ9DWqhj/YNORIIYn+QdXwiqCTUG1I34/u6TRJVE+nHUbVUIk3FkCh1ICioVAo7SteDb8QPsMWE5gRNwUjaeSyp13DqeExlrTEwJBhiN1Z6b8zHHAk8LTQtH9YNGThyUJpBRjKmwlk0YwyFA3tROTq9AxoUv+XVkxkQZDum/Yp7VNaAAllR6FQpiB2GQBLang0fXCP5wAAAABJRU5ErkJggg=="
+              class="tag-icon">
+            <span>IP属地：{{ vo.userHome.region }}</span>
           </div>
         </div>
 
@@ -79,65 +89,39 @@
   </div>
 
 
-  <el-dialog
-    :model-value="editInfoDialogVisible"
-    @close="editInfoDialogVisible = false"
-  >
+  <el-dialog :model-value="editInfoDialogVisible" @close="editInfoDialogVisible = false">
     <template #header>
       <span class="font-bold text-xl">编辑个人资料</span>
     </template>
 
     <template #default>
       <div class="flex">
-        <el-form
-          class="flex-grow"
-          ref="userInfoFormRef"
-          :model="userInfoForm"
-          :size="userInfoFormSize"
-          label-width="auto"
-          status-icon
-          :rules="userInfoFormRules"
-        >
+        <el-form class="flex-grow" ref="userInfoFormRef" :model="userInfoForm" :size="userInfoFormSize"
+          label-width="auto" status-icon :rules="userInfoFormRules">
           <el-form-item prop="userName" label="用户名" style="margin-bottom: 15px" label-width="auto">
             <template #default>
-              <el-input
-                v-model="userInfoForm.userName"
-                maxlength="40"
-                placeholder="用户名"
-              >
+              <el-input v-model="userInfoForm.userName" maxlength="40" placeholder="用户名">
               </el-input>
             </template>
           </el-form-item>
 
           <el-form-item prop="company" label="公司" style="margin-bottom: 15px" label-width="auto">
             <template #default>
-              <el-input
-                v-model="userInfoForm.company"
-                maxlength="40"
-                placeholder="所属公司"
-              >
+              <el-input v-model="userInfoForm.company" maxlength="40" placeholder="所属公司">
               </el-input>
             </template>
           </el-form-item>
 
-          <el-form-item prop="position" label="职位"  style="margin-bottom: 15px" label-width="auto">
+          <el-form-item prop="position" label="职位" style="margin-bottom: 15px" label-width="auto">
             <template #default>
-              <el-input
-                v-model="userInfoForm.position"
-                maxlength="40"
-                placeholder="职位"
-              >
+              <el-input v-model="userInfoForm.position" maxlength="40" placeholder="职位">
               </el-input>
             </template>
           </el-form-item>
 
-          <el-form-item prop="description" label="简介"  style="margin-bottom: 15px" label-width="auto">
+          <el-form-item prop="description" label="简介" style="margin-bottom: 15px" label-width="auto">
             <template #default>
-              <el-input
-                v-model="userInfoForm.description"
-                maxlength="40"
-                placeholder="自我简介"
-              >
+              <el-input v-model="userInfoForm.description" maxlength="40" placeholder="自我简介">
               </el-input>
             </template>
           </el-form-item>
@@ -156,7 +140,7 @@
     <template #footer>
       <div class="flex justify-center">
         <el-button type="info" @click="editInfoDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveUserInfo" :disabled="isSaveDisabled" >保存</el-button>
+        <el-button type="primary" @click="saveUserInfo" :disabled="isSaveDisabled">保存</el-button>
       </div>
     </template>
 
@@ -180,6 +164,7 @@ import type { CommonResponse } from '@/http/ResponseTypes/CommonResponseType'
 import { FILE_UPLOAD_URL, USER_INFO_SAVE_URL } from '@/http/URL'
 import { messageTip } from '@/util/utils'
 import { useRoute, useRouter } from 'vue-router'
+import { UserHomeTabTypeEnum } from '@/constants/UserHomeTabTypeConstants'
 const globalStore = useGlobalStore()
 const global = globalStore.global
 const router = useRouter()
@@ -190,6 +175,16 @@ const props = defineProps<{
 }>()
 
 const userId = route.params.userId
+
+const goToTab = (tab: UserHomeTabTypeEnum) => {
+  router.push({
+    name: 'userHome',
+    params: {
+      userId: props.vo.userHome.userId,
+      typeName: tab
+    }
+  })
+}
 
 // 修改用户信息
 const editInfoDialogVisible = ref(false)
@@ -235,20 +230,20 @@ const userInfoFormRules = reactive<FormRules<UserInfoForm>>({
 const cover = ref('')
 const fileList = ref<UploadUserFile[]>([])
 
-watch(() => props.vo.userHome, (newVal) => {
+watch(editInfoDialogVisible, (newVal) => {
   if (newVal) {
-    fileList.value.push({ url: newVal.photo, name: '头像' })
-    if (newVal.photo != null) {
-      cover.value = newVal.photo
+    const userHome = props.vo.userHome
+    if (userHome) {
+      fileList.value = userHome.photo ? [{ url: userHome.photo, name: '头像' }] : []
+      if (userHome.photo != null) {
+        cover.value = userHome.photo
+      }
+      userInfoForm.userName = userHome.userName || ''
+      userInfoForm.company = userHome.company || ''
+      userInfoForm.position = userHome.position || ''
+      userInfoForm.description = userHome.profile || ''
     }
-    userInfoForm.userName = newVal.userName || ''
-    userInfoForm.company = newVal.company || ''
-    userInfoForm.position = newVal.position || ''
-    userInfoForm.description = newVal.profile || ''
-    // upload.value?.fileList = fileList.value
   }
-}, {
-  immediate: true
 })
 
 // 获取隐藏的input元素
@@ -265,9 +260,9 @@ const onUploadFile = (file: File) => {
       messageTip('上传成功', 'success')
       cover.value = response.data.result.imagePath
     }).catch((error) => {
-    console.error(error)
-    messageTip('上传失败' , 'error')
-  })
+      console.error(error)
+      messageTip('上传失败', 'error')
+    })
 }
 
 const uploadAvatar = () => {
@@ -290,11 +285,11 @@ const handleFileUpload = (event: Event) => {
 const isSaveDisabled = ref(false)
 const saveUserInfo = async () => {
   isSaveDisabled.value = true
-  if(!userInfoFormRef.value){
+  if (!userInfoFormRef.value) {
     return
   }
   await userInfoFormRef.value.validate((valid, fields) => {
-    if(valid){
+    if (valid) {
       doPost<CommonResponse>(USER_INFO_SAVE_URL, {
         userId: userId,
         userName: userInfoForm.userName,
@@ -313,7 +308,7 @@ const saveUserInfo = async () => {
       }).finally(() => {
         isSaveDisabled.value = false
       })
-    }else{
+    } else {
       isSaveDisabled.value = false
     }
   })
@@ -324,7 +319,7 @@ const saveUserInfo = async () => {
 
 
 <style scoped>
-.el-form-item__label{
+.el-form-item__label {
   padding: 0;
   margin: 0;
 }
@@ -507,10 +502,11 @@ const saveUserInfo = async () => {
 }
 
 @media (max-width: 768px) {
-  .el-dialog{
+  .el-dialog {
     width: 480px;
   }
-  .hidden-when-screen-small{
+
+  .hidden-when-screen-small {
     display: none;
   }
 

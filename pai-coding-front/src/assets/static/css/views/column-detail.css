@@ -151,11 +151,11 @@
 }
 
 .book-directory-comp .section-list .section .center .sub-line .label {
-  background: #eaf2ff;
+  background: var(--pai-bg-neutral);
   border-radius: 2px;
   line-height: 20px;
   padding: 0 6px;
-  color: #1e80ff;
+  color: var(--pai-brand-1-normal);
   margin-right: 12px;
   font-size: 12px;
   min-width: 40px;
@@ -168,10 +168,10 @@
   cursor: default;
   flex-shrink: 0;
   z-index: 11;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid var(--pai-border-color-1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: left;
-  background-color: #fff;
+  background-color: var(--pai-bg-white-fff);
 }
 
 .book-summary .book-summary-masker {
@@ -197,8 +197,8 @@
   display: flex;
   padding-left: 16px;
   align-items: center;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  background-color: var(--pai-bg-white-fff);
+  border-bottom: 1px solid var(--pai-border-color-1);
 }
 
 .book-summary .book-summary-inner .book-summary__header .logo {
@@ -218,9 +218,9 @@
   line-height: 24px;
   font-size: 15px;
   font-weight: 500;
-  color: #007fff;
+  color: var(--pai-brand-1-normal);
   position: relative;
-  background-color: rgba(0, 127, 255, 0.1);
+  background-color: var(--pai-bg-neutral);
 }
 
 .book-summary .book-summary-inner .book-summary__header .label:after {

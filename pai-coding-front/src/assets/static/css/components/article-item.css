@@ -6,8 +6,8 @@
 /*首页文章*/
 .cdc-article-panel {
   box-sizing: border-box;
-  padding: 16px 0;
-  border-bottom: 1px solid #d6dbe3;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--pai-border-color-1);
   position: relative;
   cursor: pointer;
   max-width: 872px;
@@ -52,7 +52,7 @@
 /*文章标题*/
 .user-article-item-title {
   word-break: break-word;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 18px;
   line-height: 26px;
   color: var(--pai-color-3-black);
@@ -111,6 +111,7 @@
   align-items: center;
   font-size: 12px;
   line-height: 20px;
+  color: var(--pai-color-3-gray);
 }
 
 /*作者*/

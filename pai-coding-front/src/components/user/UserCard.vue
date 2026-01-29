@@ -4,16 +4,16 @@
     <div class="com-2-panel-bd">
       <div class="com-author-intro">
         <div class="com-author-intro-object">
-          <a :href="'/user/' + user.userId"
+          <RouterLink :to="'/user/' + user.userId"
              class="com-author-intro-avatar"
-             :style="{ backgroundImage: 'url(' + user.photo + ')'}"></a>
+             :style="{ backgroundImage: 'url(' + user.photo + ')'}"></RouterLink>
         </div>
         <h3 class="com-author-intro-name">
-          <a :href="'/user/' + user.userId"
+          <RouterLink :to="'/user/' + user.userId"
              class="com-author-intro-name-inner"
              :title="user.userName">
           {{ user.userName}}
-          </a>
+          </RouterLink>
         </h3>
         <div class="com-author-intro-desc">
           <span>{{'已加入' + user.joinDayCount + '天'}}</span>
@@ -31,32 +31,32 @@
         </div>
         <ul class="com-author-intro-infos">
           <li class="com-author-intro-info">
-            <a :href="'/user/' + user.userId"
+            <RouterLink :to="'/user/' + user.userId"
                class="com-author-intro-info-link">
               <div class="com-author-intro-info-title">文章数</div>
               <div class="com-author-intro-info-num">{{user.articleCount}}</div>
-            </a>
+            </RouterLink>
           </li>
           <li class="com-author-intro-info">
-            <a :href="'/user/' + user.userId"
+            <RouterLink :to="'/user/' + user.userId"
                class="com-author-intro-info-link">
               <div class="com-author-intro-info-title">点赞数</div>
               <div class="com-author-intro-info-num">{{user.praiseCount}}</div>
-            </a>
+            </RouterLink>
           </li>
           <li class="com-author-intro-info">
-            <a :href="'/user/' + user.userId"
+            <RouterLink :to="'/user/' + user.userId"
                class="com-author-intro-info-link">
               <div class="com-author-intro-info-title">收藏数</div>
               <div class="com-author-intro-info-num">{{user.collectionCount}}</div>
-            </a>
+            </RouterLink>
           </li>
           <li class="com-author-intro-info">
-            <a :href="'/user/' + user.userId"
+            <RouterLink :to="'/user/' + user.userId"
                class="com-author-intro-info-link">
               <div class="com-author-intro-info-title">粉丝数</div>
               <div class="com-author-intro-info-num">{{user.fansCount}}</div>
-            </a>
+            </RouterLink>
           </li>
         </ul>
       </div>
@@ -100,6 +100,7 @@ const follow = () => {
     })
 }
 
+import { RouterLink } from 'vue-router'
 </script>
 
 

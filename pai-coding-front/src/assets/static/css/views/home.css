@@ -2,6 +2,7 @@
   /*修复返回顶部时不起效的 bug overflow 必须默认*/
   /*overflow: auto;*/
   height: calc(100vh - 60px);
+  background: transparent;
 }
 
 .home-wrap {
@@ -13,18 +14,23 @@
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
+  gap: 20px;
+  padding: 0 16px;
 }
 
 .home-body {
   flex: 1;
-  margin-right: 20px;
-  background-color: #fff;
-  padding: 0 20px;
+  margin-right: 0;
+  background-color: var(--pai-bg-white-fff);
+  padding: 18px 22px;
+  border-radius: var(--pai-surface-radius);
+  border: 1px solid var(--pai-border-color-1);
+  box-shadow: var(--pai-surface-shadow);
   margin-bottom: 20px;
 }
 
 .home-body-nav {
-  color: #262626;
+  color: var(--pai-color-3-black);
 }
 
 /* 头部导航 */
@@ -34,6 +40,7 @@
   font-weight: 700;
   line-height: 2.3rem;
   white-space: nowrap;
+  color: var(--pai-color-3-black);
 }
 
 .category--item:hover {
@@ -118,8 +125,10 @@ svg:not(:root).svg-inline--fa {
 
 /*主要文章详情页 头部图片*/
 .home-carouse-wrap {
-  background-color: #346;
-  padding: 20px;
+  background: transparent;
+  padding: 12px 0;
+  border-radius: 0;
+  border: none;
 }
 
 .home-carouse-inter-wrap {
@@ -128,12 +137,15 @@ svg:not(:root).svg-inline--fa {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
+  padding: 0 16px;
 }
 
 .home-carouse-item {
   width: calc((100% - 60px) * 0.25);
   transition: all 0.2s ease 0s;
-  box-shadow: 0 6px 12px 0 rgb(0 0 0 / 25%);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
 }
 
 .home-carouse-item img {
@@ -142,7 +154,7 @@ svg:not(:root).svg-inline--fa {
 }
 
 .home-carouse-item-body {
-  background-color: #fff;
+  background-color: var(--pai-bg-white-fff);
   padding: 20px;
   height: 160px;
 }
@@ -171,7 +183,7 @@ svg:not(:root).svg-inline--fa {
 .home-carouse-item-tag {
   display: flex;
   align-items: center;
-  color: #a2a2a2;
+  color: var(--pai-color-3-gray);
   font-size: 14px;
 }
 
@@ -194,12 +206,12 @@ svg:not(:root).svg-inline--fa {
   width: 2px;
   height: 2px;
   border-radius: 50%;
-  background: #4e5969;
+  background: var(--pai-color-3-gray);
 }
 
 .home-carouse-item-tag .author {
   padding-left: 8px;
-  color: #a2a2a2;
+  color: var(--pai-color-3-gray);
   display: inline-block;
   max-width: 100px;
   overflow-x: hidden;
@@ -208,7 +220,7 @@ svg:not(:root).svg-inline--fa {
 }
 
 .home-carouse-item:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 
 /* home 适配 */
@@ -223,6 +235,10 @@ svg:not(:root).svg-inline--fa {
 
   .home-wrap {
     padding-top: 0;
+  }
+  .home-inter-wrap,
+  .home-carouse-inter-wrap {
+    padding: 0 12px;
   }
 
   .user-article-item-value-text {

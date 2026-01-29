@@ -29,7 +29,7 @@
 
 import HeaderBar from '@/components/layout/HeaderBar.vue'
 import Footer from '@/components/layout/Footer.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { doGet } from '@/http/BackendRequests'
 import type { CommonResponse } from '@/http/ResponseTypes/CommonResponseType'
 import { USER_INFO_URL } from '@/http/URL'
@@ -48,20 +48,36 @@ const global = globalStore.global
 const route = useRoute()
 
 const userInfo = ref<UserHomeInfoResponseType>({...defaultUserHomeInfo})
-onMounted(() => {
+
+const loadUserHome = () => {
   doGet<CommonResponse>(USER_INFO_URL, {
     userId: route.params.userId
   })
     .then((res) => {
       globalStore.setGlobal(res.data.global)
-
-      Object.assign(userInfo.value, res.data.result)
+      const result = res.data?.result
+      if (result?.userHome) {
+        Object.assign(userInfo.value.userHome, result.userHome)
+      } else if (result) {
+        Object.assign(userInfo.value, result)
+      }
       console.log(userInfo)
     })
     .catch((err) => {
       console.log(err)
     })
+}
+
+onMounted(() => {
+  loadUserHome()
 })
+
+watch(
+  () => route.params.userId,
+  () => {
+    loadUserHome()
+  }
+)
 
 
 </script>
@@ -71,7 +87,7 @@ onMounted(() => {
 <style scoped>
 /* 整体布局 */
 .user-div {
-  overflow: auto;
+  overflow: visible;
   min-height: calc(100vh - var(--footer-height) - var(--header-height));
   background-color: #f7f8f9;
 }

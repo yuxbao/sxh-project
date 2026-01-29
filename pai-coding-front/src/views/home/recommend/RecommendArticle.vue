@@ -2,7 +2,7 @@
   <div class="home-carouse-wrap" :style="{backgroundColor: backgroundColor}">
     <div class="home-carouse-inter-wrap hidden-when-screen-small p-0" >
       <div class="home-carouse-item" v-for="(article, iter) in topArticles" :key="article.articleId">
-        <a :href="'/article/detail/' + article.articleId">
+        <RouterLink :to="'/article/detail/' + article.articleId">
           <img
             :src="article.cover"
             :id="'cover' + iter"
@@ -28,7 +28,7 @@
             </div>
             <!-- </object> -->
           </div>
-        </a>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -80,6 +80,7 @@ function applyColor(img: any){
 
 
 
+import { RouterLink } from 'vue-router'
 </script>
 
 <style scoped>
