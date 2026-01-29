@@ -1,6 +1,6 @@
 package com.github.paicoding.forum.web.controller.home.vo;
 
-import com.github.paicoding.forum.api.model.vo.PageListVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.paicoding.forum.api.model.vo.article.dto.ArticleDTO;
 import com.github.paicoding.forum.api.model.vo.article.dto.CategoryDTO;
 import com.github.paicoding.forum.api.model.vo.recommend.CarouseDTO;
@@ -39,7 +39,7 @@ public class IndexVo {
     /**
      * 文章列表
      */
-    private PageListVo<ArticleDTO> articles;
+    private IPage<ArticleDTO> articles;
 
     /**
      * 登录用户信息

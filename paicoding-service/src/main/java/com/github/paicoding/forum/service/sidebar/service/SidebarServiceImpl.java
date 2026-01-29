@@ -53,7 +53,7 @@ public class SidebarServiceImpl implements SidebarService {
      * @return
      */
     @Override
-    @Cacheable(key = "'homeSidebar'", cacheManager = "caffeineCacheManager", cacheNames = "home")
+    @Cacheable(key = "'homeSidebar_v2'", cacheManager = "caffeineCacheManager", cacheNames = "home")
     public List<SideBarDTO> queryHomeSidebarList() {
         List<SideBarDTO> list = new ArrayList<>();
         list.add(noticeSideBar());
@@ -127,7 +127,7 @@ public class SidebarServiceImpl implements SidebarService {
     private SideBarDTO hotArticles() {
         PageListVo<SimpleArticleDTO> vo = articleReadService.queryHotArticlesForRecommend(PageParam.newPageInstance(1, 8));
         List<SideBarItemDTO> items = vo.getList().stream().map(s -> new SideBarItemDTO().setTitle(s.getTitle()).setUrl("/article/detail/" + s.getId()).setTime(s.getCreateTime().getTime())).collect(Collectors.toList());
-        return new SideBarDTO().setTitle("热门文章").setItems(items).setStyle(SidebarStyleEnum.ARTICLES.getStyle());
+        return new SideBarDTO().setTitle("文章热度排行榜").setItems(items).setStyle(SidebarStyleEnum.ARTICLES.getStyle());
     }
 
 
@@ -233,16 +233,15 @@ public class SidebarServiceImpl implements SidebarService {
      */
     private SideBarDTO rankList() {
         List<RankItemDTO> list = userActivityRankService.queryRankList(ActivityRankTimeEnum.MONTH, 8);
-        if (list.isEmpty()) {
-            return null;
-        }
         SideBarDTO sidebar = new SideBarDTO().setTitle("月度活跃排行榜").setStyle(SidebarStyleEnum.ACTIVITY_RANK.getStyle());
         List<SideBarItemDTO> itemList = new ArrayList<>();
         for (RankItemDTO item : list) {
+            RateVisitDTO visitDTO = new RateVisitDTO();
+            visitDTO.setVisit(item.getScore());
             SideBarItemDTO sideItem = new SideBarItemDTO().setName(item.getUser().getName())
-                    .setUrl(String.valueOf(item.getUser().getUserId()))
+                    .setUrl("/user/" + item.getUser().getUserId())
                     .setImg(item.getUser().getAvatar())
-                    .setTime(item.getScore().longValue());
+                    .setVisit(visitDTO);
             itemList.add(sideItem);
         }
         sidebar.setItems(itemList);

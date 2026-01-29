@@ -401,12 +401,13 @@ public class RedisClient {
         return template.execute(new RedisCallback<List<ImmutablePair<String, Double>>>() {
             @Override
             public List<ImmutablePair<String, Double>> doInRedis(RedisConnection connection) throws DataAccessException {
-                Set<Tuple> set = connection.zRangeWithScores(key.getBytes(), -n, -1);
+                Set<Tuple> set = connection.zRangeWithScores(keyBytes(key), -n, -1);
                 if (set == null) {
                     return Collections.emptyList();
                 }
                 return set.stream()
-                        .map(tuple -> ImmutablePair.of(tuple.getValue().toString(), tuple.getScore()))
+                        // Tuple value is raw bytes; decode to String to avoid "[B@..." artifacts
+                        .map(tuple -> ImmutablePair.of(toObj((byte[]) tuple.getValue(), String.class), tuple.getScore()))
                         .sorted((o1, o2) -> Double.compare(o2.getRight(), o1.getRight())).collect(Collectors.toList());
             }
         });

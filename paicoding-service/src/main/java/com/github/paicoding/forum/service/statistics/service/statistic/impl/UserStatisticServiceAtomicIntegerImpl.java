@@ -25,7 +25,10 @@ public class UserStatisticServiceAtomicIntegerImpl implements UserStatisticServi
      * @return
      */
     public void incrOnlineUserCnt(int add) {
-        onlineUserCnt.addAndGet(add);
+        int updated = onlineUserCnt.addAndGet(add);
+        if (updated < 0) {
+            onlineUserCnt.set(0);
+        }
     }
 
     /**

@@ -115,7 +115,7 @@
 
             <div class="cdc-tag-links__item" v-for="tag in article.tags" :key="tag.tagId">
               <a
-                :href="'/article/tag/' + tag.tag"
+                :href="'/article/tag/' + tag.tagId"
                 rel="article-tag"
                 class="user-article-item-tag cdc-tag-links__item ml-2 mr-0"
               >{{tag.tag}}</a>

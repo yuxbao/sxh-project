@@ -19,7 +19,9 @@
             <!-- 关联推荐 -->
             <h4 class="correlation-article-title">相关推荐</h4>
             <div class="bg-color-white">
-              <div id="articleList"></div>
+              <div id="articleList">
+                <ArticleList :articles="relatedArticles"></ArticleList>
+              </div>
             </div>
           </div>
         </div>
@@ -62,7 +64,7 @@ import {
   type CommonResponse,
 } from '@/http/ResponseTypes/CommonResponseType'
 import { doGet } from '@/http/BackendRequests'
-import { ARTICLE_DETAIL_URL } from '@/http/URL'
+import { ARTICLE_DETAIL_URL, ARTICLE_RELATED_URL } from '@/http/URL'
 import {
   type ArticleDetailResponse,
   defaultArticleDetailResponse
@@ -75,10 +77,13 @@ import LoginDialog from '@/components/dialog/LoginDialog.vue'
 import { useGlobalStore } from '@/stores/global'
 import CommentList from '@/views/article-detail/CommentList.vue'
 import { setTitle } from '@/util/utils'
+import ArticleList from '@/views/home/article/ArticleList.vue'
+import type { ArticleType } from '@/http/ResponseTypes/ArticleType/ArticleType'
 
 const route = useRoute()
 // let global = reactive<GlobalResponse>({...defaultGlobalResponse})
 let articleVo = reactive<ArticleDetailResponse>({...defaultArticleDetailResponse})
+const relatedArticles = ref<ArticleType[]>([])
 const globalStore = useGlobalStore()
 
 const global = globalStore.global
@@ -117,6 +122,13 @@ onMounted(async () => {
         Object.assign(articleVo, response.data.result)
         setTitle(articleVo.article.title)
         ifUsualArticle.value = true
+        doGet<CommonResponse>(ARTICLE_RELATED_URL, { articleId })
+          .then((recommendResponse) => {
+            if (recommendResponse.data) {
+              // @ts-ignore
+              relatedArticles.value = recommendResponse.data.result.list || []
+            }
+          })
       }else{
         router.replace("/column/" + response.data.result.columnId + '/' + response.data.result.sectionId)
       }

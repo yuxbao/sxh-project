@@ -76,7 +76,13 @@ public class CountServiceImpl implements CountService {
 
     @Override
     public UserStatisticInfoDTO queryUserStatisticInfo(Long userId) {
-        Map<String, Integer> ans = RedisClient.hGetAll(CountConstants.USER_STATISTIC_INFO + userId, Integer.class);
+        String key = CountConstants.USER_STATISTIC_INFO + userId;
+        Map<String, Integer> ans = RedisClient.hGetAll(key, Integer.class);
+        if (ans == null || ans.isEmpty()) {
+            // Redis 无统计信息时，主动回填
+            refreshUserStatisticInfo(userId);
+            ans = RedisClient.hGetAll(key, Integer.class);
+        }
         UserStatisticInfoDTO info = new UserStatisticInfoDTO();
         info.setFollowCount(ans.getOrDefault(CountConstants.FOLLOW_COUNT, 0));
         info.setArticleCount(ans.getOrDefault(CountConstants.ARTICLE_COUNT, 0));

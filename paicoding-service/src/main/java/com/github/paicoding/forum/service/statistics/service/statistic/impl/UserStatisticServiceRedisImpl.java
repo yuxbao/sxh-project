@@ -16,7 +16,11 @@ public class UserStatisticServiceRedisImpl implements UserStatisticService {
     @Override
     public void incrOnlineUserCnt(int cnt) {
         int onlineUserCnt = getOnlineUserCnt();
-        RedisClient.setStr(ONLINE_USER_CNT_KEY, String.valueOf(onlineUserCnt + cnt));
+        int updated = onlineUserCnt + cnt;
+        if (updated < 0) {
+            updated = 0;
+        }
+        RedisClient.setStr(ONLINE_USER_CNT_KEY, String.valueOf(updated));
     }
 
     @Override

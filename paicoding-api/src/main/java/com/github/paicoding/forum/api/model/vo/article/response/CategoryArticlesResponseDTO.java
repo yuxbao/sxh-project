@@ -3,6 +3,7 @@ package com.github.paicoding.forum.api.model.vo.article.response;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.paicoding.forum.api.model.vo.article.dto.ArticleDTO;
 import com.github.paicoding.forum.api.model.vo.article.dto.CategoryDTO;
+import com.github.paicoding.forum.api.model.vo.recommend.SideBarDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public record CategoryArticlesResponseDTO(
         @Schema(description =  "文章列表") IPage<ArticleDTO> articles,
         @Schema(description =  "分类列表") List<CategoryDTO> categories,
-        @Schema(description =  "当前分类下的指定article卡片") List<ArticleDTO> topArticles
+        @Schema(description =  "当前分类下的指定article卡片") List<ArticleDTO> topArticles,
+        @Schema(description =  "首页侧边栏") List<SideBarDTO> sideBarItems
 
 ) {}

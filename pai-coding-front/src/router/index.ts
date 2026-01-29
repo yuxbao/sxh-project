@@ -27,6 +27,17 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/rank',
+      redirect(to) {
+        return { name: 'rank', params: { time: 'month' } }
+      },
+    },
+    {
+      path: '/rank/:time',
+      name: 'rank',
+      component: () => import('@/views/rank/RankView.vue')
+    },
+    {
       path: '/article/detail/:articleId',
       name: "articleDetail",
       component: () => import('@/views/ArticleDetailView.vue')

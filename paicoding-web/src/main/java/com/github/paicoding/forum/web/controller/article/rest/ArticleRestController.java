@@ -6,6 +6,7 @@ import com.github.paicoding.forum.api.model.enums.DocumentTypeEnum;
 import com.github.paicoding.forum.api.model.enums.NotifyTypeEnum;
 import com.github.paicoding.forum.api.model.enums.OperateTypeEnum;
 import com.github.paicoding.forum.api.model.event.MessageQueueEvent;
+import com.github.paicoding.forum.api.model.vo.PageListVo;
 import com.github.paicoding.forum.api.model.vo.PageParam;
 import com.github.paicoding.forum.api.model.vo.PageVo;
 import com.github.paicoding.forum.api.model.vo.ResVo;
@@ -226,8 +227,20 @@ public class ArticleRestController {
         selectedCategory = selectedCategory == null ? CategoryDTO.DEFAULT_CATEGORY : selectedCategory;
         List<ArticleDTO> topArticles = indexRecommendHelper.topArticleList(selectedCategory);
 
-        CategoryArticlesResponseDTO responseDTO = new CategoryArticlesResponseDTO(articles, categories, topArticles);
+        List<SideBarDTO> sideBars = sidebarService.queryHomeSidebarList();
+        CategoryArticlesResponseDTO responseDTO = new CategoryArticlesResponseDTO(articles, categories, topArticles, sideBars);
         return ResultVo.ok(responseDTO);
+    }
+
+    /**
+     * 文章相关推荐
+     */
+    @GetMapping("/recommend/related")
+    public ResVo<PageListVo<ArticleDTO>> relatedRecommend(@RequestParam(name = "articleId") Long articleId,
+                                                          @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                                          @RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        PageListVo<ArticleDTO> list = articleRecommendService.relatedRecommend(articleId, PageParam.newPageInstance(pageNum, pageSize));
+        return ResVo.ok(list);
     }
 
     /**

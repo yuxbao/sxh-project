@@ -1,4 +1,10 @@
 // 定义侧边栏项的类型
+export interface SideBarVisit {
+  visit: number;
+  download: number;
+  rate: string;
+}
+
 export interface SideBarItem {
   title: string;
   subTitle: string;
@@ -13,7 +19,7 @@ export interface SideBarItem {
     img: string | null;
     time: string | null;
     tags: number[] | null;
-    visit: number | null;
+    visit: number | SideBarVisit | null;
   }>;
   style: number;
 }

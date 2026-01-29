@@ -1,73 +1,75 @@
-
 <template>
-    <HeaderBar />
+  <HeaderBar />
 
-<!--  正文内容-->
-    <div class="home mt-2">
+  <!--  正文内容-->
+  <div class="home mt-2">
 
-      <el-skeleton class="hidden-when-screen-small" :loading="contentLoading" animated :throttle="200">
-        <template #template>
-          <div style="height: 400px">
-            <el-skeleton-item class="mt-2 mb-4 p-4"></el-skeleton-item>
-            <div class="flex justify-between">
-              <el-skeleton-item v-for="(item, id) in 4" :key="id" class="ml-4" variant="image" style="width: 285px; height: 290px" />
-            </div>
+    <el-skeleton class="hidden-when-screen-small" :loading="contentLoading" animated :throttle="200">
+      <template #template>
+        <div style="height: 400px">
+          <el-skeleton-item class="mt-2 mb-4 p-4"></el-skeleton-item>
+          <div class="flex justify-between">
+            <el-skeleton-item v-for="(item, id) in 4" :key="id" class="ml-4" variant="image"
+              style="width: 285px; height: 290px" />
           </div>
-        </template>
-        <template #default>
-          <!--      类别筛选-->
-          <NavBar :categories="vo.categories"></NavBar>
-          <!--      推荐文章-->
-          <RecommendArticle v-if="!contentLoading && vo.topArticles.length > 0" :top-articles="vo.topArticles" id="recommend-article-component"></RecommendArticle>
-        </template>
-      </el-skeleton>
+        </div>
+      </template>
+      <template #default>
+        <!--      类别筛选-->
+        <NavBar :categories="vo.categories"></NavBar>
+        <!--      推荐文章-->
+        <RecommendArticle v-if="!contentLoading && vo.topArticles.length > 0" :top-articles="vo.topArticles"
+          id="recommend-article-component"></RecommendArticle>
+      </template>
+    </el-skeleton>
 
-      <el-skeleton class="hidden-when-screen-small" :loading="articlesLoading" animated :throttle="200">
-        <template #template>
-          <div class="home-wrap bg-color">
-            <div class="home-inter-wrap">
-              <div class="home-body">
-                <div v-for="(item, id) in 10" :key="id" class="center-content" style="height: 168px">
-                  <el-skeleton-item class="mt-2 ml-2 mb-4 mr-4 p-16"></el-skeleton-item>
-                </div>
-              </div>
-              <div class="home-right">
-                <el-skeleton-item class="mt-1 mb-4 p-40"></el-skeleton-item>
+    <el-skeleton class="hidden-when-screen-small" :loading="articlesLoading" animated :throttle="200">
+      <template #template>
+        <div class="home-wrap bg-color">
+          <div class="home-inter-wrap">
+            <div class="home-body">
+              <div v-for="(item, id) in 10" :key="id" class="center-content" style="height: 168px">
+                <el-skeleton-item class="mt-2 ml-2 mb-4 mr-4 p-16"></el-skeleton-item>
               </div>
             </div>
+            <div class="home-right">
+              <el-skeleton-item class="mt-1 mb-4 p-40"></el-skeleton-item>
+            </div>
           </div>
+        </div>
 
-        </template>
-        <template #default>
-          <div class="home-wrap bg-color" >
-            <div class="home-inter-wrap">
-              <div class="home-body">
-                <div id="articleList" class="cdc-article-panel__list">
-                  <ArticleList :articles="articles.records"></ArticleList>
-                </div>
-
-                <!--        分页组件-->
-                <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentPage" v-model:page-size="pageSize" layout="sizes, prev, pager, next" :page-count="totalPage" :default-current-page="1"
-                               @update:page-size="onPageSizeChange" @update:current-page="onCurrentPageChange"
-                />
-
+      </template>
+      <template #default>
+        <div class="home-wrap bg-color">
+          <div class="home-inter-wrap">
+            <div class="home-body">
+              <div id="articleList" class="cdc-article-panel__list">
+                <ArticleList :articles="articles.records"></ArticleList>
               </div>
 
-              <div class="home-right">
-                <!-- 侧边公告 -->
-<!--                <div v-if="vo.sideBarItems">-->
-<!--                  <SideBar :sidebar-items="vo.sideBarItems"></SideBar>-->
-<!--                </div>-->
+              <!--        分页组件-->
+              <el-pagination :page-sizes="[10, 20]" hide-on-single-page v-model:current-page="currentPage"
+                v-model:page-size="pageSize" layout="sizes, prev, pager, next" :page-count="totalPage"
+                :default-current-page="1" @update:page-size="onPageSizeChange"
+                @update:current-page="onCurrentPageChange" />
+
+            </div>
+
+            <div class="home-right">
+              <!-- 侧边公告 -->
+              <div v-if="vo.sideBarItems">
+                <SideBar :sidebar-items="vo.sideBarItems"></SideBar>
               </div>
             </div>
           </div>
-        </template>
-      </el-skeleton>
+        </div>
+      </template>
+    </el-skeleton>
 
 
-      <!-- 底部信息 -->
-      <Footer></Footer>
-    </div>
+    <!-- 底部信息 -->
+    <Footer></Footer>
+  </div>
   <LoginDialog :clicked="loginDialogClicked"></LoginDialog>
 
 </template>
@@ -94,9 +96,9 @@ import LoginDialog from '@/components/dialog/LoginDialog.vue'
 const globalStore = useGlobalStore()
 const route = useRoute()
 
-let global = reactive<GlobalResponse>({...defaultGlobalResponse})
-let vo = reactive<IndexVoResponse>({...defaultIndexVoResponse})
-let articles = reactive<BasicPageType<ArticleType>>({...defaultBasicPage})
+let global = reactive<GlobalResponse>({ ...defaultGlobalResponse })
+let vo = reactive<IndexVoResponse>({ ...defaultIndexVoResponse })
+let articles = reactive<BasicPageType<ArticleType>>({ ...defaultBasicPage })
 onMounted(() => {
   // 获取文章列表
   doGet<CommonResponse>(CATEGORY_ARTICLE_LIST_URL, {
@@ -104,20 +106,35 @@ onMounted(() => {
   })
     .then((response) => {
       console.log(response)
-      if(response.data){
+      if (response.data) {
         globalStore.setGlobal(response.data.global)
-        Object.assign(vo.topArticles, response.data.result.topArticles)
-        Object.assign(vo.categories, response.data.result.categories)
         // @ts-ignore
         Object.assign(articles, response.data.result.articles)
         totalPage.value = Number(response.data.result.articles.pages)
         currentPage.value = Number(response.data.result.articles.current)
-        console.log(articles)
-        // 取消骨架屏显示
         articlesLoading.value = false
+
+        // 如果不是首页，使用该接口返回的侧边栏等数据
+        if (route.query['category']) {
+          vo.topArticles = response.data.result.topArticles
+          vo.categories = response.data.result.categories
+          vo.sideBarItems = response.data.result.sideBarItems || []
+          contentLoading.value = false
+        }
+      }
+    })
+
+  // 如果是首页，单独请求 Index 接口以获取完整的侧边栏和配置信息
+  if (!route.query['category']) {
+    doGet<CommonResponse>(INDEX_URL, {}).then((response) => {
+      if (response.data) {
+        vo.topArticles = response.data.result.topArticles
+        vo.categories = response.data.result.categories
+        vo.sideBarItems = response.data.result.sideBarItems || []
         contentLoading.value = false
       }
     })
+  }
 })
 
 // 如下是分页操作
@@ -133,10 +150,11 @@ const onPageSizeChange = (newPageSize: number) => {
   })
     .then((response) => {
       console.log(response)
-      if(response.data){
+      if (response.data) {
         globalStore.setGlobal(response.data.global)
-        Object.assign(vo.topArticles, response.data.result.topArticles)
-        Object.assign(vo.categories, response.data.result.categories)
+        vo.topArticles = response.data.result.topArticles
+        vo.categories = response.data.result.categories
+        vo.sideBarItems = response.data.result.sideBarItems || []
         Object.assign(articles, response.data.result.articles)
         totalPage.value = Number(response.data.result.articles.pages)
         currentPage.value = Number(response.data.result.articles.current)
@@ -153,10 +171,11 @@ const onCurrentPageChange = (newCurrentPage: number) => {
   })
     .then((response) => {
       console.log(response)
-      if(response.data){
+      if (response.data) {
         globalStore.setGlobal(response.data.global)
-        Object.assign(vo.topArticles, response.data.result.topArticles)
-        Object.assign(vo.categories, response.data.result.categories)
+        vo.topArticles = response.data.result.topArticles
+        vo.categories = response.data.result.categories
+        vo.sideBarItems = response.data.result.sideBarItems || []
         Object.assign(articles, response.data.result.articles)
         totalPage.value = Number(response.data.result.articles.pages)
         currentPage.value = Number(response.data.result.articles.current)
@@ -180,9 +199,4 @@ const loginDialogClicked = ref(false)
 
 </script>
 
-<style scoped>
-
-
-
-</style>
-
+<style scoped></style>
