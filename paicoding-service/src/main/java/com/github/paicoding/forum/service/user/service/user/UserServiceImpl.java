@@ -192,6 +192,37 @@ public class UserServiceImpl implements UserService {
             userHomeDTO.setYearArticleList(yearArticleDTOS);
 
             userInfoCacheManager.setUserInfo(userId, userHomeDTO);
+        } else {
+            // Cache might be stale; refresh core counters from redis/db.
+            UserStatisticInfoDTO countDTO = countService.queryUserStatisticInfo(userId);
+            if (countDTO != null) {
+                userHomeDTO.setFollowCount(countDTO.getFollowCount());
+                userHomeDTO.setFansCount(countDTO.getFansCount());
+                userHomeDTO.setArticleCount(countDTO.getArticleCount());
+                userHomeDTO.setPraiseCount(countDTO.getPraiseCount());
+                userHomeDTO.setReadCount(countDTO.getReadCount());
+                userHomeDTO.setCollectionCount(countDTO.getCollectionCount());
+            }
+            if (CollectionUtils.isEmpty(userHomeDTO.getYearArticleList())) {
+                List<YearArticleDTO> yearArticleDTOS = articleDao.listYearArticleByUserId(userId);
+                userHomeDTO.setYearArticleList(yearArticleDTOS);
+            }
+            if (userHomeDTO.getArticleCount() == null || userHomeDTO.getArticleCount() == 0) {
+                int articleCountFromYear = 0;
+                if (!CollectionUtils.isEmpty(userHomeDTO.getYearArticleList())) {
+                    for (YearArticleDTO yearArticleDTO : userHomeDTO.getYearArticleList()) {
+                        if (yearArticleDTO != null && yearArticleDTO.getArticleCount() != null) {
+                            articleCountFromYear += yearArticleDTO.getArticleCount();
+                        }
+                    }
+                }
+                if (articleCountFromYear > 0) {
+                    userHomeDTO.setArticleCount(articleCountFromYear);
+                } else {
+                    userHomeDTO.setArticleCount(articleDao.countArticleByUser(userId));
+                }
+            }
+            userInfoCacheManager.setUserInfo(userId, userHomeDTO);
         }
 
         // 是否关注

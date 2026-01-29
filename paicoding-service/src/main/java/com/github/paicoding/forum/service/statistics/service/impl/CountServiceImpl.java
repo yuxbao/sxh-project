@@ -82,6 +82,30 @@ public class CountServiceImpl implements CountService {
             // Redis 无统计信息时，主动回填
             refreshUserStatisticInfo(userId);
             ans = RedisClient.hGetAll(key, Integer.class);
+        } else {
+            boolean missRequiredKey = !ans.containsKey(CountConstants.FOLLOW_COUNT)
+                    || !ans.containsKey(CountConstants.FANS_COUNT)
+                    || !ans.containsKey(CountConstants.ARTICLE_COUNT)
+                    || !ans.containsKey(CountConstants.PRAISE_COUNT)
+                    || !ans.containsKey(CountConstants.READ_COUNT)
+                    || !ans.containsKey(CountConstants.COLLECTION_COUNT);
+            if (missRequiredKey) {
+                refreshUserStatisticInfo(userId);
+                ans = RedisClient.hGetAll(key, Integer.class);
+            } else {
+                Integer articleCount = ans.get(CountConstants.ARTICLE_COUNT);
+                if (articleCount == null || articleCount == 0) {
+                    int dbArticleCount = articleDao.countArticleByUser(userId);
+                    if (dbArticleCount > 0) {
+                        refreshUserStatisticInfo(userId);
+                        ans = RedisClient.hGetAll(key, Integer.class);
+                    }
+                }
+            }
+        }
+        if (ans == null || ans.isEmpty()) {
+            UserStatisticInfoDTO fallback = buildUserStatisticInfoByDb(userId);
+            return fallback;
         }
         UserStatisticInfoDTO info = new UserStatisticInfoDTO();
         info.setFollowCount(ans.getOrDefault(CountConstants.FOLLOW_COUNT, 0));
@@ -90,6 +114,24 @@ public class CountServiceImpl implements CountService {
         info.setCollectionCount(ans.getOrDefault(CountConstants.COLLECTION_COUNT, 0));
         info.setReadCount(ans.getOrDefault(CountConstants.READ_COUNT, 0));
         info.setFansCount(ans.getOrDefault(CountConstants.FANS_COUNT, 0));
+        return info;
+    }
+
+    private UserStatisticInfoDTO buildUserStatisticInfoByDb(Long userId) {
+        UserStatisticInfoDTO info = new UserStatisticInfoDTO();
+        ArticleFootCountDTO count = userFootDao.countArticleByUserId(userId);
+        if (count == null) {
+            count = new ArticleFootCountDTO();
+        }
+        Long followCount = userRelationDao.queryUserFollowCount(userId);
+        Long fansCount = userRelationDao.queryUserFansCount(userId);
+        Integer articleNum = articleDao.countArticleByUser(userId);
+        info.setFollowCount(followCount == null ? 0 : followCount.intValue());
+        info.setFansCount(fansCount == null ? 0 : fansCount.intValue());
+        info.setArticleCount(articleNum == null ? 0 : articleNum);
+        info.setPraiseCount(count.getPraiseCount() == null ? 0 : count.getPraiseCount());
+        info.setCollectionCount(count.getCollectionCount() == null ? 0 : count.getCollectionCount());
+        info.setReadCount(count.getReadCount() == null ? 0 : count.getReadCount());
         return info;
     }
 
