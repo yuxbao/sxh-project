@@ -3,7 +3,7 @@ spring:
   datasource: #单数据源
     url: jdbc:mysql://localhost:3306/${database.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password:
+    password: Baoyu273511a
 
   dynamic: # 动态数据源
     #    primary: master # 这个表示默认的数据源
@@ -34,7 +34,7 @@ spring:
     redis:
       host: localhost
       port: 6379
-      password:
+      password: 273511
 
 # elasticsearch配置
 elasticsearch:

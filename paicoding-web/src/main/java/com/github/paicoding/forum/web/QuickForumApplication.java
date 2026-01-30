@@ -49,7 +49,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         }
 )
 public class QuickForumApplication implements WebMvcConfigurer, ApplicationRunner {
-    @Value("${server.port:8080}")
+    @Value("${server.port:8081}")
     private Integer webPort;
 
     @Resource

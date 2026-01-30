@@ -6,7 +6,7 @@
         SELECT sum(cnt) as pv_count, count(*) as uv_count, date
         FROM request_count
         group by date order by date desc
-        limit #{day};
+        limit #{day}
     </select>
 
 </mapper>

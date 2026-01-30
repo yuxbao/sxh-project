@@ -17,8 +17,8 @@ RESTART_FUNC_NAME="restart"
 
 #env, ssh remote, work dir
 ENV_PRO="prod"
-SSH_HOST_PRO=("ubuntu@124.221.214.211")
-WORK_DIR_PRO="/home/ubuntu/tech-pai/"
+SSH_HOST_PRO=("root@8.153.74.243")
+WORK_DIR_PRO="/root/paicoding/"
 
 
 # log file
@@ -69,11 +69,11 @@ function run() {
 
 function compile() {
     echo "---- start to build jar ----"
-    echo "安装依赖：mvn clean install -Dmaven.test.skip=True -P${1}"
-    mvn clean install -Dmaven.test.skip=True -P${1}
+    echo "安装依赖：mvn clean install -Dmaven.test.skip=True -P${1} -Dmaven.compiler.proc=full"
+    mvn clean install -Dmaven.test.skip=True -P${1} -Dmaven.compiler.proc=full
     cd ${WEB_PATH}
-    echo "构建可运行jar：mvn clean package spring-boot:repackage -Dmaven.test.skip=true -P${1}"
-    mvn clean package spring-boot:repackage -Dmaven.test.skip=true -P${1}
+    echo "构建可运行jar：mvn clean package spring-boot:repackage -Dmaven.test.skip=true -P${1} -Dmaven.compiler.proc=full"
+    mvn clean package spring-boot:repackage -Dmaven.test.skip=true -P${1} -Dmaven.compiler.proc=full
     cd -
     ret=$?
     if [[ ${ret} -ne 0 ]] ; then

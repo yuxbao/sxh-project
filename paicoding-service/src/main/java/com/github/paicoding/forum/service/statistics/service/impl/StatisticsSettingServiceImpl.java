@@ -6,6 +6,7 @@ import com.github.paicoding.forum.api.model.vo.user.dto.UserFootStatisticDTO;
 import com.github.paicoding.forum.core.cache.RedisClient;
 import com.github.paicoding.forum.service.article.service.ArticleReadService;
 import com.github.paicoding.forum.service.article.service.ColumnService;
+import com.github.paicoding.forum.service.statistics.repository.entity.RequestCountDO;
 import com.github.paicoding.forum.service.statistics.service.RequestCountService;
 import com.github.paicoding.forum.service.statistics.service.StatisticsSettingService;
 import com.github.paicoding.forum.service.user.service.UserFootService;
@@ -53,19 +54,19 @@ public class StatisticsSettingServiceImpl implements StatisticsSettingService {
 
         Integer count = RedisClient.hGet(RequestCountService.REQUEST_COUNT_PREFIX + Date.valueOf(LocalDate.now()), host, Integer.class);
         if(count != null){
-            RedisClient.hSet(RequestCountService.REQUEST_COUNT_PREFIX + Date.valueOf(LocalDate.now()), host, count);
+            RedisClient.hSet(RequestCountService.REQUEST_COUNT_PREFIX + Date.valueOf(LocalDate.now()), host, count + 1);
         }else{
             RedisClient.hSet(RequestCountService.REQUEST_COUNT_PREFIX + Date.valueOf(LocalDate.now()), host, 1);
         }
 
-        // 以下是直接访问DB的逻辑，要操作两次数据库，访问压力太大
-//        RequestCountDO requestCountDO = requestCountService.getRequestCount(host);
-//        if (requestCountDO == null) {
-//            requestCountService.insert(host);
-//        } else {
-//            // 改为数据库直接更新
-//            requestCountService.incrementCount(requestCountDO.getId());
-//        }
+        // 同时更新数据库，保持一致性
+        RequestCountDO requestCountDO = requestCountService.getRequestCount(host);
+        if (requestCountDO == null) {
+            requestCountService.insert(host);
+        } else {
+            // 改为数据库直接更新
+            requestCountService.incrementCount(requestCountDO.getId());
+        }
     }
 
     @Override
@@ -84,7 +85,7 @@ public class StatisticsSettingServiceImpl implements StatisticsSettingService {
                 .collectCount(userFootStatisticDTO.getCollectionCount())
                 .likeCount(userFootStatisticDTO.getPraiseCount())
                 .readCount(userFootStatisticDTO.getReadCount())
-                .starPayCount(aiConfig.getMaxNum().getStarNumber())
+                .starPayCount(aiConfig.getMaxNum() != null ? aiConfig.getMaxNum().getStarNumber() : 0)
                 .build();
     }
 

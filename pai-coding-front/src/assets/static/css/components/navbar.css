@@ -140,6 +140,13 @@
   align-items: center;
 }
 
+.navbar-logo-wrap .logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
 .logo-lg {
   height: 30px;
   width: 30px;

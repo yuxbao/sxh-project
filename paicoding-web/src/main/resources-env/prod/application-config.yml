@@ -1,17 +1,17 @@
 view:
   site:
-    websiteName: 编程汇
-    websiteLogoUrl: https://paicoding.com/img/logo.svg
-    websiteFaviconIconUrl: https://paicoding.com/img/icon.png
-    contactMeTitle: 联系我 - 小灰飞
-    contactMeWxQrCode: https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/tech-pai/images/%E5%85%AC%E4%BC%97%E5%8F%B7qrcode.jpg
+    websiteName: 思享汇
+    websiteLogoUrl: https://96e5ee1.webp.li/sixianghui_logo.svg
+    websiteFaviconIconUrl: https://96e5ee1.webp.li/icon.png
+    contactMeTitle: 联系我 - 小鲍同学
+    contactMeWxQrCode: https://96e5ee1.webp.li/qrcode.png
     pageSize: 20
     needLoginArticleReadCount: 30 # 需要登录才能阅读的文章阅读次数
     cdnImgStyle:
-    websiteRecord: 备案号:冀ICP备2023036490号-1
+    websiteRecord: 备案号:沪ICP备2025147371号
     wxLoginUrl: http://weixin.qq.com/r/WxwpMefE-rqBraNS90lJ
-    host: https://www.xuyifei.site
-    welcomeInfo: 欢迎来到编程汇！
+    host: https://baoprojects.site
+    welcomeInfo: 欢迎来到思享汇！
     zsxqUrl: ''
     zsxqPosterUrl: ''
     contactMeStarQrCode: https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/tech-pai/images/%E5%85%AC%E4%BC%97%E5%8F%B7qrcode.jpg
