@@ -62,6 +62,8 @@
   --app-accent: #2d7dff;
   --app-accent-soft: rgba(45, 125, 255, 0.16);
   --app-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  --page-accent: rgba(45, 125, 255, 0.08);
+  --page-accent-soft: rgba(45, 125, 255, 0.04);
 
   /* Element Plus theme alignment */
   --el-color-primary: #2d7dff;
@@ -94,7 +96,10 @@
 }
 
 body {
-  background: linear-gradient(180deg, #fafafa 0%, #f5f6f8 45%, #f0f1f3 100%);
+  background:
+    radial-gradient(900px 500px at 12% -10%, var(--page-accent), transparent 70%),
+    radial-gradient(900px 520px at 88% 0%, var(--page-accent-soft), transparent 68%),
+    linear-gradient(180deg, #fafafa 0%, #f5f6f8 45%, #f0f1f3 100%);
   background-attachment: fixed;
   color: var(--app-text);
   font-family: var(--app-font-sans);

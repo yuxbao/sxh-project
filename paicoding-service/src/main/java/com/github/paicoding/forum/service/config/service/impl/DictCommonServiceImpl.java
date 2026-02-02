@@ -36,13 +36,20 @@ public class DictCommonServiceImpl implements DictCommonService {
         List<DictCommonDTO> dictCommonList = dictCommonDao.getDictList();
 
         Map<String, Map<String, String>> dictCommonMap = Maps.newLinkedHashMap();
+        // 暂时注释掉广告banner和首页banner、侧边banner，因为目前前端没展示到
         for (DictCommonDTO dictCommon : dictCommonList) {
-                Map<String, String> codeMap = dictCommonMap.get(dictCommon.getTypeCode());
-                if (codeMap == null || codeMap.isEmpty()) {
-                    codeMap = Maps.newLinkedHashMap();
-                    dictCommonMap.put(dictCommon.getTypeCode(), codeMap);
-                }
-                codeMap.put(dictCommon.getDictCode(), dictCommon.getDictDesc());
+            if ("ConfigType".equals(dictCommon.getTypeCode())
+                    && ("1".equals(dictCommon.getDictCode())
+                    || "2".equals(dictCommon.getDictCode())
+                    || "3".equals(dictCommon.getDictCode()))) {
+                continue;
+            }
+            Map<String, String> codeMap = dictCommonMap.get(dictCommon.getTypeCode());
+            if (codeMap == null || codeMap.isEmpty()) {
+                codeMap = Maps.newLinkedHashMap();
+                dictCommonMap.put(dictCommon.getTypeCode(), codeMap);
+            }
+            codeMap.put(dictCommon.getDictCode(), dictCommon.getDictDesc());
         }
 
         // 获取分类的字典信息

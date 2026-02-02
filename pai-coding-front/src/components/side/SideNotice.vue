@@ -12,8 +12,13 @@
           <li>
             <a :href="item.url"
                class="home-right-item-post-item com-media com-2-side-activity">
-              <div class="com-media-body home-right-item-post-title"  v-if="item.tags?.length !== 0">
-                <span class="home-right-item-icon-wrap" v-for="(tag, id) in item.tags" :key="id">
+              <div class="com-media-body home-right-item-post-title">
+                <span
+                  v-if="item.tags && item.tags.length > 0"
+                  class="home-right-item-icon-wrap"
+                  v-for="(tag, id) in item.tags"
+                  :key="id"
+                >
                     <img v-if = "tag === 1"
                          style="display: inline"
                          class="home-right-item-icon"
@@ -31,6 +36,7 @@
                        alt="推荐"/>
                   <span class="com-2-side-activity-title home-right-item-post-title-txt">{{item.name}}</span>
                 </span>
+                <span v-else class="com-2-side-activity-title home-right-item-post-title-txt">{{item.name}}</span>
 
                 <div class="com-2-side-activity-desc">{{item.title}}</div>
               </div>

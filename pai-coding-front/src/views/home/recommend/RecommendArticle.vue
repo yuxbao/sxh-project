@@ -45,6 +45,34 @@ const props = defineProps<{
 
 const backgroundColor = ref<string>('')
 
+const applyPageAccent = (hex?: string) => {
+  if (!hex) return
+  const rgb = hexToRgb(hex)
+  if (!rgb) return
+  const root = document.documentElement
+  root.style.setProperty('--page-accent', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`)
+  root.style.setProperty('--page-accent-soft', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`)
+}
+
+const hexToRgb = (hex: string) => {
+  const normalized = hex.replace('#', '').trim()
+  if (normalized.length === 3) {
+    const r = parseInt(normalized[0] + normalized[0], 16)
+    const g = parseInt(normalized[1] + normalized[1], 16)
+    const b = parseInt(normalized[2] + normalized[2], 16)
+    if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null
+    return { r, g, b }
+  }
+  if (normalized.length === 6) {
+    const r = parseInt(normalized.slice(0, 2), 16)
+    const g = parseInt(normalized.slice(2, 4), 16)
+    const b = parseInt(normalized.slice(4, 6), 16)
+    if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null
+    return { r, g, b }
+  }
+  return null
+}
+
 
 function setColor(index: number) {
   if (index !== 0) return
@@ -73,7 +101,15 @@ function applyColor(img: any) {
     .then((palette) => {
       let rgb = palette.Vibrant?.getHex()
       // console.log("rgb", rgb)
-      backgroundColor.value = rgb || ''
+      if (rgb) {
+        const extracted = hexToRgb(rgb)
+        backgroundColor.value = extracted
+          ? `rgba(${extracted.r}, ${extracted.g}, ${extracted.b}, 0.12)`
+          : rgb
+        applyPageAccent(rgb)
+      } else {
+        backgroundColor.value = ''
+      }
     }).catch(e => {
       console.warn("Vibrant extract color failed:", e)
     })
