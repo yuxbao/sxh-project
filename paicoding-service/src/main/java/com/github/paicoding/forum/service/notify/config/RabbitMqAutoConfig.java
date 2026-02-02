@@ -1,6 +1,7 @@
 package com.github.paicoding.forum.service.notify.config;
 
 import com.github.paicoding.forum.core.config.RabbitmqProperties;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,7 +19,7 @@ public class RabbitMqAutoConfig implements ApplicationRunner {
 //    @Resource
 //    private RabbitmqService rabbitmqService;
 
-    @Autowired
+    @Resource
     private RabbitmqProperties rabbitmqProperties;
 
 

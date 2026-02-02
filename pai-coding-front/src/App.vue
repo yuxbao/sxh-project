@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
+import { connectWebSocket } from '@/util/websocket'
+
+onMounted(() => {
+  connectWebSocket()
+})
 </script>
 
 <template>

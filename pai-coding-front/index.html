@@ -27,6 +27,11 @@
     <!--    <script type="application/ld+json" th:utext="${global.jsonLd}"></script>-->
 
     <link rel="icon" href="/src/assets/static/img/icon.png" />
+    <script>
+      if (typeof global === 'undefined') {
+        window.global = window
+      }
+    </script>
     <link href="/src/assets/static/css/three/index.css" rel="stylesheet" />
     <link href="/src/assets/static/css/three/highlightjs.github.min.css" rel="stylesheet" />
     <link href="/src/assets/static/css/three/nprogress.css" rel="stylesheet" />

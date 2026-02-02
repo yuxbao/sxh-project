@@ -3,6 +3,7 @@ package com.github.paicoding.forum.service.notify.service.impl;
 import com.github.paicoding.forum.api.model.enums.NotifyStatEnum;
 import com.github.paicoding.forum.api.model.enums.NotifyTypeEnum;
 import com.github.paicoding.forum.api.model.vo.notify.NotifyMsgEvent;
+import com.github.paicoding.forum.api.model.vo.notify.NotifyWsEvent;
 import com.github.paicoding.forum.core.util.SpringUtil;
 import com.github.paicoding.forum.service.article.repository.entity.ArticleDO;
 import com.github.paicoding.forum.service.article.service.ArticleReadService;
@@ -91,6 +92,7 @@ public class NotifyMsgListener<T> implements ApplicationListener<NotifyMsgEvent<
                 .setState(NotifyStatEnum.UNREAD.getStat()).setMsg(comment.getContent());
         // 对于评论而言，支持多次评论；因此若之前有也不删除
         notifyMsgDao.save(msg);
+        SpringUtil.publishEvent(new NotifyWsEvent(this, msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg()));
     }
 
     /**
@@ -109,6 +111,7 @@ public class NotifyMsgListener<T> implements ApplicationListener<NotifyMsgEvent<
                 .setState(NotifyStatEnum.UNREAD.getStat()).setMsg(comment.getContent());
         // 回复同样支持多次回复，不做幂等校验
         notifyMsgDao.save(msg);
+        SpringUtil.publishEvent(new NotifyWsEvent(this, msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg()));
     }
 
     /**
@@ -128,6 +131,7 @@ public class NotifyMsgListener<T> implements ApplicationListener<NotifyMsgEvent<
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为一个用户对一篇文章，可以重复的点赞、取消点赞，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            SpringUtil.publishEvent(new NotifyWsEvent(this, msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg()));
         }
     }
 
@@ -142,6 +146,7 @@ public class NotifyMsgListener<T> implements ApplicationListener<NotifyMsgEvent<
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为一个用户对一篇文章，可以重复的点赞、取消点赞，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            SpringUtil.publishEvent(new NotifyWsEvent(this, msg.getNotifyUserId(), notifyTypeEnum, msg.getMsg()));
         }
     }
 
@@ -180,6 +185,7 @@ public class NotifyMsgListener<T> implements ApplicationListener<NotifyMsgEvent<
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为用户的关注是一对一的，可以重复的关注、取消，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            SpringUtil.publishEvent(new NotifyWsEvent(this, msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg()));
         }
     }
 
@@ -213,6 +219,7 @@ public class NotifyMsgListener<T> implements ApplicationListener<NotifyMsgEvent<
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为用户的关注是一对一的，可以重复的关注、取消，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            SpringUtil.publishEvent(new NotifyWsEvent(this, msg.getNotifyUserId(), NotifyTypeEnum.REGISTER, msg.getMsg()));
         }
     }
 

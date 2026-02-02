@@ -1,5 +1,5 @@
 log:
-  path: /home/ubuntu/tech-pai/logs # 请使用实际的地址进行替换
+  path: logs # 使用相对路径，容器/当前工作目录下创建 logs
 env:
   name: dev
 

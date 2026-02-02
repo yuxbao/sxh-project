@@ -11,6 +11,7 @@ import com.github.paicoding.forum.core.util.SessionUtil;
 import com.github.paicoding.forum.service.statistics.service.StatisticsSettingService;
 import com.github.paicoding.forum.service.user.service.LoginService;
 import com.github.paicoding.forum.web.global.GlobalInitService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.Cookie;
@@ -45,10 +46,10 @@ public class ReqRecordFilter implements Filter {
      */
     private static final String GLOBAL_TRACE_ID_HEADER = "g-trace-id";
 
-    @Autowired
+    @Resource
     private GlobalInitService globalInitService;
 
-    @Autowired
+    @Resource
     private StatisticsSettingService statisticsSettingService;
 
     @Override

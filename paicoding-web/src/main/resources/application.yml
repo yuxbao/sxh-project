@@ -92,7 +92,7 @@ knife4j:
     concat:
       - HX
     license: Apache License 2.0
-    email: 1499624008@qq.com
+    email: 522425561@qq.com
     group:
       admin:
         group-name: 后台接口分组

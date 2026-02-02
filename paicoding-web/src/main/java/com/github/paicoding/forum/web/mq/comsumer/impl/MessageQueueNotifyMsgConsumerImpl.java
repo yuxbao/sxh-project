@@ -13,6 +13,7 @@ import com.github.paicoding.forum.service.notify.repository.entity.NotifyMsgDO;
 import com.github.paicoding.forum.service.user.repository.entity.UserFootDO;
 import com.github.paicoding.forum.service.user.repository.entity.UserRelationDO;
 import com.github.paicoding.forum.web.mq.comsumer.MessageQueueNotifyMsgConsumer;
+import com.github.paicoding.forum.web.websocket.WebSocketNotifyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +34,16 @@ public class MessageQueueNotifyMsgConsumerImpl implements MessageQueueNotifyMsgC
     private final CommentReadService commentReadService;
 
     private final NotifyMsgDao notifyMsgDao;
+    private final WebSocketNotifyService webSocketNotifyService;
 
     public MessageQueueNotifyMsgConsumerImpl(ArticleReadService articleReadService,
                                              CommentReadService commentReadService,
-                                             NotifyMsgDao notifyMsgDao) {
+                                             NotifyMsgDao notifyMsgDao,
+                                             WebSocketNotifyService webSocketNotifyService) {
         this.articleReadService = articleReadService;
         this.commentReadService = commentReadService;
         this.notifyMsgDao = notifyMsgDao;
+        this.webSocketNotifyService = webSocketNotifyService;
     }
 
     /**
@@ -59,6 +63,7 @@ public class MessageQueueNotifyMsgConsumerImpl implements MessageQueueNotifyMsgC
                 .setState(NotifyStatEnum.UNREAD.getStat()).setMsg(comment.getContent());
         // 对于评论而言，支持多次评论；因此若之前有也不删除
         notifyMsgDao.save(msg);
+        webSocketNotifyService.notifyUser(msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg());
     }
 
     /**
@@ -78,6 +83,7 @@ public class MessageQueueNotifyMsgConsumerImpl implements MessageQueueNotifyMsgC
                 .setState(NotifyStatEnum.UNREAD.getStat()).setMsg(comment.getContent());
         // 回复同样支持多次回复，不做幂等校验
         notifyMsgDao.save(msg);
+        webSocketNotifyService.notifyUser(msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg());
     }
 
     /**
@@ -98,6 +104,7 @@ public class MessageQueueNotifyMsgConsumerImpl implements MessageQueueNotifyMsgC
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为一个用户对一篇文章，可以重复的点赞、取消点赞，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            webSocketNotifyService.notifyUser(msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg());
         }
     }
 
@@ -113,6 +120,7 @@ public class MessageQueueNotifyMsgConsumerImpl implements MessageQueueNotifyMsgC
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为一个用户对一篇文章，可以重复的点赞、取消点赞，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            webSocketNotifyService.notifyUser(msg.getNotifyUserId(), notifyTypeEnum, msg.getMsg());
         }
     }
 
@@ -153,6 +161,7 @@ public class MessageQueueNotifyMsgConsumerImpl implements MessageQueueNotifyMsgC
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为用户的关注是一对一的，可以重复的关注、取消，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            webSocketNotifyService.notifyUser(msg.getNotifyUserId(), event.getNotifyType(), msg.getMsg());
         }
     }
 
@@ -188,6 +197,7 @@ public class MessageQueueNotifyMsgConsumerImpl implements MessageQueueNotifyMsgC
         if (record == null) {
             // 若之前已经有对应的通知，则不重复记录；因为用户的关注是一对一的，可以重复的关注、取消，但是最终我们只通知一次
             notifyMsgDao.save(msg);
+            webSocketNotifyService.notifyUser(msg.getNotifyUserId(), NotifyTypeEnum.REGISTER, msg.getMsg());
         }
     }
 }

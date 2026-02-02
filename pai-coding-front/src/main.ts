@@ -1,16 +1,21 @@
 import './assets/main.css'
 
 import { createApp, defineComponent, h } from 'vue'
+
+// 解决 stompjs 在 vite 环境下 global 未定义的问题
+// if (typeof global === 'undefined') {
+//   ;(window as any).global = window
+// }
+
 import { createPinia } from 'pinia'
-import ElementPlus  from 'element-plus'
+import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 导入css样式
 import 'element-plus/dist/index.css'
-import "./index.css"
+import './index.css'
 
 import App from './App.vue'
 import router from './router'
-
 
 // markdown插件
 
@@ -29,6 +34,8 @@ app.use(createPinia())
 app.use(router)
 
 // ....
-app.use(ElementPlus, {
-  locale: zhCn
-}).mount('#app')
+app
+  .use(ElementPlus, {
+    locale: zhCn
+  })
+  .mount('#app')
