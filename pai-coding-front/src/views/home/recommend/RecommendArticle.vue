@@ -49,9 +49,7 @@ const backgroundColor = ref<string>('')
 function setColor(index: number) {
   if (index !== 0) return
   const img = document.getElementById(`cover${index}`) as HTMLImageElement
-  if (img) {  
-    // 设置 crossOrigin 属性，允许跨域
-    img.setAttribute('crossOrigin', 'anonymous')
+  if (img) {
     // @ts-ignore
     if (img.complete) {
       applyColor(img)
@@ -64,11 +62,6 @@ function setColor(index: number) {
 }
 
 function applyColor(img: any) {
-  // 必须加上 crossorigin 属性，否则 getImageData 会报错
-  if (!img.crossOrigin) {
-    img.crossOrigin = "anonymous";
-  }
-
   // Vibrant.from 如果传入 URL 字符串，可以直接由 Vibrant 处理下载。
   // 如果传入 HTMLImageElement，则该元素必须在加载时就有了 crossOrigin="anonymous" 属性，
   // 否则 Canvas 就会被污染。

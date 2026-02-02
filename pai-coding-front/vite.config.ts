@@ -21,7 +21,7 @@ export default defineConfig({
   //     '/': {
   //       target: 'http://xuyifei.site:8081/',
   //       changeOrigin: true,
-  //       secure: true,
+  //       secure: true,;;;
   //       rewrite: (path) => {
   //         // const newPath = path.replace(/^\/api/, '')
   //         // console.log('Rewritten path:', newPath)
