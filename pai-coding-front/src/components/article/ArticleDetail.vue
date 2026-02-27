@@ -5,13 +5,13 @@
     <div class="mb-4 relative">
       <span v-if="showPraisePlus" class="plus-one">+1</span>
       <el-badge :offset="[-5, 5]" :type="praised ? 'danger' : 'primary'" :value="praiseCnt" class="item"
-        :hidden="praiseCnt === 0">
-        <el-button circle round size="large" @click="likeArticle">
+        :hidden="praiseCnt === 0 && !praised">
+        <el-button circle round size="large" :disabled="btnLoading" @click="likeArticle">
           <el-icon v-show="!btnLoading" size="20"><svg t="1719494245215" class="icon" viewBox="0 0 1024 1024"
               xmlns="http://www.w3.org/2000/svg" p-id="2214" id="mx_n_1719494245217" width="16" height="18">
               <path
                 d="M621.674667 408.021333c16.618667-74.24 28.224-127.936 34.837333-161.194666C673.152 163.093333 629.941333 85.333333 544.298667 85.333333c-77.226667 0-116.010667 38.378667-138.88 115.093334l-0.586667 2.24c-13.728 62.058667-34.72 110.165333-62.506667 144.586666a158.261333 158.261333 0 0 1-119.733333 58.965334l-21.909333 0.469333C148.437333 407.808 106.666667 450.816 106.666667 503.498667V821.333333c0 64.8 52.106667 117.333333 116.394666 117.333334h412.522667c84.736 0 160.373333-53.568 189.12-133.92l85.696-239.584c21.802667-60.96-9.536-128.202667-70.005333-150.186667a115.552 115.552 0 0 0-39.488-6.954667H621.674667z"
-                :fill="praised ? '#ED722E' : '#8a8a8a'" p-id="2215"></path>
+                :fill="praised ? '#9a9a9a' : '#8a8a8a'" p-id="2215"></path>
             </svg></el-icon>
           <el-icon v-show="btnLoading" class="is-loading" size="20">
             <Loading />
@@ -22,9 +22,9 @@
     <!-- 评论  -->
     <div class="mb-4 p-0">
       <el-badge :offset="[-5, 5]" :type="commented ? 'danger' : 'primary'" :value="commentCnt"
-        :hidden="commentCnt === 0" class="item">
+        :hidden="commentCnt === 0 && !commented" class="item">
         <el-button circle round size="large" @click="scrollToComment">
-          <el-icon v-show="!btnLoading" size="20" :color="commented ? '#ED722E' : '#8a8a8a'">
+          <el-icon v-show="!btnLoading" size="20" :color="commented ? '#9a9a9a' : '#8a8a8a'">
             <Comment />
           </el-icon>
           <el-icon v-show="btnLoading" class="is-loading" size="20">
@@ -37,10 +37,10 @@
     <div class="mb-4 relative">
       <span v-if="showCollectPlus" class="plus-one">+1</span>
       <el-badge :offset="[-5, 5]" :type="collected ? 'danger' : 'primary'" :value="collectCnt" class="item"
-        :hidden="collectCnt === 0">
-        <el-button circle round size="large" @click="collectArticle">
+        :hidden="collectCnt === 0 && !collected">
+        <el-button circle round size="large" :disabled="btnLoading" @click="collectArticle">
           <template #default>
-            <el-icon v-show="!btnLoading" size="20" :color="collected ? '#ED722E' : '#8a8a8a'">
+            <el-icon v-show="!btnLoading" size="20" :color="collected ? '#9a9a9a' : '#8a8a8a'">
               <StarFilled />
             </el-icon>
             <el-icon v-show="btnLoading" class="is-loading" size="20">
@@ -110,7 +110,7 @@
     </div>
 
     <div class="flex">
-      <MdPreview :editor-id="'id'" :model-value="articleVo.article.content"></MdPreview>
+      <MdPreview :editor-id="'id'" :model-value="articleVo.article.content" :theme="previewTheme"></MdPreview>
     </div>
 
     <!-- 左右切换 -->
@@ -184,12 +184,12 @@
     </div>
 
     <div class="article-heart bg-color-white">
-      <el-button circle round size="large" @click="likeArticle">
+      <el-button circle round size="large" :disabled="btnLoading" @click="likeArticle">
         <el-icon v-show="!btnLoading" size="20"><svg t="1719494245215" class="icon" viewBox="0 0 1024 1024"
             xmlns="http://www.w3.org/2000/svg" p-id="2214" id="mx_n_1719494245217" width="16" height="18">
             <path
               d="M621.674667 408.021333c16.618667-74.24 28.224-127.936 34.837333-161.194666C673.152 163.093333 629.941333 85.333333 544.298667 85.333333c-77.226667 0-116.010667 38.378667-138.88 115.093334l-0.586667 2.24c-13.728 62.058667-34.72 110.165333-62.506667 144.586666a158.261333 158.261333 0 0 1-119.733333 58.965334l-21.909333 0.469333C148.437333 407.808 106.666667 450.816 106.666667 503.498667V821.333333c0 64.8 52.106667 117.333333 116.394666 117.333334h412.522667c84.736 0 160.373333-53.568 189.12-133.92l85.696-239.584c21.802667-60.96-9.536-128.202667-70.005333-150.186667a115.552 115.552 0 0 0-39.488-6.954667H621.674667z"
-              :fill="praised ? '#ED722E' : '#8a8a8a'" p-id="2215"></path>
+              :fill="praised ? '#9a9a9a' : '#8a8a8a'" p-id="2215"></path>
           </svg></el-icon>
         <el-icon v-show="btnLoading" class="is-loading" size="20">
           <Loading />
@@ -230,7 +230,7 @@
 
 import { format } from 'date-fns'
 import '@/assets/md-preview.css'
-import { inject, ref, watch } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { Comment, Delete, Edit, Loading, StarFilled } from '@element-plus/icons-vue'
 import type { ArticleDetailResponse } from '@/http/ResponseTypes/ArticleDetailResponseType'
 import { MdPreview } from 'md-editor-v3'
@@ -270,21 +270,35 @@ const deleteArticle = () => {
 
 // ========= 点赞、收藏、评论 ============
 const btnLoading = ref(false)
-const praiseCnt = ref(props.articleVo.article.count.praiseCount)
-const commentCnt = ref(props.articleVo.article.count.commentCount)
-const collectCnt = ref(props.articleVo.article.count.collectionCount)
+const resolveCounts = (article: any) => ({
+  praiseCount: article?.count?.praiseCount ?? article?.praiseCount ?? 0,
+  commentCount: article?.count?.commentCount ?? article?.commentCount ?? 0,
+  collectionCount: article?.count?.collectionCount ?? article?.collectionCount ?? 0,
+})
+
+const initialCounts = resolveCounts(props.articleVo.article)
+const praiseCnt = ref(initialCounts.praiseCount)
+const commentCnt = ref(initialCounts.commentCount)
+const collectCnt = ref(initialCounts.collectionCount)
 const praised = ref(props.articleVo.article.praised)
 const commented = ref(props.articleVo.article.commented)
 const collected = ref(props.articleVo.article.collected)
 const praisedUsers = ref<SimpleUserInfo[]>(props.articleVo.article.praisedUsers ? props.articleVo.article.praisedUsers : [])
 const showPraisePlus = ref(false)
 const showCollectPlus = ref(false)
+const previewTheme = ref<'light' | 'dark'>('light')
+let themeClassObserver: MutationObserver | null = null
+
+const syncPreviewTheme = () => {
+  previewTheme.value = document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+}
 
 watch(() => props.articleVo.article, (newVal) => {
   console.log(newVal)
-  praiseCnt.value = newVal.count.praiseCount
-  commentCnt.value = newVal.count.commentCount
-  collectCnt.value = newVal.count.collectionCount
+  const counts = resolveCounts(newVal)
+  praiseCnt.value = counts.praiseCount
+  commentCnt.value = counts.commentCount
+  collectCnt.value = counts.collectionCount
   praised.value = newVal.praised || false
   commented.value = newVal.commented || false
   collected.value = newVal.collected || false
@@ -304,6 +318,9 @@ const likeArticle = () => {
     }
     return
   }
+  if (btnLoading.value) {
+    return
+  }
   btnLoading.value = true
   if (praised.value) {
     doGet<CommonResponse>(ARTICLE_LIKE_COLLECT_URL, {
@@ -311,9 +328,7 @@ const likeArticle = () => {
       type: OperateTypeEnum.CANCEL_PRAISE,
     })
       .then((response) => {
-        if (praiseCnt.value > 0) {
-          praiseCnt.value--
-        }
+        praiseCnt.value = Math.max(0, praiseCnt.value - 1)
         praised.value = false
         praisedUsers.value = praisedUsers.value?.filter((item) => item.userId !== global.user.id)
       }).catch((error) => {
@@ -361,6 +376,9 @@ const collectArticle = () => {
     }
     return
   }
+  if (btnLoading.value) {
+    return
+  }
   btnLoading.value = true
   if (collected.value) {
     doGet<CommonResponse>(ARTICLE_LIKE_COLLECT_URL, {
@@ -368,9 +386,7 @@ const collectArticle = () => {
       type: OperateTypeEnum.CANCEL_COLLECTION,
     })
       .then((response) => {
-        if (collectCnt.value > 0) {
-          collectCnt.value--
-        }
+        collectCnt.value = Math.max(0, collectCnt.value - 1)
         collected.value = false
       }).catch((error) => {
         console.error(error)
@@ -404,6 +420,20 @@ const scrollToComment = () => {
     commentSection.scrollIntoView({ behavior: 'smooth' })
   }
 }
+
+onMounted(() => {
+  syncPreviewTheme()
+  themeClassObserver = new MutationObserver(syncPreviewTheme)
+  themeClassObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  })
+})
+
+onBeforeUnmount(() => {
+  themeClassObserver?.disconnect()
+  themeClassObserver = null
+})
 </script>
 
 <style scoped>
@@ -437,7 +467,7 @@ const scrollToComment = () => {
   position: absolute;
   top: -20px;
   right: 0;
-  color: #ED722E;
+  color: #9a9a9a;
   font-weight: bold;
   pointer-events: none;
   animation: fly-up 1s ease-out forwards;

@@ -107,6 +107,12 @@ const getProgressColor = (usageRate: number): string => {
 </script>
 
 <style scoped>
+.card {
+  background-color: var(--pai-neu-surface);
+  border: 1px solid var(--pai-neu-border);
+  box-shadow: var(--pai-neu-shadow-out);
+}
+
 .quota-wrap {
   padding: 20px;
 }
@@ -115,14 +121,14 @@ const getProgressColor = (usageRate: number): string => {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
-  color: #303133;
+  color: var(--pai-color-3-black);
 }
 
 .loading-state,
 .empty-state {
   text-align: center;
   padding: 20px;
-  color: #909399;
+  color: var(--pai-color-3-gray);
   font-size: 14px;
 }
 
@@ -136,6 +142,11 @@ const getProgressColor = (usageRate: number): string => {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  background: var(--pai-neu-surface-soft);
+  border: 1px solid var(--pai-neu-border);
+  border-radius: 12px;
+  box-shadow: var(--pai-neu-shadow-inset);
+  padding: 10px 12px;
 }
 
 .quota-header {
@@ -147,20 +158,21 @@ const getProgressColor = (usageRate: number): string => {
 
 .model-name {
   font-weight: 500;
-  color: #606266;
+  color: var(--pai-color-4-gray);
 }
 
 .quota-percentage {
   font-weight: 600;
-  color: #303133;
+  color: var(--pai-color-3-black);
 }
 
 .progress-bar-container {
   width: 100%;
   height: 8px;
-  background-color: #ebeef5;
+  background-color: var(--pai-neu-surface);
   border-radius: 4px;
   overflow: hidden;
+  box-shadow: var(--pai-neu-shadow-inset);
 }
 
 .progress-bar {
@@ -173,14 +185,37 @@ const getProgressColor = (usageRate: number): string => {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: #909399;
+  color: var(--pai-color-3-gray);
 }
 
 .used {
-  color: #606266;
+  color: var(--pai-color-4-gray);
 }
 
 .total {
-  color: #909399;
+  color: var(--pai-color-3-gray);
+}
+
+html.dark .card {
+  background-color: var(--pai-neu-surface);
+  border-color: var(--pai-neu-border);
+}
+
+@media (max-width: 768px) {
+  .quota-wrap {
+    padding: 14px;
+  }
+
+  .quota-list {
+    gap: 12px;
+  }
+
+  .quota-item {
+    padding: 10px;
+  }
+
+  .quota-header {
+    font-size: 13px;
+  }
 }
 </style>

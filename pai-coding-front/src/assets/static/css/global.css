@@ -45,7 +45,7 @@ body {
   --pai-bg-dark-2: #111827;
   /*主题色更深一点*/
   --pai-bg-dark-3: #0b1220;
-    /*讯飞星火的左侧聊天背景色*/
+  /*讯飞星火的左侧聊天背景色*/
   --pai-bg-smart-chat: #f6f8fb;
   /*横线的颜色*/
   --pai-hr-color-1: #e6edf7;
@@ -53,6 +53,14 @@ body {
   --pai-border-color-1: #dbe3f2;
   /*字体*/
   --pai-font-2: #556070;
+
+  /* light mode compatibility mapping for neu tokens */
+  --pai-neu-bg: #f5f6f8;
+  --pai-neu-surface: #ffffff;
+  --pai-neu-surface-soft: #fafbfc;
+  --pai-neu-border: rgba(219, 227, 242, 0.9);
+  --pai-neu-shadow-out: var(--pai-surface-shadow);
+  --pai-neu-shadow-inset: inset 0 0 0 1px rgba(219, 227, 242, 0.65);
 
   --pai-surface-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
   --pai-surface-radius: 18px;
@@ -89,7 +97,9 @@ li {
 
 a {
   color: var(--pai-color-3-black);
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 a.underline {
@@ -133,11 +143,12 @@ h2,
 h3,
 .section-title,
 .article-title {
-  font-family: var(--app-font-display, "Fraunces", "Songti SC", serif);
+  font-family: var(--app-font-display, 'Fraunces', 'Songti SC', serif);
   letter-spacing: 0.2px;
 }
 
-input:focus,.form-control:focus {
+input:focus,
+.form-control:focus {
   /*border: 1px solid var(--pai-brand-3-click);*/
   /*outline: none;*/
   /*box-shadow: none;*/
@@ -153,7 +164,7 @@ textarea::placeholder {
   font-size: 14px;
 }
 
-textarea:focus  {
+textarea:focus {
   border: 1px solid var(--pai-brand-3-click);
   outline: none;
 }
@@ -180,7 +191,7 @@ button:focus {
 }
 
 #scrollUp:before {
-  content: "";
+  content: '';
   display: inline-block;
   vertical-align: middle;
   width: 22px;
@@ -208,7 +219,8 @@ button:focus {
   margin: 0 0 1rem;
 }
 
-.login-main, .register-main {
+.login-main,
+.register-main {
   width: 32rem;
 }
 
@@ -229,7 +241,7 @@ button:focus {
 }
 
 .mdnice-user-dialog-footer a {
-    color: var(--pai-brand-1-normal);
+  color: var(--pai-brand-1-normal);
 }
 
 .mdnice-user-dialog-footer a:hover {
@@ -290,7 +302,8 @@ button:focus {
   display: flex;
 }
 
-.oauth-box, .oauth {
+.oauth-box,
+.oauth {
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -298,17 +311,16 @@ button:focus {
 }
 
 .oauth-bg {
-    border-radius: 50%;
-    background-color: var(--pai-bg-light-1);
-    justify-content: center;
-    margin-right: 8px;
+  border-radius: 50%;
+  background-color: var(--pai-bg-light-1);
+  justify-content: center;
+  margin-right: 8px;
 }
 
 .clickable {
   cursor: pointer;
   font-size: 0.8rem;
 }
-
 
 .modal .modal-content .modal-body .tabpane-container {
   border-left: 1px solid var(--pai-border-color-1);
@@ -319,7 +331,8 @@ button:focus {
   width: 80%;
 }
 
-.modal input, .modal input::placeholder {
+.modal input,
+.modal input::placeholder {
   font-size: 0.8rem;
 }
 
@@ -729,7 +742,7 @@ button:focus {
 }
 
 .third-oauth-login-box::before {
-  content: "三方账号登录";
+  content: '三方账号登录';
   position: absolute;
   left: 50%;
   bottom: 55px;
@@ -1041,12 +1054,14 @@ button:focus {
   margin-bottom: 5px;
 }
 
-.article-content p a,.article-content ul a {
+.article-content p a,
+.article-content ul a {
   color: var(--pai-brand-1-normal);
   text-decoration: underline;
 }
 
-.article-content p a:hover,.article-content ul a:hover {
+.article-content p a:hover,
+.article-content ul a:hover {
   color: var(--pai-brand-2-hover);
 }
 
@@ -1062,6 +1077,15 @@ button:focus {
 .md-editor .md-editor-admonition {
   background-image: none !important;
   background-color: transparent !important;
+}
+
+html.dark .md-editor-dark,
+html.dark .md-editor-dark .md-editor-toolbar,
+html.dark .md-editor-dark .md-editor-content,
+html.dark .md-editor-dark .md-editor-input-wrapper,
+html.dark .md-editor-dark .md-editor-preview-wrapper {
+  background-color: #121212 !important;
+  color: #f2f2f2 !important;
 }
 
 .article-content .hljs-left {
@@ -1096,13 +1120,13 @@ button:focus {
   margin-bottom: 0;
 }
 
-
-.article-content pre, .article-content pre>code.hljs {
+.article-content pre,
+.article-content pre > code.hljs {
   color: #333;
   background: #f8f8f8;
 }
 
-.article-content pre>code {
+.article-content pre > code {
   font-size: 12px;
   padding: 15px 12px;
   margin: 0;
@@ -1113,20 +1137,26 @@ button:focus {
   background: #f8f8f8;
 }
 
-.article-content code, .article-content pre {
-  font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+.article-content code,
+.article-content pre {
+  font-family:
+    Menlo,
+    Monaco,
+    Consolas,
+    Courier New,
+    monospace;
 }
 
-.article-content pre>code.copyable.hljs[lang]:before {
+.article-content pre > code.copyable.hljs[lang]:before {
   right: 70px;
 }
 
-.article-content pre>code.hljs[lang]:before {
+.article-content pre > code.hljs[lang]:before {
   content: attr(lang);
   position: absolute;
   right: 15px;
   top: 3px;
-  color: hsla(0,0%,54.9%,.8);
+  color: hsla(0, 0%, 54.9%, 0.8);
 }
 
 .article-content pre .copy-code-btn {
@@ -1136,8 +1166,8 @@ button:focus {
   font-size: 12px;
   line-height: 1;
   cursor: pointer;
-  color: hsla(0,0%,54.9%,.8);
-  transition: color .1s;
+  color: hsla(0, 0%, 54.9%, 0.8);
+  transition: color 0.1s;
 }
 
 .article-content pre .copy-code-btn:hover {
@@ -1150,11 +1180,14 @@ button:focus {
 
 @media (max-width: 768px) {
   #registerModal .modal-content .modal-body .tabpane-container,
-  #loginModal .modal-content .modal-body .login-main, #loginModal .modal-footer {
+  #loginModal .modal-content .modal-body .login-main,
+  #loginModal .modal-footer {
     display: none;
   }
 
-  .modal input, .modal input::placeholder,.modal .title {
+  .modal input,
+  .modal input::placeholder,
+  .modal .title {
     font-size: 1rem;
   }
 
@@ -1165,4 +1198,77 @@ button:focus {
   #loginModal .first .signin-qrcode {
     width: 180px;
   }
+}
+
+/* Dark Mode Overrides */
+html.dark .bg-color,
+html.dark .bg-color-white {
+  background: var(--pai-neu-surface) !important;
+  background-color: var(--pai-neu-surface) !important;
+}
+
+html.dark body {
+  --pai-neu-bg: #141414;
+  --pai-neu-surface: #181818;
+  --pai-neu-surface-soft: #222222;
+  --pai-neu-border: rgba(255, 255, 255, 0.06);
+  --pai-neu-shadow-out:
+    12px 12px 24px rgba(0, 0, 0, 0.5),
+    -8px -8px 16px rgba(255, 255, 255, 0.03);
+  --pai-neu-shadow-inset:
+    inset 6px 6px 12px rgba(0, 0, 0, 0.48),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.04);
+  background:
+    radial-gradient(900px 500px at 12% -10%, var(--page-accent), transparent 70%),
+    radial-gradient(900px 520px at 88% 0%, var(--page-accent-soft), transparent 68%),
+    linear-gradient(180deg, var(--app-bg) 0%, var(--app-bg) 45%, var(--app-bg) 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--app-text) !important;
+}
+
+html.dark .home-wrap {
+  background-color: transparent !important;
+}
+
+html.dark .notice-wrap {
+  background-color: transparent !important;
+}
+
+html.dark .notification {
+  background-color: var(--pai-neu-surface);
+  border: 1px solid var(--pai-neu-border);
+  box-shadow: var(--pai-neu-shadow-out);
+}
+
+html.dark .el-button {
+  background: var(--pai-neu-surface-soft);
+  border-color: var(--pai-neu-border);
+  color: var(--pai-color-3-black);
+  box-shadow: var(--pai-neu-shadow-out);
+}
+
+html.dark .el-button:active {
+  box-shadow: var(--pai-neu-shadow-inset);
+}
+
+html.dark .el-button--primary {
+  background: linear-gradient(145deg, #919191, #727272);
+  box-shadow:
+    8px 8px 18px rgba(0, 0, 0, 0.44),
+    -6px -6px 14px rgba(255, 255, 255, 0.04);
+}
+
+html.dark .el-input__wrapper,
+html.dark .el-select__wrapper,
+html.dark .el-textarea__inner {
+  background: var(--pai-neu-surface-soft) !important;
+  color: var(--pai-color-3-black) !important;
+  box-shadow: var(--pai-neu-shadow-inset) !important;
+}
+
+html.dark .el-textarea__inner:focus,
+html.dark .el-input__wrapper.is-focus,
+html.dark .el-select__wrapper.is-focused {
+  border-color: var(--pai-neu-border) !important;
+  box-shadow: var(--pai-neu-shadow-inset) !important;
 }

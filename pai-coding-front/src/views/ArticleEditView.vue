@@ -27,6 +27,7 @@
       style="height: calc(100vh - 72px - var(--footer-height) - var(--header-height))"
       :editor-id="'id'"
       v-model="text"
+      :theme="editorTheme"
       @onUploadImg="onUploadImg"
       :toolbars-exclude="['prettier', 'github']"
     ></MdEditor>
@@ -180,7 +181,7 @@
 
 import { MdEditor } from 'md-editor-v3'
 import '@/assets/style.css'
-import { onMounted, provide, reactive, ref } from 'vue'
+import { onBeforeUnmount, onMounted, provide, reactive, ref } from 'vue'
 import HeaderBar from '@/components/layout/HeaderBar.vue'
 const text = ref('')
 import { useGlobalStore } from '@/stores/global'
@@ -210,6 +211,8 @@ const globalStore = useGlobalStore()
 const global = globalStore.global
 const router = useRouter()
 const route = useRoute()
+const editorTheme = ref<'light' | 'dark'>('light')
+let themeClassObserver: MutationObserver | null = null
 
 const clicked = ref(false)
 
@@ -219,6 +222,10 @@ const changeClicked = () => {
 }
 
 provide('loginDialogClicked', changeClicked)
+
+const syncEditorTheme = () => {
+  editorTheme.value = document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+}
 
 
 // ========  标题输入框 =========
@@ -238,6 +245,13 @@ const titleFormRules = reactive<FormRules<TitleForm>>({
 })
 
 onMounted(() => {
+  syncEditorTheme()
+  themeClassObserver = new MutationObserver(syncEditorTheme)
+  themeClassObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  })
+
   // 如果带了articleId参数，说明是编辑文章，需要获取文章信息
   if(route.params.articleId){
     doGet<CommonResponse<ArticleEditResponseType>>(ARTICLE_EDIT_URL + '/' + route.params.articleId, {})
@@ -295,6 +309,11 @@ onMounted(() => {
       tagsLoading.value = false
     })
 
+})
+
+onBeforeUnmount(() => {
+  themeClassObserver?.disconnect()
+  themeClassObserver = null
 })
 
 

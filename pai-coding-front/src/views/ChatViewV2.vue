@@ -51,7 +51,7 @@ onMounted(async () => {
 
 <style scoped>
 .chat-page-wrapper {
-  background: white;
+  background: var(--pai-neu-bg);
   min-height: calc(100vh - 60px); /* 减去 Header 高度 */
   display: flex;
   flex-direction: column;
@@ -61,13 +61,14 @@ onMounted(async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .chat-view {
   display: flex;
   flex: 1;
   width: 100%;
-  background: white;
+  background: var(--pai-neu-surface);
   overflow: hidden;
   min-height: 0; /* 关键：允许 flex 子元素缩小 */
 }

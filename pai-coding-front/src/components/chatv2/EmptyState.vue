@@ -2,7 +2,7 @@
   <div class="empty-state">
     <div class="welcome-section">
       <div class="icon-wrapper">
-        <el-icon :size="80" color="#409eff">
+        <el-icon :size="80" class="welcome-icon">
           <ChatDotRound />
         </el-icon>
       </div>
@@ -76,7 +76,7 @@ const chatStore = useChatStore()
   align-items: center;
   justify-content: center;
   padding: 60px 40px;
-  background: white;
+  background: var(--pai-neu-surface);
   overflow-y: auto;
   min-height: 0;
 }
@@ -91,6 +91,10 @@ const chatStore = useChatStore()
   animation: float 3s ease-in-out infinite;
 }
 
+.welcome-icon {
+  color: var(--pai-brand-1-normal);
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0);
@@ -103,21 +107,22 @@ const chatStore = useChatStore()
 .app-title {
   font-size: 32px;
   font-weight: 600;
-  color: #303133;
+  color: var(--pai-color-3-black);
   margin-bottom: 12px;
 }
 
 .subtitle {
   font-size: 16px;
-  color: #606266;
+  color: var(--pai-color-3-gray);
   line-height: 1.6;
 }
 
 .model-selector-card {
-  background: white;
+  background: var(--pai-neu-surface);
   border-radius: 8px;
   padding: 32px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--pai-neu-border);
+  box-shadow: var(--pai-neu-shadow-out);
   max-width: 500px;
   width: 90%;
 }
@@ -136,12 +141,12 @@ const chatStore = useChatStore()
 .model-option-name {
   font-size: 14px;
   font-weight: 500;
-  color: #303133;
+  color: var(--pai-color-3-black);
 }
 
 .model-option-desc {
   font-size: 12px;
-  color: #909399;
+  color: var(--pai-color-3-gray);
   margin-top: 4px;
   line-height: 1.4;
 }
@@ -162,20 +167,21 @@ const chatStore = useChatStore()
   flex-direction: column;
   align-items: center;
   padding: 12px;
-  background: #f5f7fa;
+  background: var(--pai-neu-surface-soft);
+  border: 1px solid var(--pai-neu-border);
   border-radius: 6px;
 }
 
 .info-label {
   font-size: 12px;
-  color: #909399;
+  color: var(--pai-color-3-gray);
   margin-bottom: 4px;
 }
 
 .info-value {
   font-size: 14px;
   font-weight: 600;
-  color: #303133;
+  color: var(--pai-color-3-black);
 }
 
 /* 响应式设计 */

@@ -341,11 +341,12 @@ const saveUserInfo = async () => {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--pai-bg-white-fff);
+  border: 1px solid var(--pai-border-color-1);
   border-radius: 8px;
   font-size: 13px;
-  color: #606266;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: var(--pai-color-4-gray);
+  box-shadow: var(--pai-surface-shadow);
 }
 
 .tag-icon {
@@ -367,17 +368,17 @@ const saveUserInfo = async () => {
   align-items: center;
   gap: 5px;
   padding: 4px 8px;
-  background: rgba(64, 158, 255, 0.1);
-  border: 1px solid rgba(64, 158, 255, 0.2);
+  background: var(--pai-brand-7-light);
+  border: 1px solid var(--pai-brand-8-light);
   border-radius: 6px;
   font-size: 12px;
-  color: #606266;
+  color: var(--pai-color-4-gray);
   transition: all 0.3s ease;
 }
 
 .profile-tag-item:hover {
-  background: rgba(64, 158, 255, 0.15);
-  border-color: rgba(64, 158, 255, 0.3);
+  background: var(--pai-brand-8-light);
+  border-color: var(--pai-brand-8-light);
 }
 
 .profile-tag-icon {
@@ -400,19 +401,19 @@ const saveUserInfo = async () => {
   margin-bottom: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: #303133;
+  color: var(--pai-color-3-black);
 }
 
 .profile-icon {
   width: 16px;
   height: 16px;
-  color: #409EFF;
+  color: var(--pai-brand-1-normal);
 }
 
 .profile-content-box {
   position: relative;
-  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-  border: 1px solid #e4e7ed;
+  background: var(--pai-bg-light-2);
+  border: 1px solid var(--pai-border-color-1);
   border-radius: 8px;
   padding: 10px 12px;
   transition: all 0.3s ease;
@@ -426,8 +427,8 @@ const saveUserInfo = async () => {
 }
 
 .profile-editable:hover {
-  background: linear-gradient(135deg, #667eea25 0%, #764ba225 100%);
-  border-color: #c0c4cc;
+  background: var(--pai-bg-normal-1);
+  border-color: var(--pai-brand-8-light);
 }
 
 .profile-text {
@@ -435,14 +436,14 @@ const saveUserInfo = async () => {
   padding-right: 24px;
   font-size: 13px;
   line-height: 1.5;
-  color: #303133;
+  color: var(--pai-color-3-black);
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
 }
 
 .profile-placeholder {
-  color: #909399;
+  color: var(--pai-color-3-gray);
   font-style: italic;
 }
 
@@ -450,13 +451,13 @@ const saveUserInfo = async () => {
   position: absolute;
   top: 12px;
   right: 12px;
-  color: #909399;
+  color: var(--pai-color-3-gray);
   font-size: 14px;
   transition: all 0.3s ease;
 }
 
 .profile-editable:hover .edit-icon-small {
-  color: #409EFF;
+  color: var(--pai-brand-1-normal);
 }
 
 /* ========== 资料完善度样式 ========== */
@@ -473,37 +474,41 @@ const saveUserInfo = async () => {
 
 .completion-text {
   font-size: 12px;
-  color: #606266;
+  color: var(--pai-color-4-gray);
 }
 
 .edit-link {
   font-size: 12px;
-  color: #409EFF;
+  color: var(--pai-brand-1-normal);
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
 .edit-link:hover {
-  color: #66b1ff;
+  color: var(--pai-brand-2-hover);
 }
 
 .completion-bar-bg {
   height: 8px;
-  background: #f5f7fa;
+  background: var(--pai-bg-light-1);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .completion-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #409EFF 0%, #66b1ff 100%);
+  background: linear-gradient(90deg, var(--pai-brand-1-normal) 0%, #808080 100%);
   border-radius: 4px;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+html.dark .tag-item {
+  box-shadow: none;
+}
+
 @media (max-width: 768px) {
   .el-dialog {
-    width: 480px;
+    width: min(92vw, 480px);
   }
 
   .hidden-when-screen-small {

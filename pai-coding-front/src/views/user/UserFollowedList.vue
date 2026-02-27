@@ -9,7 +9,7 @@
     <template #image>
       <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <!-- 背景圆 -->
-        <circle cx="100" cy="100" r="90" fill="#F5F7FA"/>
+        <circle cx="100" cy="100" r="90" fill="#f0f0f0"/>
 
         <!-- 主要用户头像 -->
         <g transform="translate(100, 100)">
@@ -18,8 +18,8 @@
 
           <defs>
             <linearGradient id="userGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#409EFF;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#79BBFF;stop-opacity:1" />
+              <stop offset="0%" style="stop-color:#8f8f8f;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#b0b0b0;stop-opacity:1" />
             </linearGradient>
           </defs>
 
@@ -35,7 +35,7 @@
           <circle r="20" fill="url(#userGrad2)"/>
           <defs>
             <linearGradient id="userGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#67C23A;stop-opacity:1" />
+              <stop offset="0%" style="stop-color:#8a8a8a;stop-opacity:1" />
               <stop offset="100%" style="stop-color:#95D475;stop-opacity:1" />
             </linearGradient>
           </defs>
@@ -48,7 +48,7 @@
           <circle r="20" fill="url(#userGrad3)"/>
           <defs>
             <linearGradient id="userGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#E6A23C;stop-opacity:1" />
+              <stop offset="0%" style="stop-color:#9a9a9a;stop-opacity:1" />
               <stop offset="100%" style="stop-color:#F3C17A;stop-opacity:1" />
             </linearGradient>
           </defs>
@@ -64,9 +64,9 @@
         </g>
 
         <!-- 漂浮装饰点 -->
-        <circle cx="35" cy="45" r="3" fill="#F56C6C" opacity="0.5"/>
-        <circle cx="165" cy="170" r="4" fill="#409EFF" opacity="0.4"/>
-        <circle cx="60" cy="160" r="3" fill="#67C23A" opacity="0.5"/>
+        <circle cx="35" cy="45" r="3" fill="#a0a0a0" opacity="0.5"/>
+        <circle cx="165" cy="170" r="4" fill="#8f8f8f" opacity="0.4"/>
+        <circle cx="60" cy="160" r="3" fill="#8a8a8a" opacity="0.5"/>
       </svg>
     </template>
   </el-empty>

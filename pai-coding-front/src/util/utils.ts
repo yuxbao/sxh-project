@@ -67,8 +67,7 @@ export function notifyMsg(
   ElNotification({
     title: title,
     message: message,
-    // @ts-ignore
-    type: type,
+    type: type as any,
     duration: duration,
     position: 'top-right'
   })

@@ -115,13 +115,14 @@
   display: flex;
   justify-content: flex-start;
   padding: 20px;
+  gap: 12px;
 }
 
 .comment-write-img {
   font-size: 40px;
   width: 40px;
   height: 40px;
-  margin-right: 15px;
+  margin-right: 0;
   border-radius: 50%;
 }
 
@@ -134,14 +135,31 @@
 
 .comment-write-textarea {
   width: 100%;
-  border: 1px solid var(--pai-color-999-gray);
-  border-radius: 2px;
-  padding: 8px 16px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  padding: 12px 14px;
   margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .comment-write-btn {
   border-radius: 2px;
+}
+
+.comment-write-wrap .el-textarea__inner,
+.comment-list-wrap .el-textarea__inner {
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.comment-write-wrap .el-textarea__inner:focus,
+.comment-list-wrap .el-textarea__inner:focus {
+  border-color: rgba(130, 130, 130, 0.4);
+  box-shadow: 0 0 0 3px rgba(130, 130, 130, 0.15);
 }
 
 .c-btn-disabled,
@@ -218,8 +236,8 @@
 }
 
 .ui-message {
-  box-shadow: inset 0 0 0 1px #a9d5de, 0 0 0 0 transparent;
-  background: #f8f8f9;
+  box-shadow: inset 0 0 0 1px #c9c9c9, 0 0 0 0 transparent;
+  background: #f4f4f4;
   border-radius: 0.28571429rem;
   color: rgba(0, 0, 0, 0.87);
   line-height: 1.4285em;
@@ -229,7 +247,7 @@
   position: relative;
   transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease,
     box-shadow 0.1s ease;
-  color: #276f86;
+  color: #666;
   font-size: 0.8em;
 }
 
@@ -258,6 +276,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  gap: 10px;
 }
 
 .action-box .item,
@@ -267,7 +286,7 @@
 }
 
 .action-box .item {
-  margin-right: 16px;
+  margin-right: 12px;
   line-height: 22px;
   font-size: 12px;
   cursor: pointer;
@@ -276,7 +295,7 @@
 
 .action-box .item svg {
   fill: #8a919f;
-  margin-right: 4px;
+  margin-right: 6px;
 }
 
 .action-box .item:hover {
@@ -293,6 +312,30 @@
 
 .action-box .item.active svg {
   fill: var(--pai-brand-2-hover);
+}
+
+.action-box .el-button.is-text {
+  padding: 6px 10px !important;
+  border-radius: 999px;
+  background: rgba(125, 125, 125, 0.08);
+  color: inherit;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.action-box .item:hover .el-button.is-text {
+  background: rgba(125, 125, 125, 0.14);
+  border-color: rgba(125, 125, 125, 0.25);
+  transform: translateY(-1px);
+}
+
+.action-box .item.active .el-button.is-text {
+  background: rgba(125, 125, 125, 0.16);
+  border-color: rgba(125, 125, 125, 0.3);
+}
+
+.action-box .item span {
+  font-weight: 600;
 }
 
 /*文章评论*/

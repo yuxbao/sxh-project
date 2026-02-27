@@ -297,9 +297,9 @@ onMounted(() => {
 }
 
 .demo-tabs .el-tabs__nav {
-  border: 1px solid var(--pai-border-color-1);
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--pai-neu-border);
+  background: var(--pai-neu-surface);
+  box-shadow: var(--pai-neu-shadow-out);
   border-radius: 999px;
   padding: 6px;
   gap: 6px;
@@ -317,8 +317,8 @@ onMounted(() => {
 
 .demo-tabs .el-tabs__item.is-active {
   color: var(--pai-color-3-black);
-  background: rgba(45, 125, 255, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(45, 125, 255, 0.35);
+  background: var(--pai-neu-surface-soft);
+  box-shadow: var(--pai-neu-shadow-inset);
 }
 
 .demo-tabs .el-tabs__content {
@@ -329,5 +329,69 @@ onMounted(() => {
 .demo-tabs .el-pagination {
   margin-top: 18px;
   justify-content: center;
+}
+
+html.dark .demo-tabs .el-tabs__nav {
+  background: var(--pai-neu-surface);
+  border-color: var(--pai-neu-border);
+  box-shadow: var(--pai-neu-shadow-out);
+}
+
+html.dark .demo-tabs .el-tabs__item.is-active {
+  background: var(--pai-neu-surface-soft);
+  box-shadow: var(--pai-neu-shadow-inset);
+}
+
+html.dark .demo-tabs .el-tabs__content {
+  color: var(--pai-color-4-gray);
+}
+
+html.dark .demo-tabs .el-pagination button,
+html.dark .demo-tabs .el-pager li {
+  background-color: var(--pai-neu-surface-soft);
+  color: var(--pai-color-3-black);
+}
+
+@media (max-width: 768px) {
+  .demo-tabs > .el-tabs__header {
+    margin: 0 0 10px;
+  }
+
+  .demo-tabs .el-tabs__nav-wrap {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .demo-tabs .el-tabs__nav-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .demo-tabs .el-tabs__nav-scroll {
+    width: max-content;
+  }
+
+  .demo-tabs .el-tabs__nav {
+    width: max-content;
+    flex-wrap: nowrap;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .demo-tabs .el-tabs__item {
+    height: 32px;
+    line-height: 32px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .demo-tabs .el-tabs__content {
+    padding: 6px 0 0;
+  }
+
+  .demo-tabs .el-pagination {
+    margin-top: 14px;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
 }
 </style>

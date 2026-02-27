@@ -42,49 +42,98 @@
 
   --md-width: 768px;
 
-  --active-element-color: #ED722E;
-  --active-background-color: #ECF5FF;
-/*  footer高度*/
+  --active-element-color: #9b9b9b;
+  --active-background-color: #ededed;
+  /*  footer高度*/
   --footer-height: 70px;
-/*  header 高度*/
+  /*  header 高度*/
   --header-height: 60px;
-/*  用户页的主体内容控制*/
+  /*  用户页的主体内容控制*/
   --max-width-1024: 1024px;
   --max-width-1200: 1200px;
 
-  --app-font-sans: "Plus Jakarta Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --app-font-display: "Fraunces", "Songti SC", serif;
-  --app-bg: #f4f7fb;
+  --app-font-sans: 'Plus Jakarta Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --app-font-display: 'Fraunces', 'Songti SC', serif;
+  --app-bg: #f1f1f1;
   --app-surface: #ffffff;
   --app-border: rgba(15, 23, 42, 0.08);
   --app-text: #0f172a;
   --app-muted: #556070;
-  --app-accent: #2d7dff;
-  --app-accent-soft: rgba(45, 125, 255, 0.16);
+  --app-accent: #8f8f8f;
+  --app-accent-soft: rgba(143, 143, 143, 0.2);
   --app-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  --page-accent: rgba(45, 125, 255, 0.08);
-  --page-accent-soft: rgba(45, 125, 255, 0.04);
+  --page-accent: rgba(125, 125, 125, 0.08);
+  --page-accent-soft: rgba(125, 125, 125, 0.04);
 
   /* Element Plus theme alignment */
-  --el-color-primary: #2d7dff;
-  --el-color-primary-light-3: rgba(45, 125, 255, 0.35);
-  --el-color-primary-light-5: rgba(45, 125, 255, 0.22);
-  --el-color-primary-light-7: rgba(45, 125, 255, 0.12);
+  --el-color-primary: #8f8f8f;
+  --el-color-primary-light-3: rgba(143, 143, 143, 0.35);
+  --el-color-primary-light-5: rgba(143, 143, 143, 0.22);
+  --el-color-primary-light-7: rgba(143, 143, 143, 0.12);
   --el-border-radius-base: 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
+/* @media (prefers-color-scheme: dark) { */
+html.dark {
+  --color-background: var(--vt-c-black);
+  --color-background-soft: var(--vt-c-black-soft);
+  --color-background-mute: var(--vt-c-black-mute);
 
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
 
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
+  --color-heading: var(--vt-c-text-dark-1);
+  --color-text: var(--vt-c-text-dark-2);
+
+  /* App theme dark overrides */
+  --app-bg: #121212;
+  --app-surface: #1e1e1e;
+  --app-text: #f2f2f2;
+  --app-muted: #a3a3a3;
+  --app-border: rgba(255, 255, 255, 0.08);
+  --app-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  --app-accent: #b5b5b5;
+  --app-accent-soft: rgba(181, 181, 181, 0.16);
+  --page-accent: rgba(255, 255, 255, 0.03);
+  --page-accent-soft: rgba(255, 255, 255, 0.015);
+  --active-element-color: #d4d4d4;
+  --active-background-color: rgba(255, 255, 255, 0.12);
+
+  --el-color-primary: #b5b5b5;
+  --el-color-primary-light-3: rgba(181, 181, 181, 0.35);
+  --el-color-primary-light-5: rgba(181, 181, 181, 0.22);
+  --el-color-primary-light-7: rgba(181, 181, 181, 0.12);
+}
+/* } */
+
+html.dark body {
+  --pai-brand-1-normal: #c8c8c8;
+  --pai-brand-2-hover: #d8d8d8;
+  --pai-brand-3-click: #b8b8b8;
+  --pai-brand-4-disable: #707070;
+  --pai-brand-5-bak: #8a8a8a;
+  --pai-brand-6-mq: #9a9a9a;
+  --pai-brand-7-light: rgba(255, 255, 255, 0.1);
+  --pai-brand-8-light: rgba(255, 255, 255, 0.16);
+  --pai-color-fff-normal: #f2f2f2;
+  --pai-color-999-gray: #a3a3a3;
+  --pai-color-3-gray: #a3a3a3;
+  --pai-color-4-gray: #c2c2c2;
+  --pai-color-5-gray: #4a4a4a;
+  --pai-color-6-gray: #252525;
+  --pai-color-7-gray: #1b1b1b;
+  --pai-color-3-black: #f2f2f2;
+  --pai-bg-white-fff: #1e1e1e;
+  --pai-bg-normal-1: #262626;
+  --pai-bg-light-1: #242424;
+  --pai-bg-light-2: #1a1a1a;
+  --pai-bg-neutral: #171717;
+  --pai-bg-smart-chat: #1a1a1a;
+  --pai-hr-color-1: #3b3b3b;
+  --pai-border-color-1: #3b3b3b;
+  --pai-font-2: #a3a3a3;
+  --second: #2a2a2a;
+  --pai-surface-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
 }
 
 *,
@@ -99,7 +148,7 @@ body {
   background:
     radial-gradient(900px 500px at 12% -10%, var(--page-accent), transparent 70%),
     radial-gradient(900px 520px at 88% 0%, var(--page-accent-soft), transparent 68%),
-    linear-gradient(180deg, #fafafa 0%, #f5f6f8 45%, #f0f1f3 100%);
+    linear-gradient(180deg, var(--app-bg) 0%, var(--app-bg) 45%, var(--app-bg) 100%);
   background-attachment: fixed;
   color: var(--app-text);
   font-family: var(--app-font-sans);
@@ -131,4 +180,30 @@ body {
   /*text-rendering: optimizeLegibility;*/
   /*-webkit-font-smoothing: antialiased;*/
   /*-moz-osx-font-smoothing: grayscale;*/
+}
+
+html.dark .bg-white {
+  background-color: var(--app-surface) !important;
+}
+
+html.dark .shadow-sm {
+  box-shadow: var(--app-shadow) !important;
+}
+
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-gray-600 {
+  color: var(--app-text) !important;
+}
+
+html.dark .text-gray-500,
+html.dark .text-gray-400 {
+  color: var(--app-muted) !important;
+}
+
+html.dark .border-gray-200,
+html.dark .border-gray-100,
+html.dark .border-slate-200,
+html.dark .border-slate-100 {
+  border-color: var(--app-border) !important;
 }

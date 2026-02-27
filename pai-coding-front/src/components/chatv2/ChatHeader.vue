@@ -21,7 +21,7 @@
         v-model="chatStore.selectedModelId"
         placeholder="选择模型"
         size="default"
-        style="width: 200px"
+        class="model-select"
         @change="onModelChange"
       >
         <el-option
@@ -66,8 +66,8 @@ function getModelDisplayName(modelId: string): string {
   justify-content: space-between;
   align-items: center;
   padding: 12px 24px;
-  border-bottom: 1px solid #e4e7ed;
-  background: white;
+  border-bottom: 1px solid var(--pai-neu-border);
+  background: var(--pai-neu-surface);
   min-height: 56px;
   flex-shrink: 0;
 }
@@ -86,7 +86,7 @@ function getModelDisplayName(modelId: string): string {
 .conversation-title {
   font-size: 16px;
   font-weight: 500;
-  color: #303133;
+  color: var(--pai-color-3-black);
 }
 
 .model-tag {
@@ -99,5 +99,25 @@ function getModelDisplayName(modelId: string): string {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.model-select {
+  width: 200px;
+}
+
+@media (max-width: 768px) {
+  .chat-header {
+    padding: 10px 12px 10px 64px;
+    min-height: 52px;
+    gap: 8px;
+  }
+
+  .conversation-title {
+    font-size: 14px;
+  }
+
+  .model-select {
+    width: 150px;
+  }
 }
 </style>

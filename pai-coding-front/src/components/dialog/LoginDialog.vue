@@ -57,7 +57,7 @@
                   <span>
                     <bold>输入验证码</bold> <span class="link-color">{{ code }}</span>
                   </span>
-                  <div><span id="state">有效期五分钟 👉</span> <a class="bold-span underline cursor-pointer link-color"
+                  <div><span id="state">{{ state }}</span> <a class="bold-span underline cursor-pointer link-color"
                       @click="refreshCode">手动刷新</a></div>
                 </div>
               </div>
@@ -91,14 +91,14 @@
 </template>
 <script setup lang="ts">
 
-import { reactive, ref, watch } from 'vue'
+import { onBeforeUnmount, reactive, ref, watch } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { doGet, doPost, mockLogin2XML, mockLoginXML } from '@/http/BackendRequests'
 import type { CommonResponse, GlobalResponse } from '@/http/ResponseTypes/CommonResponseType'
-import { BASE_URL, LOGIN_USER_NAME_URL } from '@/http/URL'
+import { BASE_URL, GLOBAL_INFO_URL, LOGIN_USER_NAME_URL } from '@/http/URL'
 import { getCookie, messageTip, notifyMsg, refreshPage, setAuthToken } from '@/util/utils'
 import { MESSAGE_TYPE } from '@/constants/MessageTipEnumConstant'
-import { COOKIE_DEVICE_ID } from '@/constants/CookieConstants'
+import { COOKIE_DEVICE_ID, COOKIE_SESSION_ID } from '@/constants/CookieConstants'
 import { useGlobalStore } from '@/stores/global'
 const globalStore = useGlobalStore()
 const global = globalStore.global
@@ -108,16 +108,25 @@ const props = defineProps<{
 }>()
 
 const loginModal = ref(false)
-let init = false
 
-
-watch(() => props.clicked, () => {
-  loginModal.value = true
-  // 如果是第一次打开，需要建立长连接
-  if (!init) {
-    buildConnect()
-    init = true
+watch(() => props.clicked, (clicked) => {
+  if (!clicked) {
+    return
   }
+  loginModal.value = true
+  reconnectAttempt = 0
+  buildConnect()
+})
+
+watch(loginModal, (visible) => {
+  if (!visible) {
+    stopConnect()
+    state.value = '有效期五分钟 👉'
+  }
+})
+
+onBeforeUnmount(() => {
+  stopConnect()
 })
 
 const formRef = ref<FormInstance>()
@@ -194,44 +203,189 @@ const mockLogin2 = () => {
 //  * 记录长连接
 //  * @type {null}
 //  */
-let sseSource: any = null;
-let intHook: any = null;
-let deviceId: any = null;
+const reconnectBaseDelayMs = 1000
+const reconnectMaxDelayMs = 20000
+const reconnectMaxAttempts = 8
+
+let reconnectAttempt = 0
+let reconnectTimer: number | null = null
+
+let sseSource: EventSource | null = null
+let intHook: number | null = null
+let deviceId = ''
+let handlingLoginSuccess = false
 const code = ref('')
 const state = ref('有效期五分钟 👉')
 let fetchCodeCnt = 0
+
+function parseCookieValue(cookiePayload: string, cookieName: string): string {
+  const cookieParts = cookiePayload.split(';')
+  for (const cookiePart of cookieParts) {
+    const segment = cookiePart.trim()
+    if (segment.startsWith(`${cookieName}=`)) {
+      return segment.substring(cookieName.length + 1)
+    }
+  }
+  return ''
+}
+
+function hasSessionCookie() {
+  return document.cookie.includes(`${COOKIE_SESSION_ID}=`)
+}
+
+function persistSessionCookie(cookiePayload: string): boolean {
+  const normalizedCookie = cookiePayload.trim().endsWith(';')
+    ? cookiePayload.trim()
+    : `${cookiePayload.trim()};`
+
+  if (!normalizedCookie.includes('=')) {
+    return false
+  }
+
+  document.cookie = normalizedCookie
+  if (hasSessionCookie()) {
+    return true
+  }
+
+  const sessionToken = parseCookieValue(normalizedCookie, COOKIE_SESSION_ID)
+  if (!sessionToken) {
+    return false
+  }
+
+  document.cookie = `${COOKIE_SESSION_ID}=${sessionToken};path=/;`
+  return hasSessionCookie()
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms)
+  })
+}
+
+async function syncLoginStatus(): Promise<boolean> {
+  for (let retry = 0; retry < 3; retry += 1) {
+    try {
+      const response = await doGet<CommonResponse>(GLOBAL_INFO_URL, {})
+      globalStore.setGlobal(response.data.global)
+      if (response.data.global.isLogin) {
+        return true
+      }
+    } catch (error) {
+      console.error("同步登录态失败", error)
+    }
+    await wait(350)
+  }
+  return false
+}
+
+async function handleLoginSuccess(cookiePayload: string) {
+  if (handlingLoginSuccess) {
+    return
+  }
+  handlingLoginSuccess = true
+  stopConnect()
+  state.value = '登录处理中'
+
+  const sessionToken = parseCookieValue(cookiePayload, COOKIE_SESSION_ID)
+  if (sessionToken) {
+    setAuthToken(sessionToken)
+  }
+
+  const cookiePersisted = persistSessionCookie(cookiePayload)
+  if (!cookiePersisted) {
+    state.value = '登录失败，请手动重试'
+    messageTip("登录态写入失败，请刷新后重试", MESSAGE_TYPE.ERROR)
+    handlingLoginSuccess = false
+    return
+  }
+
+  const loginSucceed = await syncLoginStatus()
+  if (loginSucceed) {
+    state.value = '登录成功'
+    loginModal.value = false
+    messageTip("登录成功", MESSAGE_TYPE.SUCCESS)
+    handlingLoginSuccess = false
+    return
+  }
+
+  state.value = '登录成功，刷新页面中'
+  handlingLoginSuccess = false
+  refreshPage()
+}
+
+function clearFetchTimer() {
+  if (intHook != null) {
+    window.clearInterval(intHook)
+    intHook = null
+  }
+}
+
+function clearReconnectTimer() {
+  if (reconnectTimer != null) {
+    window.clearTimeout(reconnectTimer)
+    reconnectTimer = null
+  }
+}
+
+function stopConnect() {
+  clearReconnectTimer()
+  clearFetchTimer()
+  if (sseSource != null) {
+    try {
+      sseSource.close()
+    } catch (e) {
+      console.log("关闭连接失败", e)
+    }
+    sseSource = null
+  }
+}
+
+function scheduleReconnect() {
+  if (!loginModal.value) {
+    return
+  }
+  if (reconnectAttempt >= reconnectMaxAttempts) {
+    state.value = '连接失败，请稍后手动刷新'
+    messageTip("连接失败，请稍后再试", MESSAGE_TYPE.WARNING)
+    return
+  }
+
+  const delay = Math.min(
+    reconnectBaseDelayMs * 2 ** reconnectAttempt,
+    reconnectMaxDelayMs
+  )
+  reconnectAttempt += 1
+  clearReconnectTimer()
+  reconnectTimer = window.setTimeout(() => {
+    buildConnect()
+  }, delay)
+}
 
 /**
  * 建立半长连接，用于实现自动登录
  */
 function buildConnect() {
-  if (sseSource != null) {
-    try {
-      sseSource.close();
-    } catch (e) {
-      console.log("关闭上次的连接", e);
-    }
-    try {
-      window.clearInterval(intHook);
-    } catch (e) { /* empty */ }
+  stopConnect()
+  if (!loginModal.value) {
+    return
   }
 
   if (!deviceId) {
-    deviceId = getCookie(COOKIE_DEVICE_ID);
+    deviceId = getCookie(COOKIE_DEVICE_ID)
     console.log("获取设备id: ", deviceId)
   }
-  const subscribeUrl = BASE_URL + "/subscribe?deviceId=" + deviceId;
-  const source = new EventSource(subscribeUrl);
-  sseSource = source;
+  const subscribeUrl = `${BASE_URL}/subscribe?deviceId=${encodeURIComponent(deviceId)}`
+  const source = new EventSource(subscribeUrl)
+  sseSource = source
 
   source.onmessage = function (event) {
-    let text = event.data.replaceAll("\"", "").trim();
-    console.log("receive: " + text);
+    const text = event.data.replaceAll("\"", "").trim()
+    console.log("receive: " + text)
 
-    let newCode;
+    let newCode = ''
     if (text.startsWith('refresh#')) {
       // 刷新验证码
-      newCode = text.substring(8).trim();
+      newCode = text.substring(8).trim()
       code.value = newCode
       state.value = '已刷新 '
       notifyMsg("验证码已刷新", "二维码已更新，请重新扫码", MESSAGE_TYPE.INFO)
@@ -243,46 +397,41 @@ function buildConnect() {
     } else if (text.startsWith('login#')) {
       // 登录格式为 login#cookie
       console.log("登录成功,保存cookie", text)
-      document.cookie = text.substring(6);
-      source.close();
-      refreshPage();
+      void handleLoginSuccess(text.substring(6))
     } else if (text.startsWith("init#")) {
-      newCode = text.substring(5).trim();
+      newCode = text.substring(5).trim()
       code.value = newCode
-      console.log("初始化验证码: ", newCode);
+      console.log("初始化验证码: ", newCode)
     }
 
-    if (newCode != null) {
-      try {
-        window.clearInterval(intHook);
-      } catch (e) { /* empty */ }
+    if (newCode) {
+      clearFetchTimer()
     }
-  };
-
-  source.onopen = function (evt) {
-    deviceId = getCookie("f-device");
-    console.log("开始订阅, 设备id=", deviceId, evt);
   }
 
-  source.onerror = function (e: Event) {
-    console.log("连接错误，重新开始", e);
-    state.value = '连接中断,请刷新重连'
-    buildConnect();
-  };
+  source.onopen = function (evt) {
+    reconnectAttempt = 0
+    deviceId = getCookie(COOKIE_DEVICE_ID)
+    state.value = '连接成功'
+    console.log("开始订阅, 设备id=", deviceId, evt)
+  }
 
-  fetchCodeCnt = 0;
-  console.log("#############################")
-  intHook = setInterval(() => fetchCode(), 1000);
+  source.onerror = function () {
+    state.value = '连接中断，正在重连'
+    stopConnect()
+    scheduleReconnect()
+  }
+
+  fetchCodeCnt = 0
+  intHook = window.setInterval(() => fetchCode(), 1000)
 }
 
 function fetchCode() {
   if (deviceId) {
     if (++fetchCodeCnt > 5) {
       // 为了避免不停的向后端发起请求，做一个最大的重试计数限制
-      try {
-        window.clearInterval(intHook);
-      } catch (e) { /* empty */ }
-      return;
+      clearFetchTimer()
+      return
     }
 
     doGet('/login/fetch?deviceId=' + deviceId, {}, 'text')
@@ -292,9 +441,7 @@ function fetchCode() {
           if (response.data !== 'fail') {
             // @ts-ignore
             code.value = response.data
-            try {
-              window.clearInterval(intHook);
-            } catch (e) { /* empty */ }
+            clearFetchTimer()
           }
         }
       })
@@ -317,6 +464,7 @@ function refreshCode() {
 
       if (reconnect) {
         // 重新建立连接
+        reconnectAttempt = 0
         buildConnect()
         state.value = '已刷新'
       } else if (validationCode) {

@@ -7,8 +7,8 @@
         <ul class="flex flex-col gap-3">
             <li v-for="(item, index) in side.items" :key="index" class="group">
                 <a :href="item.url" class="flex items-start gap-3">
-                    <div
-                        class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded text-xs font-bold"
+                    <!-- 序号 -->
+                    <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded text-xs font-bold"
                         :class="[
                             index === 0 ? 'bg-red-500 text-white' :
                                 index === 1 ? 'bg-orange-500 text-white' :
@@ -18,6 +18,7 @@
                         {{ index + 1 }}
                     </div>
                     <div class="min-w-0">
+                        <!-- 文章名称 -->
                         <div
                             class="text-gray-700 hover:text-blue-600 transition-colors text-sm line-clamp-2 leading-relaxed">
                             {{ item.title }}

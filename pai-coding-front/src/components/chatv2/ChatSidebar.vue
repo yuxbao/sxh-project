@@ -297,8 +297,8 @@ function formatTime(date: Date): string {
 /* 桌面端侧边栏 */
 .chat-sidebar {
   width: 260px;
-  background: #fafbfc;
-  border-right: 1px solid #e4e7ed;
+  background: var(--pai-neu-surface-soft);
+  border-right: 1px solid var(--pai-neu-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -310,13 +310,22 @@ function formatTime(date: Date): string {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #fafbfc;
+  background: var(--pai-neu-surface-soft);
+}
+
+.sidebar-drawer :deep(.el-drawer) {
+  background: var(--pai-neu-surface-soft);
+}
+
+.sidebar-drawer :deep(.el-drawer__body) {
+  padding: 0;
+  background: var(--pai-neu-surface-soft);
 }
 
 .new-chat-button {
   margin: 16px;
   padding: 10px 16px;
-  background: #409eff;
+  background: var(--pai-brand-1-normal);
   color: white;
   border-radius: 6px;
   cursor: pointer;
@@ -331,7 +340,7 @@ function formatTime(date: Date): string {
 }
 
 .new-chat-button:hover {
-  background: #337ecc;
+  background: var(--pai-brand-2-hover);
 }
 
 .conversations-list {
@@ -349,18 +358,18 @@ function formatTime(date: Date): string {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: var(--pai-neu-surface);
   border: 1px solid transparent;
 }
 
 .conversation-item:hover {
-  background: #f0f2f5;
-  border-color: #e4e7ed;
+  background: var(--pai-neu-surface-soft);
+  border-color: var(--pai-neu-border);
 }
 
 .conversation-item.active {
-  background: #ecf5ff;
-  border-color: #409eff;
+  background: rgba(45, 125, 255, 0.08);
+  border-color: var(--pai-brand-1-normal);
 }
 
 .conversation-content {
@@ -371,7 +380,7 @@ function formatTime(date: Date): string {
 .conversation-title {
   font-size: 14px;
   font-weight: 500;
-  color: #303133;
+  color: var(--pai-color-3-black);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -381,7 +390,7 @@ function formatTime(date: Date): string {
 .title-input {
   width: 100%;
   padding: 4px 8px;
-  border: 1px solid #409eff;
+  border: 1px solid var(--pai-brand-1-normal);
   border-radius: 4px;
   font-size: 14px;
   outline: none;
@@ -397,7 +406,7 @@ function formatTime(date: Date): string {
 
 .conversation-time {
   font-size: 12px;
-  color: #909399;
+  color: var(--pai-color-3-gray);
   flex-shrink: 0;
 }
 
@@ -423,13 +432,13 @@ function formatTime(date: Date): string {
 
 .action-icon {
   cursor: pointer;
-  color: #909399;
+  color: var(--pai-color-3-gray);
   transition: color 0.2s;
   font-size: 16px;
 }
 
 .action-icon:hover {
-  color: #409eff;
+  color: var(--pai-brand-1-normal);
 }
 
 .conversations-list::-webkit-scrollbar {
@@ -437,12 +446,21 @@ function formatTime(date: Date): string {
 }
 
 .conversations-list::-webkit-scrollbar-thumb {
-  background: #dcdfe6;
+  background: var(--pai-color-5-gray);
   border-radius: 3px;
 }
 
 .conversations-list::-webkit-scrollbar-thumb:hover {
-  background: #c0c4cc;
+  background: var(--pai-color-3-gray);
+}
+
+html.dark .conversation-item.active {
+  background: var(--pai-neu-surface);
+  border-color: var(--pai-neu-border);
+}
+
+html.dark .new-chat-button {
+  color: #111111;
 }
 
 /* 响应式设计 */

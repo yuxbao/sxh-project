@@ -653,8 +653,8 @@
 
   .col-2-article .article-mark {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 12px;
+    top: 12px;
   }
 
   .com-2-mark-triangle .mark-cnt {
@@ -852,4 +852,34 @@
   line-height: 22px;
   color: var(--pai-brand-6-mq);
   margin-bottom: 8px;
+}
+
+/* 更强力地覆盖背景图显示 */
+html.dark .home-right-item-wrap.notice,
+html.dark .home-right-item-wrap.hot-article,
+html.dark .home-right-item-wrap.column,
+html.dark .home-right-item-wrap.pdf {
+    background-color: var(--pai-neu-surface) !important;
+}
+
+html.dark .home-right-item-wrap .notice-bg,
+html.dark .home-right-item-wrap .hot-article-bg,
+html.dark .home-right-item-wrap .column-bg,
+html.dark .home-right-item-wrap .pdf-bg {
+    display: none !important;
+}
+
+/* 调整内边距，因为隐藏了顶部的图片，可能需要恢复一些内边距 */
+html.dark .notice-content,
+html.dark .hot-article-content,
+html.dark .column-content {
+    margin-top: 0 !important;
+    padding-top: 20px !important;
+}
+
+html.dark .home-right-item-wrap.notice .home-right-item-title {
+    position: static;
+    left: auto;
+    top: auto;
+    margin-bottom: 14px;
 }

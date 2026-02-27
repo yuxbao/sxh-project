@@ -1,10 +1,21 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { RouterView } from 'vue-router'
 import { connectWebSocket } from '@/util/websocket'
+import { applyTheme, watchSystemTheme } from '@/util/theme'
+
+let unwatchSystemTheme: (() => void) | null = null
 
 onMounted(() => {
   connectWebSocket()
+  applyTheme()
+  unwatchSystemTheme = watchSystemTheme()
+})
+
+onUnmounted(() => {
+  if (unwatchSystemTheme) {
+    unwatchSystemTheme()
+  }
 })
 </script>
 

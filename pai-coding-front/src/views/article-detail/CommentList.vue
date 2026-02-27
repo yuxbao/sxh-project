@@ -3,7 +3,7 @@
 
   <!-- 评论列表 -->
   <div
-    class="comment-list-wrap bg-color-white"
+    class="comment-list-wrap bg-color-white comment-section"
     id="commentList">
     <div>
       <svg xmlns="http://www.w3.org/2000/svg" style="display:none;" class="">
@@ -19,6 +19,14 @@
         </symbol>
       </svg>
     </div>
+    <div class="comment-section-head">
+      <div class="comment-section-title">
+        <span>评论区</span>
+        <em>{{ comments ? comments.length : 0 }}</em>
+      </div>
+      <div class="comment-section-sub">欢迎分享你的思考，保持友善与克制。</div>
+    </div>
+
     <div class="comment-write-wrap">
       <img
         v-if="global.isLogin"
@@ -37,6 +45,10 @@
           maxlength="512"
           :placeholder="global.isLogin ? '讨论应以学习和精进为目的。请勿发布不友善或者负能量的内容，与人为善，比聪明更重要！' : '请先登录后再评论'"
         />
+        <div class="comment-meta">
+          <span>请保持友善与克制</span>
+          <span>{{ textarea.length }}/512</span>
+        </div>
         <p class="flex justify-end m-2">
           <el-button @click="commentSubmit" :disabled="textarea.length === 0 || isCommenting">
             评论<el-icon class="el-icon--right"><ChatSquare /></el-icon>
@@ -68,6 +80,9 @@
         <div class="all-comment-item" v-for="(comment,id) in comments" :key="id">
           <CommentItem :comment="comment" :article="article"></CommentItem>
         </div>
+      </div>
+      <div v-else class="comment-empty">
+        <p>还没有评论，来做第一个发言者。</p>
       </div>
     </div>
 

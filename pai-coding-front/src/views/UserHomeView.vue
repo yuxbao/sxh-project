@@ -89,6 +89,6 @@ watch(
 .user-div {
   overflow: visible;
   min-height: calc(100vh - var(--footer-height) - var(--header-height));
-  background-color: #f7f8f9;
+  background-color: var(--app-bg);
 }
 </style>

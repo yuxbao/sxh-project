@@ -110,7 +110,7 @@ watch(() => chatStore.messages[chatStore.messages.length - 1]?.content, () => {
   overflow-y: auto;
   padding: 20px;
   scroll-behavior: smooth;
-  background: white;
+  background: var(--pai-neu-surface);
   min-height: 0;
 }
 
@@ -174,13 +174,13 @@ watch(() => chatStore.messages[chatStore.messages.length - 1]?.content, () => {
 }
 
 .avatar-icon.user {
-  background: #409eff;
+  background: var(--pai-brand-1-normal);
   color: white;
 }
 
 .avatar-icon.bot {
-  background: #e4e7ed;
-  color: #606266;
+  background: var(--pai-neu-surface-soft);
+  color: var(--pai-color-3-gray);
 }
 
 .message-content {
@@ -192,14 +192,14 @@ watch(() => chatStore.messages[chatStore.messages.length - 1]?.content, () => {
 }
 
 .user-message .message-content {
-  background: #409eff;
+  background: var(--pai-brand-1-normal);
   color: white;
 }
 
 .bot-message .message-content {
-  background: white;
-  color: #303133;
-  border: 1px solid #e4e7ed;
+  background: var(--pai-neu-surface-soft);
+  color: var(--pai-color-3-black);
+  border: 1px solid var(--pai-neu-border);
 }
 
 .message-text {
@@ -215,7 +215,7 @@ watch(() => chatStore.messages[chatStore.messages.length - 1]?.content, () => {
 }
 
 .message-text :deep(code) {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.08);
   padding: 2px 6px;
   border-radius: 4px;
   font-family: 'Courier New', monospace;
@@ -245,7 +245,7 @@ watch(() => chatStore.messages[chatStore.messages.length - 1]?.content, () => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #909399;
+  background: var(--pai-color-3-gray);
   animation: bounce 1.4s infinite ease-in-out both;
 }
 
@@ -273,12 +273,28 @@ watch(() => chatStore.messages[chatStore.messages.length - 1]?.content, () => {
 }
 
 .message-list::-webkit-scrollbar-thumb {
-  background: #dcdfe6;
+  background: var(--pai-color-5-gray);
   border-radius: 4px;
 }
 
 .message-list::-webkit-scrollbar-thumb:hover {
-  background: #c0c4cc;
+  background: var(--pai-color-3-gray);
+}
+
+html.dark .avatar-icon.user,
+html.dark .user-message .message-content {
+  background: #353535;
+  color: #f2f2f2;
+}
+
+html.dark .message-text :deep(code) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f2f2f2;
+}
+
+html.dark .message-text :deep(pre) {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--pai-neu-border);
 }
 
 /* 响应式设计 */

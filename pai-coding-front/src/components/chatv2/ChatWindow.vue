@@ -23,7 +23,7 @@ const chatStore = useChatStore()
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--pai-neu-surface);
   overflow: hidden;
   min-height: 0;
 }

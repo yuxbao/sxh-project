@@ -159,8 +159,8 @@
     </div>
 
     <div class="article-heart bg-color-white">
-      <el-button circle round size="large" @click="likeArticle">
-        <el-icon v-show="!btnLoading" size="20"><svg t="1719494245215" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2214" id="mx_n_1719494245217" width="16" height="18"><path d="M621.674667 408.021333c16.618667-74.24 28.224-127.936 34.837333-161.194666C673.152 163.093333 629.941333 85.333333 544.298667 85.333333c-77.226667 0-116.010667 38.378667-138.88 115.093334l-0.586667 2.24c-13.728 62.058667-34.72 110.165333-62.506667 144.586666a158.261333 158.261333 0 0 1-119.733333 58.965334l-21.909333 0.469333C148.437333 407.808 106.666667 450.816 106.666667 503.498667V821.333333c0 64.8 52.106667 117.333333 116.394666 117.333334h412.522667c84.736 0 160.373333-53.568 189.12-133.92l85.696-239.584c21.802667-60.96-9.536-128.202667-70.005333-150.186667a115.552 115.552 0 0 0-39.488-6.954667H621.674667z" :fill="praised? '#ED722E': '#8a8a8a'" p-id="2215"></path></svg></el-icon>
+      <el-button circle round size="large" :disabled="btnLoading" @click="likeArticle">
+        <el-icon v-show="!btnLoading" size="20"><svg t="1719494245215" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2214" id="mx_n_1719494245217" width="16" height="18"><path d="M621.674667 408.021333c16.618667-74.24 28.224-127.936 34.837333-161.194666C673.152 163.093333 629.941333 85.333333 544.298667 85.333333c-77.226667 0-116.010667 38.378667-138.88 115.093334l-0.586667 2.24c-13.728 62.058667-34.72 110.165333-62.506667 144.586666a158.261333 158.261333 0 0 1-119.733333 58.965334l-21.909333 0.469333C148.437333 407.808 106.666667 450.816 106.666667 503.498667V821.333333c0 64.8 52.106667 117.333333 116.394666 117.333334h412.522667c84.736 0 160.373333-53.568 189.12-133.92l85.696-239.584c21.802667-60.96-9.536-128.202667-70.005333-150.186667a115.552 115.552 0 0 0-39.488-6.954667H621.674667z" :fill="praised? '#9a9a9a': '#8a8a8a'" p-id="2215"></path></svg></el-icon>
         <el-icon v-show="btnLoading" class="is-loading" size="20"><Loading /></el-icon>
       </el-button>
 
@@ -233,6 +233,9 @@ const likeArticle = () => {
     }
     return
   }
+  if (btnLoading.value) {
+    return
+  }
   btnLoading.value = true
   if(praised.value){
     doGet<CommonResponse>(ARTICLE_LIKE_COLLECT_URL, {
@@ -240,7 +243,7 @@ const likeArticle = () => {
       type: OperateTypeEnum.CANCEL_PRAISE,
     })
       .then((response) => {
-        praiseCnt.value --
+        praiseCnt.value = Math.max(0, praiseCnt.value - 1)
         praised.value = false
         praisedUsers.value = praisedUsers.value?.filter((item) => item.userId !== global.user.id)
       }).catch((error) => {

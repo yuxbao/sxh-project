@@ -178,8 +178,8 @@ async function sendMessage() {
 
 <style scoped>
 .chat-input-container {
-  border-top: 1px solid #e4e7ed;
-  background: white;
+  border-top: 1px solid var(--pai-neu-border);
+  background: var(--pai-neu-surface);
   padding: 16px 20px;
   flex-shrink: 0;
 }
@@ -210,29 +210,31 @@ async function sendMessage() {
 
 .message-input :deep(.el-textarea__inner) {
   border-radius: 8px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--pai-neu-border);
   font-size: 14px;
   line-height: 1.6;
   transition: all 0.2s;
   resize: none;
+  background: var(--pai-neu-surface-soft);
+  color: var(--pai-color-3-black);
 }
 
 .message-input :deep(.el-textarea__inner):focus {
-  border-color: #409eff;
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+  border-color: var(--pai-brand-1-normal);
+  box-shadow: 0 0 0 2px rgba(45, 125, 255, 0.1);
 }
 
 .input-info {
   margin-top: 8px;
   font-size: 13px;
-  color: #909399;
+  color: var(--pai-color-3-gray);
 }
 
 .streaming-indicator {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #409eff;
+  color: var(--pai-brand-1-normal);
   font-size: 13px;
 }
 
@@ -252,7 +254,7 @@ async function sendMessage() {
 
 @media (max-width: 768px) {
   .chat-input-container {
-    padding: 12px;
+    padding: 12px 12px max(12px, env(safe-area-inset-bottom));
   }
 
   .input-wrapper {
@@ -271,5 +273,9 @@ async function sendMessage() {
   .message-input :deep(.el-textarea__inner) {
     font-size: 13px;
   }
+}
+
+html.dark .message-input :deep(.el-textarea__inner):focus {
+  box-shadow: 0 0 0 2px rgba(200, 200, 200, 0.12);
 }
 </style>

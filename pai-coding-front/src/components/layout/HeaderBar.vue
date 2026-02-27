@@ -1,13 +1,10 @@
 <template>
-  <nav
-    :data-islogin="global.isLogin? 'true' : 'false'"
-    class="navbar navbar-expand-md bg-color-white fixed-top"
-  >
+  <nav :data-islogin="global.isLogin ? 'true' : 'false'" class="navbar navbar-expand-md bg-color-white fixed-top">
     <div class="nav-body">
       <div class="nav-logo-wrap-lg">
         <RouterLink class="navbar-logo-wrap" to="/">
-          <img class="logo hidden-when-screen-small" src="/src/assets/static/img/logo.png"/>
-<!--          <img src="/src/assets/static/img/icon.png" class="logo-lg display-when-screen-small" alt="" />-->
+          <img class="logo hidden-when-screen-small" src="/src/assets/static/img/logo.png" />
+          <!--          <img src="/src/assets/static/img/icon.png" class="logo-lg display-when-screen-small" alt="" />-->
         </RouterLink>
 
         <el-dropdown :hide-on-click="false" class="display-when-screen-small center-content">
@@ -16,13 +13,27 @@
           </a>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item><RouterLink class="dropdown-item" to="/">首页</RouterLink></el-dropdown-item>
-              <el-dropdown-item><RouterLink class="dropdown-item" to="/column">教程</RouterLink></el-dropdown-item>
-              <el-dropdown-item><RouterLink class="dropdown-item" to="/rank/month">排行榜</RouterLink></el-dropdown-item>
-              <el-dropdown-item><RouterLink class="dropdown-item" to="/chat">LLM</RouterLink></el-dropdown-item>
-              <el-dropdown-item v-if="global.isLogin"><RouterLink class="dropdown-item" to="/tools/">工具</RouterLink></el-dropdown-item>
-              <el-dropdown-item><RouterLink class="dropdown-item" to="/about">关于作者</RouterLink></el-dropdown-item>
-              <el-dropdown-item><RouterLink class="dropdown-item" to="/plan">更新计划</RouterLink></el-dropdown-item>
+              <el-dropdown-item>
+                <RouterLink class="dropdown-item" to="/">首页</RouterLink>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <RouterLink class="dropdown-item" to="/column">教程</RouterLink>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <RouterLink class="dropdown-item" to="/rank/month">排行榜</RouterLink>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <RouterLink class="dropdown-item" to="/chat">LLM</RouterLink>
+              </el-dropdown-item>
+              <el-dropdown-item v-if="global.isLogin">
+                <RouterLink class="dropdown-item" to="/tools/">工具</RouterLink>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <RouterLink class="dropdown-item" to="/about">关于作者</RouterLink>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <RouterLink class="dropdown-item" to="/plan">更新计划</RouterLink>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -30,45 +41,49 @@
       <div class="navbar-collapse hidden-when-screen-small">
         <ul class="navbar-nav">
           <el-space size="small">
-            <li :class="{'selected-domain': activeTab == '/'}">
+            <li :class="{ 'selected-domain': activeTab == '/' }">
               <RouterLink class="nav-link" to="/">首页</RouterLink>
             </li>
-            <li :class="{'selected-domain': activeTab == '/column'}">
+            <li :class="{ 'selected-domain': activeTab == '/column' }">
               <RouterLink class="nav-link" to="/column">教程</RouterLink>
             </li>
-            <li :class="{'selected-domain': activeTab.startsWith('/rank')}">
+            <li :class="{ 'selected-domain': activeTab.startsWith('/rank') }">
               <RouterLink class="nav-link" to="/rank/month">排行榜</RouterLink>
             </li>
-            <li :class="{'selected-domain': activeTab == '/chat'}">
+            <li :class="{ 'selected-domain': activeTab == '/chat' }">
               <RouterLink class="nav-link" to="/chat">LLM</RouterLink>
             </li>
-            <li v-if="global.isLogin" :class="{'selected-domain': activeTab.startsWith('/tools')}">
+            <li v-if="global.isLogin" :class="{ 'selected-domain': activeTab.startsWith('/tools') }">
               <RouterLink class="nav-link" to="/tools/">工具</RouterLink>
             </li>
-            <li :class="{'selected-domain': activeTab == '/about'}">
+            <li :class="{ 'selected-domain': activeTab == '/about' }">
               <RouterLink class="nav-link" to="/about">关于作者</RouterLink>
             </li>
-            <li class="max-lg:hidden" :class="{'selected-domain': activeTab == '/plan'}">
+            <li class="max-lg:hidden" :class="{ 'selected-domain': activeTab == '/plan' }">
               <RouterLink class="nav-link" to="/plan">更新计划</RouterLink>
             </li>
           </el-space>
         </ul>
       </div>
       <div class="nav-right">
-        <button
-          v-if="!route.path.includes('/article/edit') && route.path !== '/article/edit/' && global.isLogin"
-          type="button"
-          class="btn btn-primary nav-article"
-          @click="writeArticle"
-        >
+        <el-dropdown trigger="click">
+          <el-button plain size="small" class="theme-switch-btn">
+            主题：{{ themeLabel }}
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="changeTheme('system')">跟随系统</el-dropdown-item>
+              <el-dropdown-item @click="changeTheme('light')">浅色</el-dropdown-item>
+              <el-dropdown-item @click="changeTheme('dark')">暗色</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <button v-if="!route.path.includes('/article/edit') && route.path !== '/article/edit/' && global.isLogin"
+          type="button" class="btn btn-primary nav-article" @click="writeArticle">
           写文章
         </button>
-        <button
-          v-else-if="route.path.includes('/article/edit') || route.path === '/article/edit/'"
-          type="button"
-          class="btn btn-primary nav-article"
-          @click="router.push('/')"
-        >
+        <button v-else-if="route.path.includes('/article/edit') || route.path === '/article/edit/'" type="button"
+          class="btn btn-primary nav-article" @click="router.push('/')">
           返回主页
         </button>
         <ul v-if="!global.isLogin">
@@ -81,29 +96,14 @@
           <!--  已登录 -->
           <li class="nav-item nav-notice">
             <RouterLink class="nav-link navbar-count-msg-box" to="/notice/">
-                <span
-                  v-if="global.msgNum != null && global.msgNum > 0"
-                  class="navbar-count-msg"
-                >
-                  {{global.msgNum}}
-                </span>
+              <span v-if="global.msgNum != null && global.msgNum > 0" class="navbar-count-msg">
+                {{ global.msgNum }}
+              </span>
               <!-- 消息提醒的角标 -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path
-                  d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"
-                ></path>
+                <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
                 <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
               </svg>
             </RouterLink>
@@ -114,14 +114,12 @@
           <li class="nav-right-user center-content">
             <el-dropdown :hide-on-click="false">
               <div style="display: flex">
-                <img
-                  class="nav-login-img"
-                  style="border-radius: 50%"
-                  :src="global.user.photo? global.user.photo : 'https://static.developers.pub/static/img/logo.b2ff606.jpeg'"
-                  alt=""
-                  loading="lazy"
-                />
-                <div class="center-content m-2"><el-icon size="15"><ArrowDownBold /></el-icon></div>
+                <img class="nav-login-img" style="border-radius: 50%"
+                  :src="global.user.photo ? global.user.photo : 'https://static.developers.pub/static/img/logo.b2ff606.jpeg'"
+                  alt="" loading="lazy" />
+                <div class="center-content m-2"><el-icon size="15">
+                    <ArrowDownBold />
+                  </el-icon></div>
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -135,15 +133,17 @@
       </div>
     </div>
   </nav>
-<!--  登录对话框 -->
+  <!--  登录对话框 -->
 </template>
 
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
+import type { ThemeMode } from '@/util/theme'
+import { getThemeMode, setThemeMode } from '@/util/theme'
 const router = useRouter()
 const route = useRoute()
-import { doGet} from '@/http/BackendRequests'
+import { doGet } from '@/http/BackendRequests'
 import {
   type CommonResponse,
 } from '@/http/ResponseTypes/CommonResponseType'
@@ -154,9 +154,9 @@ const global = globalStore.global
 
 // ======= 跳转到写文章 ==========
 const writeArticle = () => {
-  if(route.fullPath.includes("/article/edit")){
+  if (route.fullPath.includes("/article/edit")) {
     window.location.reload()
-  }else{
+  } else {
     router.push("/article/edit")
   }
 }
@@ -167,10 +167,31 @@ const activeTab = ref('/')
 
 onMounted(() => {
   activeTab.value = router.currentRoute.value.path
+  themeMode.value = getThemeMode()
   console.log(activeTab.value)
 })
 
 const registerModal = ref(false)
+
+const themeMode = ref<ThemeMode>('system')
+
+const themeLabelMap: Record<ThemeMode, string> = {
+  system: '跟随系统',
+  light: '浅色',
+  dark: '暗色'
+}
+
+const themeLabel = ref(themeLabelMap.system)
+
+const changeTheme = (mode: ThemeMode) => {
+  themeMode.value = mode
+  themeLabel.value = themeLabelMap[mode]
+  setThemeMode(mode)
+}
+
+onMounted(() => {
+  themeLabel.value = themeLabelMap[themeMode.value]
+})
 
 import { messageTip, refreshPage, sleep } from '@/util/utils'
 import { MESSAGE_TYPE } from '@/constants/MessageTipEnumConstant'
@@ -181,7 +202,7 @@ import { LOGOUT_URL } from '@/http/URL'
 const showLoginDialog = inject<() => void>('loginDialogClicked')
 
 const loginButton = () => {
-  if(showLoginDialog)
+  if (showLoginDialog)
     showLoginDialog()
   else
     console.error("请先登录")
@@ -190,17 +211,17 @@ const loginButton = () => {
 // ==========个人主页==========
 const personalPage = () => {
   console.log(route.fullPath)
-  if(route.fullPath.includes('/user/' + global.user.userId)){
+  if (route.fullPath.includes('/user/' + global.user.userId)) {
     messageTip("已经在个人主页了", MESSAGE_TYPE.INFO)
     return
   }
-  if(global.user.userId != route.params['userId']){
-    router.push(global.user.userId? '/user/' + global.user.userId: '/login')
+  if (global.user.userId != route.params['userId']) {
+    router.push(global.user.userId ? '/user/' + global.user.userId : '/login')
       .then(() => {
         window.location.reload()
       })
-  }else{
-    router.push(global.user.userId? '/user/' + global.user.userId: '/login')
+  } else {
+    router.push(global.user.userId ? '/user/' + global.user.userId : '/login')
   }
 }
 
@@ -209,13 +230,14 @@ const logout = () => {
   console.log("退出登录")
   doGet<CommonResponse>(LOGOUT_URL, {})
     .then((response) => {
-      if(response.data.status.code === 0){
+      if (response.data.status.code === 0) {
         messageTip("退出登录成功", MESSAGE_TYPE.SUCCESS)
         sleep(1)
         console.log(response.data)
         // router.replace('/')
         refreshPage()
-      }})
+      }
+    })
     .catch((error) => {
       console.error(error)
     })
@@ -225,14 +247,13 @@ const logout = () => {
 
 
 <style scoped>
-
-.wx-login-span-info{
+.wx-login-span-info {
   font-weight: bold;
   font-size: small;
   line-height: 10px;
 }
 
-.dropdown-item{
+.dropdown-item {
   margin: 5px;
 }
 
@@ -257,16 +278,19 @@ const logout = () => {
   font-weight: bold;
 }
 
-span.wx-login-span-info{
+span.wx-login-span-info {
   margin: 10px;
 }
 
-#login-agreement-message{
+#login-agreement-message {
   margin: 10px
 }
 
-.el-main{
+.el-main {
   padding: 0;
 }
 
+.theme-switch-btn {
+  margin-right: 8px;
+}
 </style>
