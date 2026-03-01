@@ -28,8 +28,13 @@ export const operateBatchZsxqWhiteApi = (params: object | undefined) => {
 };
 
 // 重置操作
-export const removeAuthorWhiteApi = (authorId: number) => {
+export const resetAuthorWhiteApi = (authorId: number) => {
 	return http.get<Login.ResAuthButtons>(`${PORT1}/author/whitelist/remove`, { authorId });
+};
+
+// 删除作者白名单
+export const removeAuthorWhiteApi = (authorId: number) => {
+	return resetAuthorWhiteApi(authorId);
 };
 
 // 保存操作

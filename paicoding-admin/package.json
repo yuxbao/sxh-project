@@ -13,9 +13,10 @@
 		"lint:prettier": "prettier --write --loglevel warn \"src/**/*.{js,ts,json,tsx,css,less,scss,html,md}\"",
 		"lint:stylelint": "stylelint --cache --fix \"**/*.{less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
 		"lint:lint-staged": "lint-staged",
-		"prepare": "husky install",
+		"prepare": "sh -c \"if [ -d .git ]; then husky install; else echo skipping husky install outside git root; fi\"",
 		"release": "standard-version",
-		"commit": "git pull && git add -A && git-cz && git push"
+		"commit": "git pull && git add -A && git-cz && git push",
+		"build": "pnpm run build:pro"
 	},
 	"dependencies": {
 		"@ant-design/icons": "^4.7.0",
@@ -105,7 +106,8 @@
 		"vite-plugin-eslint": "^1.6.1",
 		"vite-plugin-html": "^3.2.0",
 		"vite-plugin-style-import": "^2.0.0",
-		"vite-plugin-svg-icons": "^2.0.1"
+		"vite-plugin-svg-icons": "^2.0.1",
+		"dotenv": "^16.6.1"
 	},
 	"config": {
 		"commitizen": {
