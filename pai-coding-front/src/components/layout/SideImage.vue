@@ -4,19 +4,11 @@
     <el-card>
       <template #header>作者联系方式</template>
       <template #default>
-        <el-image
-          style="width: 100%;"
-          src="https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/WechatARCode.png"
-          fit="cover"
-        ></el-image>
+        <el-image style="width: 100%;" src="https://96e5ee1.webp.li/wechat.jpg" fit="cover"></el-image>
 
         <el-divider></el-divider>
 
-        <el-image
-          style="width: 100%;"
-          src="https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/QQARCode.png"
-          fit="cover"
-        ></el-image>
+        <el-image style="width: 100%;" src="https://96e5ee1.webp.li/qq.jpg" fit="cover"></el-image>
       </template>
     </el-card>
   </div>
@@ -28,6 +20,4 @@
 
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

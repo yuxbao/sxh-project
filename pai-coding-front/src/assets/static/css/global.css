@@ -72,7 +72,7 @@ body {
   /*左边宽度*/
   --pai-sidebar-width: 360px;
   /*卡片的阴影*/
-  --card-shadow: 0px 2px 4px 0px rgba(0,0,0,.05);
+  --card-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
   --window-height: calc(100vh - 170px);
   --window-width: 90vw;
   --window-content-width: calc(100%);
@@ -82,7 +82,13 @@ body {
   color: var(--pai-color-3-black);
   background: linear-gradient(180deg, #fafafa 0%, #f5f6f8 45%, #f0f1f3 100%);
   background-attachment: fixed;
-  font-family: var(--app-font-sans, "Plus Jakarta Sans", "PingFang SC", "Microsoft YaHei", sans-serif);
+  font-family: var(
+    --app-font-sans,
+    'Plus Jakarta Sans',
+    'PingFang SC',
+    'Microsoft YaHei',
+    sans-serif
+  );
 }
 
 /*全局的色调往前面放*/
@@ -118,7 +124,10 @@ a:hover {
 
 .el-button {
   border-radius: 999px;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .el-button:hover {
@@ -130,7 +139,9 @@ a:hover {
   border: 1px solid var(--pai-border-color-1);
   box-shadow: var(--pai-surface-shadow);
   background-color: var(--pai-bg-white-fff);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .el-card:hover {
@@ -1212,12 +1223,9 @@ html.dark body {
   --pai-neu-surface: #181818;
   --pai-neu-surface-soft: #222222;
   --pai-neu-border: rgba(255, 255, 255, 0.06);
-  --pai-neu-shadow-out:
-    12px 12px 24px rgba(0, 0, 0, 0.5),
-    -8px -8px 16px rgba(255, 255, 255, 0.03);
+  --pai-neu-shadow-out: 12px 12px 24px rgba(0, 0, 0, 0.5), -8px -8px 16px rgba(255, 255, 255, 0.03);
   --pai-neu-shadow-inset:
-    inset 6px 6px 12px rgba(0, 0, 0, 0.48),
-    inset -4px -4px 10px rgba(255, 255, 255, 0.04);
+    inset 6px 6px 12px rgba(0, 0, 0, 0.48), inset -4px -4px 10px rgba(255, 255, 255, 0.04);
   background:
     radial-gradient(900px 500px at 12% -10%, var(--page-accent), transparent 70%),
     radial-gradient(900px 520px at 88% 0%, var(--page-accent-soft), transparent 68%),
