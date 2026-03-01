@@ -111,4 +111,4 @@ logging:
 
 online:
   statistics:
-    type: atomic_integer
+    type: redis

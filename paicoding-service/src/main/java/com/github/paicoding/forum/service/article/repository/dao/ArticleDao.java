@@ -158,6 +158,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
 
     /**
      * 根据用户id分页查询文章列表
+     *
      * @param userId
      * @param currentPage
      * @param pageSize
@@ -178,6 +179,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
 
     /**
      * 根据用户id分页查询最近的浏览文章的列表
+     *
      * @param userId
      * @param page
      * @return
@@ -188,6 +190,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
 
     /**
      * 根据用户id分页查询最近的浏览文章的列表
+     *
      * @param userId
      * @param page
      * @return
@@ -195,8 +198,6 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
     public IPage<ArticleDO> listStarArticlesByUserIdPagination(Page<ArticleDO> page, Long userId) {
         return articleMapper.listStarArticlesByUserId(page, userId);
     }
-
-
 
 
     public List<ArticleDO> listArticlesByCategoryId(Long categoryId, PageParam pageParam) {
@@ -216,12 +217,13 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
 
         Optional.ofNullable(categoryId).ifPresent(cid -> query.eq(ArticleDO::getCategoryId, cid));
         query.last(PageParam.getLimitSql(pageParam))
-                .orderByDesc(ArticleDO::getToppingStat,  ArticleDO::getCreateTime);
+                .orderByDesc(ArticleDO::getToppingStat, ArticleDO::getCreateTime);
         return baseMapper.selectList(query);
     }
 
     /**
      * 根据分类id查询文章
+     *
      * @param currentPage
      * @param pageSize
      * @param categoryId
@@ -248,6 +250,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
 
     /**
      * 根据分类id查询文章
+     *
      * @param currentPage
      * @param pageSize
      * @param tagId
@@ -261,7 +264,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
             query.eq(ArticleDO::getDeleted, YesOrNoEnum.NO.getCode())
                     .eq(ArticleDO::getStatus, PushStatusEnum.ONLINE.getCode());
             return baseMapper.selectPage(page, query);
-        }else{
+        } else {
             return articleMapper.selectArticlesByTag(page, tagId);
         }
     }
@@ -401,6 +404,17 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
             return new ArrayList<>();
         }
 
+        // 相关文章推荐优化：如果只有文章本身作为tag查询结果，将每个tag查询一篇相关文章
+        if (list.size() == 1) {
+            for (Long tagId : tagIds) {
+                list.add(baseMapper.listOneTopArticleByTag(tagId, pageParam));
+            }
+            // 去重一遍
+            list = list.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+
         List<Long> ids = list.stream().map(ReadCountDO::getDocumentId).collect(Collectors.toList());
         List<ArticleDO> result = baseMapper.selectBatchIds(ids);
         result.sort((o1, o2) -> {
@@ -432,8 +446,8 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, ArticleDO> {
                 .eq(Objects.nonNull(searchArticleParams.getArticleId()), ArticleDO::getId, searchArticleParams.getArticleId())
                 .eq(Objects.nonNull(searchArticleParams.getUserId()), ArticleDO::getUserId, searchArticleParams.getUserId())
                 .eq(Objects.nonNull(searchArticleParams.getStatus()) && searchArticleParams.getStatus() != -1, ArticleDO::getStatus, searchArticleParams.getStatus())
-                .eq(Objects.nonNull(searchArticleParams.getOfficalStat())&& searchArticleParams.getOfficalStat() != -1, ArticleDO::getOfficalStat, searchArticleParams.getOfficalStat())
-                .eq(Objects.nonNull(searchArticleParams.getToppingStat())&& searchArticleParams.getToppingStat() != -1, ArticleDO::getToppingStat, searchArticleParams.getToppingStat())
+                .eq(Objects.nonNull(searchArticleParams.getOfficalStat()) && searchArticleParams.getOfficalStat() != -1, ArticleDO::getOfficalStat, searchArticleParams.getOfficalStat())
+                .eq(Objects.nonNull(searchArticleParams.getToppingStat()) && searchArticleParams.getToppingStat() != -1, ArticleDO::getToppingStat, searchArticleParams.getToppingStat())
                 .eq(ArticleDO::getDeleted, YesOrNoEnum.NO.getCode());
     }
 

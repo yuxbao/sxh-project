@@ -47,6 +47,22 @@
         <include refid="limit"/>
     </select>
 
+    <select id="listOneTopArticleByTag"
+            resultType="com.github.paicoding.forum.service.article.repository.entity.ReadCountDO"
+    >
+        select a.id as documentId,rc.cnt as cnt
+            from article a
+        left join article_tag at on a.id = at.article_id
+        left join read_count rc on a.id = rc.document_id
+        where rc.document_type = ${@com.github.paicoding.forum.api.model.enums.DocumentTypeEnum@ARTICLE.code}
+        and a.status = ${@com.github.paicoding.forum.api.model.enums.PushStatusEnum@ONLINE.code}
+        and a.deleted = ${@com.github.paicoding.forum.api.model.enums.YesOrNoEnum@NO.code}
+        and at.tag_id = #{tagId}
+        order by rc.cnt desc ,a.id desc
+        limit 1
+    </select>
+
+
     <select id="listArticlesByUserIdOrderByReadCounts"
             resultType="com.github.paicoding.forum.api.model.vo.article.dto.SimpleArticleDTO">
         select rc.document_id as id, a.title as title, a.create_time as createTime

@@ -40,7 +40,9 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long registerByUserNameAndPassword(UserPwdLoginReq loginReq) {
-        // 1. 判断用户名是否准确
+        // 1. 判断用户名是否准确symotion-prefix)
+
+
         UserDO user = userDao.getUserByUserName(loginReq.getUsername());
         if (user != null) {
             throw ExceptionUtil.of(StatusEnum.USER_LOGIN_NAME_REPEAT, loginReq.getUsername());

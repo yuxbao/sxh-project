@@ -52,6 +52,7 @@ public class ReqRecordFilter implements Filter {
     @Resource
     private StatisticsSettingService statisticsSettingService;
 
+
     @Override
     public void init(FilterConfig filterConfig) {
     }
@@ -66,9 +67,11 @@ public class ReqRecordFilter implements Filter {
             request = this.initReqInfo((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
             stopWatch.stop();
             stopWatch.start("cors");
+            // 设置CORS配置
             CrossUtil.buildCors(request, (HttpServletResponse) servletResponse);
             stopWatch.stop();
             stopWatch.start("业务执行");
+            // 执行真实业务
             filterChain.doFilter(request, servletResponse);
         } finally {
             if (stopWatch.isRunning()) {
@@ -76,6 +79,7 @@ public class ReqRecordFilter implements Filter {
                 stopWatch.stop();
             }
             stopWatch.start("输出请求日志");
+            // 构建请求日志
             buildRequestLog(ReqInfoContext.getReqInfo(), request, System.currentTimeMillis() - start);
             // 一个链路请求完毕，清空MDC相关的变量(如GlobalTraceId，用户信息)
             MdcUtil.clear();
@@ -83,6 +87,7 @@ public class ReqRecordFilter implements Filter {
             stopWatch.stop();
 
             if (!isStaticURI(request) && !EnvUtil.isPro()) {
+                // 打印出来
                 log.info("{} - cost:\n{}", request.getRequestURI(), stopWatch.prettyPrint(TimeUnit.MILLISECONDS));
             }
         }
@@ -92,6 +97,10 @@ public class ReqRecordFilter implements Filter {
     public void destroy() {
     }
 
+
+    /**
+     * 构建请求信息，生成traceId，记录到MDC，提取基本信息，包装请求对象，加载用户身份，记录统计日志耗时
+     */
     private HttpServletRequest initReqInfo(HttpServletRequest request, HttpServletResponse response) {
         if (isStaticURI(request)) {
             // 静态资源直接放行
@@ -158,6 +167,7 @@ public class ReqRecordFilter implements Filter {
         return request;
     }
 
+    // 构建请求日志
     private void buildRequestLog(ReqInfoContext.ReqInfo req, HttpServletRequest request, long costTime) {
         if (req == null || isStaticURI(request)) {
             return;
@@ -185,7 +195,7 @@ public class ReqRecordFilter implements Filter {
         msg.append("; cost=").append(costTime);
         REQ_LOG.info("{}", msg);
 
-        // 保存请求计数
+        // 保存请求计数(异步提交任务，等待完成)
         AsyncUtil.concurrentExecutor("保存请求计数信息")
                         .async(() -> statisticsSettingService.saveRequestCount(req.getClientIp()), "saveRequestCount")
                         .allExecuted();
@@ -198,6 +208,7 @@ public class ReqRecordFilter implements Filter {
             return request;
         }
 
+        // 包装原始的HttpServletRequest，实现输入流的多次读取HTTP Body内容(Servlet规范不允许多次读取http请求body)
         BodyReaderHttpServletRequestWrapper requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
         reqInfo.setPayload(requestWrapper.getBodyString());
         return requestWrapper;

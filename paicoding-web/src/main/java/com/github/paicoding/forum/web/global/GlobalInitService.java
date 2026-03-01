@@ -106,6 +106,7 @@ public class GlobalInitService {
     public void initLoginUser(ReqInfoContext.ReqInfo reqInfo) {
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        // 请求头没有cookie，从authorization头初始化用户
         if (request.getCookies() == null) {
             Optional.ofNullable(request.getHeader("Authorization"))
                     .ifPresent(cookie -> initLoginUser(request.getHeader("Authorization"), reqInfo));
@@ -117,6 +118,8 @@ public class GlobalInitService {
 //            String token = request.getHeader("Authorization");
 //            initLoginUser(token, reqInfo);
 //        }
+
+        // 存在则用cookie初始化用户
         Optional.ofNullable(SessionUtil.findCookieByName(request, LoginService.SESSION_KEY))
                 .ifPresent(cookie -> initLoginUser(cookie.getValue(), reqInfo));
     }

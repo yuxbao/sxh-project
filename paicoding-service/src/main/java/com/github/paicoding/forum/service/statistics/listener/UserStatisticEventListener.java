@@ -96,6 +96,7 @@ public class UserStatisticEventListener {
         if (type == ArticleEventEnum.ONLINE || type == ArticleEventEnum.OFFLINE || type == ArticleEventEnum.DELETE) {
             Long userId = event.getContent().getUserId();
             int count = articleDao.countArticleByUser(userId);
+            // 写redis
             RedisClient.hSet(CountConstants.USER_STATISTIC_INFO + userId, CountConstants.ARTICLE_COUNT, count);
         }
     }

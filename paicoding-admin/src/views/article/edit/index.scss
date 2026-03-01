@@ -1,0 +1,213 @@
+.bytemd {
+  height: calc(100vh - 220px);
+}
+
+/* CustomRadioGroup.css */
+.custom-radio-group .ant-radio-button-wrapper {
+  margin-right: 8px; /* 右侧空隙 */
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-radio-group {
+  display: flex;
+  flex-wrap: wrap; /* 允许换行 */
+  gap: 10px; /* 行间距 */
+}
+
+/* CustomRadioGroup.css */
+.custom-radio-group .ant-radio-button-wrapper:first-child {
+  border-top-left-radius: 0; /* 左上圆角 */
+  border-bottom-left-radius: 0; /* 左下圆角 */
+}
+
+.custom-radio-group .ant-radio-button-wrapper:last-child {
+  border-top-right-radius: 0; /* 右上圆角 */
+  border-bottom-right-radius: 0; /* 右下圆角 */
+}
+
+.bytemd-preview {
+  /* 解决外部容器出现滚动条的 bug */
+  position: relative;
+
+  strong {
+    font-weight: bold;
+  }
+
+  /* 为斜体添加斜体样式 */
+  em {
+    font-style: italic;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+
+  p {
+    line-height: 1.5;
+  }
+
+  .img-with-caption {
+    display: inline-block;
+
+    img {
+      display: block;
+    }
+
+    .img-caption {
+      display: block;
+      text-align: center;
+      color: #666;
+      padding: 4px 8px;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+}
+
+:root[data-theme-mode="dark"] {
+  .ArticleEdit {
+    .content-inter-wrap {
+      background-color: #191f27;
+      border-color: #2a323d;
+    }
+
+    .markdown-body {
+      background: #191f27;
+      border-radius: 10px;
+      color: #d6dde8;
+    }
+
+    .bytemd {
+      border-color: #2a323d;
+      background: #191f27;
+      color: #d6dde8;
+      box-shadow: none;
+    }
+
+    .bytemd-toolbar,
+    .bytemd-status {
+      background: #161c25;
+      border-color: #2a323d;
+      color: #d6dde8;
+    }
+
+    .bytemd-toolbar-icon,
+    .bytemd-toolbar-right,
+    .bytemd-dropdown-title,
+    .bytemd-status-right,
+    .bytemd-status-left {
+      color: #d6dde8;
+    }
+
+    .bytemd-toolbar-icon:hover,
+    .bytemd-toolbar-icon.bytemd-tippy-active {
+      background: rgba(87, 196, 184, 0.14);
+      color: #edf4fb;
+    }
+
+    .bytemd-body,
+    .bytemd-preview,
+    .bytemd-preview .markdown-body {
+      background: #191f27;
+      color: #d6dde8;
+    }
+
+    .CodeMirror,
+    .CodeMirror-gutters,
+    .CodeMirror-scroll,
+    .CodeMirror-scrollbar-filler,
+    .CodeMirror-gutter-filler {
+      background: #191f27;
+      color: #d6dde8;
+    }
+
+    .CodeMirror-gutters {
+      border-right: 1px solid #2a323d;
+    }
+
+    .CodeMirror-linenumber,
+    .CodeMirror-cursor {
+      color: #93a0b2;
+      border-color: #93a0b2;
+    }
+
+    .CodeMirror-selected,
+    .CodeMirror-focused .CodeMirror-selected,
+    .CodeMirror-line::selection,
+    .CodeMirror-line > span::selection,
+    .CodeMirror-line > span > span::selection {
+      background: rgba(87, 196, 184, 0.22);
+    }
+
+    .cm-s-default .cm-header,
+    .cm-s-default .cm-atom,
+    .cm-s-default .cm-link,
+    .cm-s-default .cm-tag,
+    .cm-s-default .cm-attribute {
+      color: #8cc7ff;
+    }
+
+    .cm-s-default .cm-keyword,
+    .cm-s-default .cm-number,
+    .cm-s-default .cm-def,
+    .cm-s-default .cm-variable-2,
+    .cm-s-default .cm-variable-3,
+    .cm-s-default .cm-type {
+      color: #87d8d2;
+    }
+
+    .cm-s-default .cm-comment,
+    .cm-s-default .cm-meta,
+    .cm-s-default .cm-qualifier {
+      color: #93a0b2;
+    }
+
+    .cm-s-default .cm-string,
+    .cm-s-default .cm-string-2 {
+      color: #f0c889;
+    }
+
+    .markdown-body,
+    .markdown-body h1,
+    .markdown-body h2,
+    .markdown-body h3,
+    .markdown-body h4,
+    .markdown-body h5,
+    .markdown-body h6,
+    .markdown-body p,
+    .markdown-body li,
+    .markdown-body blockquote,
+    .markdown-body table,
+    .markdown-body strong,
+    .markdown-body em {
+      color: #d6dde8;
+    }
+
+    .markdown-body pre,
+    .markdown-body code,
+    .markdown-body table tr,
+    .markdown-body table td,
+    .markdown-body table th,
+    .markdown-body blockquote {
+      background: #161c25;
+      border-color: #2a323d;
+    }
+
+    .markdown-body hr,
+    .markdown-body table tr {
+      border-color: #2a323d;
+    }
+
+    .markdown-body a {
+      color: #87d8d2;
+    }
+
+    .markdown-body .img-with-caption .img-caption {
+      color: #93a0b2;
+    }
+  }
+}

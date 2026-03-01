@@ -60,6 +60,8 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
                                                    @Param("tags") List<Long> tagIds,
                                                    @Param("pageParam") PageParam pageParam);
 
+    ReadCountDO listOneTopArticleByTag(@Param("tagId") Long tagId, @Param("pageParam") PageParam pageParam);
+
     /**
      * 根据用户ID获取创作历程
      *
@@ -73,10 +75,11 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
 
     /**
      * 根据用户id查询浏览记录
+     *
      * @param userId
      * @return
      */
-    IPage<ArticleDO> listHistoryArticlesByUserId(Page<ArticleDO> page,  @Param("userId") Long userId);
+    IPage<ArticleDO> listHistoryArticlesByUserId(Page<ArticleDO> page, @Param("userId") Long userId);
 
     Long countArticlesByParams(@Param("searchParams") SearchArticleParams searchArticleParams);
 
@@ -84,6 +87,7 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
 
     /**
      * 查询某个标签下的文章
+     *
      * @param page
      * @param tagId
      * @return

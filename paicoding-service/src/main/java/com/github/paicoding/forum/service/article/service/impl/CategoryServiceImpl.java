@@ -84,7 +84,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void refreshCache() {
         List<CategoryDO> list = categoryDao.listAllCategoriesFromDb();
+        // 标记所有缓存为失效
         categoryCaches.invalidateAll();
+        // 移除失效的缓存
         categoryCaches.cleanUp();
         list.forEach(s -> categoryCaches.put(s.getId(), ArticleConverter.toDto(s)));
     }

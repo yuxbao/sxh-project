@@ -229,6 +229,9 @@ public class RedisClient {
         });
     }
 
+    /**
+     * 设置多个字段和值到一个hash
+     */
     public static <T> void hMSet(String key, Map<String, T> fields) {
         Map<byte[], byte[]> val = Maps.newHashMapWithExpectedSize(fields.size());
         for (Map.Entry<String, T> entry : fields.entrySet()) {

@@ -1,5 +1,6 @@
 package com.github.paicoding.forum.test.guavacache;
 
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -34,5 +35,19 @@ public class CacheBuilderExample {
 
         // 打印缓存的命中率等统计信息
         System.out.println(cache.stats());
+    }
+
+    public void testBuilder() {
+        // Guava CacheBuilder可以创建各种自定义配置缓存
+        CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
+        // 设置最大缓存，超过会触发回收策略
+        Cache<Object, Object> cache = cacheBuilder.maximumSize(100)
+                // 设置过期时间
+                .expireAfterWrite(3, TimeUnit.MINUTES)
+                // 设置最大闲置时间
+                .expireAfterAccess(2, TimeUnit.HOURS)
+                // 开启缓存监控
+                .recordStats()
+                .build();
     }
 }

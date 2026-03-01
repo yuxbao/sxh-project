@@ -26,6 +26,9 @@ public enum YesOrNoEnum {
     private final String cnDesc;
     private final String enDesc;
 
+    /**
+     * 根据code获取enum，否则默认返回no
+     */
     public static YesOrNoEnum formCode(int code) {
         for (YesOrNoEnum yesOrNoEnum : YesOrNoEnum.values()) {
             if (yesOrNoEnum.getCode() == code) {

@@ -1,0 +1,182 @@
+/* 自定义 antd 默认样式 */
+@light-bg-color: #ffffff;
+@light-main-bg-color: #f3f1ec;
+@light-border-color: #e3ded4;
+@light-border-header-color: #efe9dd;
+@light-text-color: rgba(31, 36, 48, 0.9);
+@light-shadow-color: 0 12px 28px rgba(18, 24, 40, 0.08);
+@light-scrollbar-bg-color: #d7d1c4;
+@light-sider-bg: #f8f5ef;
+@light-sider-text: #2e3644;
+@light-sider-text-muted: #6f7786;
+@light-sider-active-bg: rgba(42, 111, 106, 0.12);
+@light-sider-active-text: #1f4f55;
+@light-sider-border: #e7e2d8;
+
+:root {
+	--app-main-bg: @light-main-bg-color;
+	--app-surface-bg: @light-bg-color;
+	--app-surface-muted-bg: #f8f5ef;
+	--app-border-color: @light-border-color;
+	--app-border-soft: @light-border-header-color;
+	--app-text-color: @light-text-color;
+	--app-text-muted: #6f7786;
+	--app-card-shadow: @light-shadow-color;
+	--tabs-border-color: #e4e7ed;
+	--login-page-bg: linear-gradient(
+		160deg,
+		rgba(244, 240, 231, 0.95) 0%,
+		rgba(232, 238, 235, 0.95) 45%,
+		rgba(227, 232, 240, 0.9) 100%
+	);
+	--login-overlay-primary: rgba(42, 111, 106, 0.18);
+	--login-overlay-secondary: rgba(191, 173, 120, 0.16);
+	--login-shell-bg: rgba(255, 255, 255, 0.78);
+	--login-shell-border: rgba(255, 255, 255, 0.4);
+	--login-shell-shadow: 0 40px 80px rgba(20, 30, 45, 0.18);
+	--login-visual-bg: linear-gradient(135deg, rgba(250, 246, 238, 0.9), rgba(236, 243, 240, 0.9));
+	--login-visual-border: rgba(255, 255, 255, 0.6);
+	--login-card-bg: rgba(255, 255, 255, 0.9);
+	--login-card-shadow: 0 20px 40px rgba(24, 32, 54, 0.12);
+	--login-title-color: #1f2430;
+	--login-subtitle-color: #6c7483;
+	--login-input-icon-color: #94a0b3;
+	--login-input-text-color: #5f6b7a;
+	--login-input-border: rgba(31, 36, 48, 0.12);
+	--login-input-bg: rgba(250, 251, 252, 0.9);
+	--login-input-shadow: 0 8px 16px rgba(28, 33, 49, 0.06);
+	--login-input-placeholder: #9aa4b2;
+	--login-secondary-btn-bg: rgba(255, 255, 255, 0.92);
+	--login-secondary-btn-color: #3e4758;
+	--login-secondary-btn-border: rgba(31, 36, 48, 0.14);
+}
+
+/* 需要自定义覆盖的样式 */
+body {
+	background-color: @light-main-bg-color !important;
+	#driver-highlighted-element-stage {
+		background-color: #fff !important;
+	}
+}
+
+/* login container（先固定样式） */
+.login-container {
+	background-color: #f4f1ea !important;
+	.login-box {
+		background-color: rgba(255, 255, 255, 0.85) !important;
+		.login-form {
+			background-color: rgba(255, 255, 255, 0.92) !important;
+			box-shadow: 0 18px 36px rgba(18, 24, 40, 0.12) !important;
+			.login-logo {
+				.logo-text {
+					color: #475768 !important;
+				}
+			}
+			.login-btn {
+				.ant-btn-default {
+					color: #3e4758 !important;
+				}
+			}
+		}
+	}
+}
+
+/* container */
+.container {
+	--sider-bg: @light-sider-bg;
+	--sider-text: @light-sider-text;
+	--sider-text-muted: @light-sider-text-muted;
+	--sider-active-bg: @light-sider-active-bg;
+	--sider-active-text: @light-sider-active-text;
+	--sider-border: @light-sider-border;
+	--sider-logo-text: @light-sider-text;
+
+	/* sider */
+	.ant-layout-sider {
+		background-color: var(--sider-bg) !important;
+		border-right: 1px solid var(--sider-border) !important;
+		.ant-menu {
+			background: transparent !important;
+			color: var(--sider-text) !important;
+			&::-webkit-scrollbar {
+				background-color: #f1ede6 !important;
+			}
+			&::-webkit-scrollbar-thumb {
+				background-color: #cfc8bc !important;
+			}
+		}
+		.logo-box {
+			border-bottom: 1px solid var(--sider-border) !important;
+		}
+		.ant-menu-item,
+		.ant-menu-submenu-title {
+			color: var(--sider-text) !important;
+		}
+		.ant-menu-item:hover,
+		.ant-menu-submenu-title:hover {
+			color: var(--sider-active-text) !important;
+		}
+		.ant-menu-item-selected {
+			background-color: var(--sider-active-bg) !important;
+			color: var(--sider-active-text) !important;
+		}
+		.ant-menu-item-selected::after {
+			border-right: 3px solid var(--sider-active-text) !important;
+		}
+		.ant-menu-submenu-selected > .ant-menu-submenu-title {
+			color: var(--sider-active-text) !important;
+		}
+		.ant-menu-item:active,
+		.ant-menu-submenu-title:active {
+			background-color: var(--sider-active-bg) !important;
+		}
+	}
+
+	/* layout */
+	.ant-layout {
+		background-color: @light-main-bg-color !important;
+		.tabs,
+		.footer,
+		.card {
+			background-color: @light-bg-color !important;
+			border-color: @light-border-color !important;
+		}
+		.ant-layout-header {
+			height: 55px;
+			padding: 0 40px 0 20px;
+			background-color: @light-bg-color !important;
+			border-color: @light-border-header-color !important;
+			.icon-style,
+			.username {
+				color: @light-text-color !important;
+			}
+		}
+		.footer {
+			a {
+				color: @light-text-color !important;
+			}
+		}
+		.card {
+			box-shadow: @light-shadow-color !important;
+			.text {
+				color: #585858 !important;
+			}
+		}
+		.ant-layout-content {
+			&::-webkit-scrollbar {
+				background-color: @light-main-bg-color !important;
+			}
+			&::-webkit-scrollbar-thumb {
+				background-color: @light-scrollbar-bg-color !important;
+			}
+			.card {
+				&::-webkit-scrollbar {
+					background-color: @light-bg-color !important;
+				}
+				&::-webkit-scrollbar-thumb {
+					background-color: @light-scrollbar-bg-color !important;
+				}
+			}
+		}
+	}
+}

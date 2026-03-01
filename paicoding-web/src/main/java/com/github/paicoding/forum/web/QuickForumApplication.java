@@ -34,8 +34,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Slf4j
 @EnableAsync
+// 开启定时任务
 @EnableScheduling
+// 使用spring cacheable等注解
 @EnableCaching
+// 开启web过滤器
 @ServletComponentScan
 //@SpringBootApplication(scanBasePackages = {"com.github.paicoding.forum.web", "com.github.paicoding.forum.service"})
 @SpringBootApplication(exclude =
@@ -59,6 +62,7 @@ public class QuickForumApplication implements WebMvcConfigurer, ApplicationRunne
     private AsyncHandlerInterceptor onlineUserStatisticInterceptor;
 
 
+    // 通过实现webmvcConfigurer的方法
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(globalViewInterceptor).addPathPatterns("/**");

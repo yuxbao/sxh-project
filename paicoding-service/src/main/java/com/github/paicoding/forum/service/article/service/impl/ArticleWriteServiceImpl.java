@@ -80,20 +80,25 @@ public class ArticleWriteServiceImpl implements ArticleWriteService {
     public Long saveArticle(ArticlePostReq req, Long author) {
         ArticleDO article = ArticleConverter.toArticleDo(req, author);
         String content = imageService.mdImgReplace(req.getContent());
+        // 开启编程式事务
         return transactionTemplate.execute(new TransactionCallback<Long>() {
+
             @Override
             public Long doInTransaction(TransactionStatus status) {
                 Long articleId;
+                // 根据文章id是否为空进行新增或更新
                 if (NumUtil.nullOrZero(req.getArticleId())) {
                     articleId = insertArticle(article, content, req.getTagIds());
                     log.info("文章发布成功! title={}", req.getTitle());
                 } else {
                     articleId = updateArticle(article, content, req.getTagIds());
+                    // 删除旧缓存
                     articleCacheManager.delArticleInfo(articleId);
                     log.info("文章更新成功！ title={}", article.getTitle());
                 }
                 if (req.getColumnId() != null) {
                     // 更新文章对应的专栏信息
+                    // 如果是专栏文章保存到专栏中
                     columnSettingService.saveColumnArticle(articleId, req.getColumnId());
                 }
                 return articleId;
@@ -132,7 +137,7 @@ public class ArticleWriteServiceImpl implements ArticleWriteService {
         userFootService.saveOrUpdateUserFoot(DocumentTypeEnum.ARTICLE, articleId, article.getUserId(), article.getUserId(), OperateTypeEnum.READ);
 
         // todo 事件发布这里可以进行优化，一次发送多个事件？ 或者借助bit知识点来表示多种事件状态
-        // 发布文章创建事件
+        // 发布文章创建事件，监听者会进行同步更新redis更新统计
         SpringUtil.publishEvent(new ArticleMsgEvent<>(this, ArticleEventEnum.CREATE, article));
         // 文章直接上线时，发布上线事件
         SpringUtil.publishEvent(new ArticleMsgEvent<>(this, ArticleEventEnum.ONLINE, article));

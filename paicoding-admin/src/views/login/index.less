@@ -1,0 +1,193 @@
+.login-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 550px;
+	height: 100%;
+	min-height: 500px;
+	background: var(--login-page-bg), url("@/assets/images/login_bg.svg");
+	background-position: center;
+	background-size: cover;
+	overflow: hidden;
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(circle at 12% 18%, var(--login-overlay-primary), transparent 40%),
+			radial-gradient(circle at 82% 10%, var(--login-overlay-secondary), transparent 45%);
+		pointer-events: none;
+	}
+
+	.dark {
+		position: absolute;
+		top: 5%;
+		right: 3.2%;
+		z-index: 2;
+	}
+
+	.login-box {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: clamp(28px, 4vw, 56px);
+		width: min(1140px, 92%);
+		height: min(640px, 86%);
+		padding: 24px 32px;
+		overflow: hidden;
+		border-radius: 28px;
+		background: var(--login-shell-bg);
+		box-shadow: var(--login-shell-shadow);
+		border: 1px solid var(--login-shell-border);
+		backdrop-filter: blur(18px);
+		position: relative;
+		z-index: 1;
+
+		.login-left {
+			width: 46%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			border-radius: 24px;
+			background: var(--login-visual-bg);
+			box-shadow: inset 0 0 0 1px var(--login-visual-border);
+
+			img {
+				width: 100%;
+				height: auto;
+				max-height: 100%;
+				object-fit: contain;
+			}
+		}
+
+		.login-form {
+			width: 40%;
+			padding: 36px 36px 30px;
+			border-radius: 24px;
+			background: var(--login-card-bg);
+			box-shadow: var(--login-card-shadow);
+
+			.login-logo {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-bottom: 18px;
+
+				.login-icon {
+					width: 160px;
+				}
+			}
+
+			.login-title {
+				font-family: "Fraunces", "PingFang SC", serif;
+				font-size: 26px;
+				font-weight: 600;
+				color: var(--login-title-color);
+				text-align: center;
+				letter-spacing: 0.4px;
+				margin-bottom: 6px;
+			}
+
+			.login-subtitle {
+				font-size: 13px;
+				color: var(--login-subtitle-color);
+				text-align: center;
+				margin-bottom: 26px;
+			}
+
+			.ant-form-item {
+				height: 74px;
+				margin-bottom: 0;
+
+				.ant-input-prefix {
+					margin-right: 10px;
+					color: var(--login-input-icon-color);
+				}
+				.ant-input-affix-wrapper-lg {
+					padding: 10px 14px;
+					border-radius: 14px;
+				}
+				.ant-input-affix-wrapper,
+				.ant-input-lg {
+					font-size: 14px;
+				}
+				.ant-input-affix-wrapper {
+					color: var(--login-input-text-color);
+					border: 1px solid var(--login-input-border);
+					box-shadow: var(--login-input-shadow);
+					background: var(--login-input-bg);
+
+					&:hover,
+					&:focus,
+					&.ant-input-affix-wrapper-focused {
+						border-color: rgba(42, 111, 106, 0.5);
+						box-shadow: 0 0 0 3px rgba(42, 111, 106, 0.15);
+					}
+				}
+				.ant-input,
+				.ant-input-password {
+					color: var(--login-input-text-color);
+					background: transparent;
+				}
+				.ant-input::placeholder,
+				.ant-input-password input::placeholder {
+					color: var(--login-input-placeholder);
+				}
+			}
+
+			.login-btn {
+				width: 100%;
+				margin-top: 6px;
+				white-space: nowrap;
+
+				.ant-form-item-control-input-content {
+					min-width: 100%;
+					display: flex;
+					justify-content: space-between;
+					gap: 12px;
+
+					.ant-btn {
+						flex: 1;
+						border-radius: 999px;
+						height: 42px;
+						font-weight: 600;
+						border: 1px solid var(--login-secondary-btn-border);
+
+						span {
+							font-size: 14px;
+						}
+					}
+					.ant-btn:not(.ant-btn-primary) {
+						background: var(--login-secondary-btn-bg);
+						color: var(--login-secondary-btn-color);
+					}
+
+					.ant-btn-primary {
+						background: linear-gradient(135deg, #2a6f6a, #1f4f55);
+						border: none;
+						box-shadow: 0 14px 28px rgba(33, 86, 92, 0.25);
+					}
+				}
+			}
+		}
+	}
+
+	@media (max-width: 1100px) {
+		.login-box {
+			width: 94%;
+			height: auto;
+			flex-direction: column;
+			padding: 20px;
+			gap: 18px;
+
+			.login-left,
+			.login-form {
+				width: 100%;
+			}
+		}
+	}
+}

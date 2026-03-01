@@ -1,4 +1,13 @@
-FROM ubuntu:latest
-LABEL authors="baoyuxiang"
+FROM openjdk:21-jdk-slim
+LABEL author="baoyuxiang"
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+
+COPY paicoding-web-0.0.1-SNAPSHOT.jar app.jar
+
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+EXPOSE 8081
+
+ENTRYPOINT ["java", "-server", "-Xms512m", "-Xmx512m", "-Djava.security.egd=file:/prod/./urandom", "-jar", "app.jar", "--server.port=8081"]

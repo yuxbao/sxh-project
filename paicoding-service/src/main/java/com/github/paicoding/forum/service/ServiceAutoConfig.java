@@ -1,5 +1,6 @@
 package com.github.paicoding.forum.service;
 
+import jakarta.annotation.PostConstruct;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author XuYifei
  * @date 2024-07-12
+ * <p></p>
+ * 加载文章、用户、评论、配置、统计、通知、ai聊天的组件mapper
  */
 @Configuration
 @ComponentScan("com.github.paicoding.forum.service")
@@ -20,4 +23,8 @@ import org.springframework.context.annotation.Configuration;
         "com.github.paicoding.forum.service.chatv2.repository.mapper",})
 public class ServiceAutoConfig {
 
+    @PostConstruct
+    public void init(){
+        System.out.println("成功加载ServiceAutoConfig!");
+    }
 }

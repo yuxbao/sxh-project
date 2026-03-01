@@ -40,9 +40,10 @@ public class LoginRestController {
     public ResVo<Boolean> login(@RequestParam(name = "username") String username,
                                 @RequestParam(name = "password") String password,
                                 HttpServletResponse response) {
+        // 登录，拿到session(jwt)
         String session = loginService.loginByUserPwd(username, password);
         if (StringUtils.isNotBlank(session)) {
-            // cookie中写入用户登录信息，用于身份识别
+            // cookie中写入用户登录信息(jwt)，用于身份识别
             response.addCookie(SessionUtil.newCookie(LoginService.SESSION_KEY, session));
             return ResVo.ok(true);
         } else {
@@ -73,6 +74,7 @@ public class LoginRestController {
     @PostMapping("/login/register")
     public ResVo<Boolean> register(UserPwdLoginReq loginReq,
                                    HttpServletResponse response) {
+        // 拿到session，也就是jwt
         String session = loginService.registerByUserPwd(loginReq);
         if (StringUtils.isNotBlank(session)) {
             // cookie中写入用户登录信息，用于身份识别

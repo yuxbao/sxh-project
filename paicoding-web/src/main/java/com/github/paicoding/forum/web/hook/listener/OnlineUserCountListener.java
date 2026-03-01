@@ -27,8 +27,9 @@ public class OnlineUserCountListener implements HttpSessionListener {
      *
      * @param se
      */
+    @Override
     public void sessionCreated(HttpSessionEvent se) {
-
+        // 监听到session创建
         HttpSessionListener.super.sessionCreated(se);
         SpringUtil.getBean(UserStatisticService.class).incrOnlineUserCnt(1);
     }
@@ -38,6 +39,7 @@ public class OnlineUserCountListener implements HttpSessionListener {
      *
      * @param se
      */
+    @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         HttpSessionListener.super.sessionDestroyed(se);
         SpringUtil.getBean(UserStatisticService.class).incrOnlineUserCnt(-1);

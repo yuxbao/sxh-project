@@ -21,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class SitemapServiceImpl implements SitemapService {
-    @Value("${view.site.host:https://paicoding.com}")
+    @Value("${view.site.host:https://baoprojects.site}")
     private String host;
     private static final int SCAN_SIZE = 100;
 
@@ -47,6 +48,7 @@ public class SitemapServiceImpl implements SitemapService {
 
     /**
      * 查询站点地图
+     *
      * @return 返回站点地图
      */
     public SiteMapVo getSiteMap() {
@@ -80,7 +82,8 @@ public class SitemapServiceImpl implements SitemapService {
             list.forEach(s -> countService.refreshArticleStatisticInfo(s.getId()));
 
             // 刷新站点地图信息
-            Map<String, Long> map = list.stream().collect(Collectors.toMap(s -> String.valueOf(s.getId()), s -> s.getCreateTime().getTime(), (a, b) -> a));
+            Map<String, Long> map = list.stream()
+                    .collect(Collectors.toMap(s -> String.valueOf(s.getId()), s -> s.getCreateTime().getTime(), (a, b) -> a));
             RedisClient.hMSet(SITE_MAP_CACHE_KEY, map);
             if (list.size() < SCAN_SIZE) {
                 break;

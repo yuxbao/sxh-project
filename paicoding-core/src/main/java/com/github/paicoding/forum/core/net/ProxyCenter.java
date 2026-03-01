@@ -12,6 +12,8 @@ import java.util.List;
 /**
  * @author XuYifei
  * @date 2024-07-12
+ * <p></p>
+ * 当前项目里“代理”的用途主要是为外部 HTTP 调用提供可选的代理出口，典型场景是访问 OpenAI 这类需要代理才能连通的服务。
  */
 public class ProxyCenter {
 
@@ -39,8 +41,6 @@ public class ProxyCenter {
         if (index == null) {
             index = -1;
         }
-
-        ++index;
         if (index >= PROXIES.size()) {
             index = 0;
         }

@@ -90,10 +90,12 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String loginByUserPwd(String username, String password) {
         UserDO user = userDao.getUserByUserName(username);
+        // 用户为空抛出异常
         if (user == null) {
             throw ExceptionUtil.of(StatusEnum.USER_NOT_EXISTS, "userName=" + username);
         }
 
+        // 用户密码加密后不匹配抛出异常
         if (!userPwdEncoder.match(password, user.getPassword())) {
             throw ExceptionUtil.of(StatusEnum.USER_PWD_ERROR);
         }
@@ -101,6 +103,7 @@ public class LoginServiceImpl implements LoginService {
         Long userId = user.getId();
         // 登录成功，返回对应的session
         ReqInfoContext.getReqInfo().setUserId(userId);
+        // 生成一个jwt token，作为session
         return userSessionHelper.genToken(userId);
     }
 
@@ -122,6 +125,7 @@ public class LoginServiceImpl implements LoginService {
         if (userId != null) {
             // 2.1 如果用户已经登录，则走绑定用户信息流程
             userService.bindUserInfo(loginReq);
+            // 返回session
             return ReqInfoContext.getReqInfo().getSession();
         }
 

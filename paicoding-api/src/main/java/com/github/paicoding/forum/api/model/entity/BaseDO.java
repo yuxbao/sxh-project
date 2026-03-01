@@ -7,6 +7,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 基本的Data Object数据对象，存储了id和更新创建时间
+ */
 @Data
 public class BaseDO implements Serializable {
 

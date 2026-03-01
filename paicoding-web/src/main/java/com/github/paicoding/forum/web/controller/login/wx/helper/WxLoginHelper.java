@@ -157,6 +157,7 @@ public class WxLoginHelper {
             log.error("登录异常: {}", verifyCode, e);
         } finally {
             sseEmitter.complete();
+            // 登录成功失效之前的验证码缓存以便其他用户能获取到这个验证码
             verifyCodeCache.invalidate(verifyCode);
         }
         return false;
