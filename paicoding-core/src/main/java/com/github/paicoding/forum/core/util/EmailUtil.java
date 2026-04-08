@@ -36,6 +36,7 @@ public class EmailUtil {
     public static boolean sendMail(String title, String to, String content) {
         try {
             JavaMailSender javaMailSender = SpringUtil.getBean(JavaMailSender.class);
+            // 构建邮件
             MimeMessage mimeMailMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
             mimeMessageHelper.setFrom(getFrom());

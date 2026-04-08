@@ -6,9 +6,9 @@ services:
     container_name: paicoding
     restart: always
     ports:
-      - "8081:8081"
+      - "8082:8082"
     environment:
-      - SERVER_PORT=8081
+      - SERVER_PORT=8082
       # 连接宿主机 MySQL
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/pai_coding?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root

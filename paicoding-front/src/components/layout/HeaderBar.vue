@@ -23,10 +23,7 @@
                 <RouterLink class="dropdown-item" to="/rank/month">排行榜</RouterLink>
               </el-dropdown-item>
               <el-dropdown-item>
-                <RouterLink class="dropdown-item" to="/chat">LLM</RouterLink>
-              </el-dropdown-item>
-              <el-dropdown-item v-if="global.isLogin">
-                <RouterLink class="dropdown-item" to="/tools/">工具</RouterLink>
+                <RouterLink class="dropdown-item" to="/chat">智能助手</RouterLink>
               </el-dropdown-item>
               <el-dropdown-item>
                 <RouterLink class="dropdown-item" to="/about">关于作者</RouterLink>
@@ -50,11 +47,8 @@
             <li :class="{ 'selected-domain': activeTab.startsWith('/rank') }">
               <RouterLink class="nav-link" to="/rank/month">排行榜</RouterLink>
             </li>
-            <li :class="{ 'selected-domain': activeTab == '/chat' }">
-              <RouterLink class="nav-link" to="/chat">LLM</RouterLink>
-            </li>
-            <li v-if="global.isLogin" :class="{ 'selected-domain': activeTab.startsWith('/tools') }">
-              <RouterLink class="nav-link" to="/tools/">工具</RouterLink>
+            <li :class="{ 'selected-domain': activeTab.startsWith('/chat') }">
+              <RouterLink class="nav-link" to="/chat">智能助手</RouterLink>
             </li>
             <li :class="{ 'selected-domain': activeTab == '/about' }">
               <RouterLink class="nav-link" to="/about">关于作者</RouterLink>

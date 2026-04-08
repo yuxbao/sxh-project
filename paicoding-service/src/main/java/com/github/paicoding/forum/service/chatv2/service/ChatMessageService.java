@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 消息服务
@@ -68,5 +70,25 @@ public class ChatMessageService {
         wrapper.eq(ChatMessageDO::getHistoryId, historyId);
 
         return chatMessageMapper.selectCount(wrapper);
+    }
+
+    public Long saveMessage(Long historyId, String role, String content, Map<String, Object> metadata) {
+        LambdaQueryWrapper<ChatMessageDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ChatMessageDO::getHistoryId, historyId)
+                .orderByDesc(ChatMessageDO::getSequenceNum)
+                .last("LIMIT 1");
+
+        ChatMessageDO lastMessage = chatMessageMapper.selectOne(wrapper);
+        int nextSeq = lastMessage == null ? 0 : lastMessage.getSequenceNum() + 1;
+
+        ChatMessageDO messageDO = new ChatMessageDO();
+        messageDO.setHistoryId(historyId);
+        messageDO.setRole(role);
+        messageDO.setContent(content);
+        messageDO.setMetadataJson(metadata);
+        messageDO.setSequenceNum(nextSeq);
+        messageDO.setTimestamp(new Date());
+        chatMessageMapper.insert(messageDO);
+        return messageDO.getId();
     }
 }

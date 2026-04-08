@@ -81,7 +81,7 @@ public class ArticleWriteServiceImpl implements ArticleWriteService {
         ArticleDO article = ArticleConverter.toArticleDo(req, author);
         String content = imageService.mdImgReplace(req.getContent());
         // 开启编程式事务
-        return transactionTemplate.execute(new TransactionCallback<Long>() {
+        Long articleId = transactionTemplate.execute(new TransactionCallback<Long>() {
 
             @Override
             public Long doInTransaction(TransactionStatus status) {
@@ -104,6 +104,8 @@ public class ArticleWriteServiceImpl implements ArticleWriteService {
                 return articleId;
             }
         });
+
+        return articleId;
     }
 
     /**

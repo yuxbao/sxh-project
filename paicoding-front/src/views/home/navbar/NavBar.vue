@@ -21,13 +21,14 @@
     <div v-if="ifSearchActive" class="center-content card-body d-flex category-wrap type-box">
       <div class="d-flex justify-center">
         <div class="relative lg:max-w-lg w-full">
-          <el-select v-model="searchInput" filterable remote reserve-keyword placeholder="搜你想搜..." :loading="loading"
-            :remote-method="fetchSearchData" :no-data-text="'嗯... 没有找到你想要的内容，换个关键字试试吧:'" fit-input-width
+          <el-select v-model="searchInput" filterable remote reserve-keyword placeholder="搜文章，或试试自然语言描述..."
+            :loading="loading" :remote-method="fetchSearchData" :no-data-text="'没有找到合适内容，换个关键词或换种说法试试'" fit-input-width
             @change="handleSelect">
             <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.title">
               <template #default>
-                <div class="d-flex justify-between">
-                  <span v-html="highlightKeyword(item.title)"></span>
+                <div class="search-option">
+                  <span class="search-option-title" v-html="highlightKeyword(item.title)"></span>
+                  <span v-if="item.column" class="search-option-tag">{{ item.column }}</span>
                 </div>
               </template>
             </el-option>
@@ -132,6 +133,30 @@ const highlightKeyword = (text: string) => {
 <style scoped>
 .el-select {
   width: 300px
+}
+
+.search-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.search-option-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-option-tag {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 /* 当屏幕宽度大于等于 768px 时，应用此样式 */

@@ -43,12 +43,12 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 			// 代理跨域（mock 不需要配置，这里只是个示例）
 			proxy: {
 				"/admin": {
-					target: "http://127.0.0.1:8081/",
+					target: "http://127.0.0.1:8082/",
 					changeOrigin: true,
 					rewrite: path => path.replace(/^\/api/, "")
 				},
 				"/api/admin": {
-					target: "http://127.0.0.1:8081/",
+					target: "http://127.0.0.1:8082/",
 					changeOrigin: true
 				}
 			}

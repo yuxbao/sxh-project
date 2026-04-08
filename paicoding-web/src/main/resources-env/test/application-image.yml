@@ -6,6 +6,13 @@ image:
   oss:
     type: local
     prefix: paicoding/
+    endpoint:
+    ak:
+    sk:
+    bucket:
+    host:
+    region:
+    path-style-access: false
 
 spring:
   web:

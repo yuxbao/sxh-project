@@ -235,6 +235,15 @@ export function deleteConversation<T>(conversationId: string): Promise<AxiosResp
   return doDelete(`/chatv2/api/conversation/${conversationId}`, {});
 }
 
+let activeChatCancelTokenSource: ReturnType<typeof axios.CancelToken.source> | null = null
+
+function sanitizeChatStreamText(text: string): string {
+  return text
+    .replaceAll('[TOOL_EXECUTING]', '')
+    .replaceAll('[HEARTBEAT]', '')
+    .replaceAll('[DONE]', '')
+}
+
 /**
  * 发送消息（流式响应）
  * 使用 axios onDownloadProgress 处理流式响应，参考 deepextract 实现
@@ -244,13 +253,14 @@ export async function sendChatMessage(
   message: string,
   conversationId: string | number | null,
   modelId: string | null,
-  onChunk: (chunk: string) => void,
+  onChunk: (chunk: string, fullText: string) => void,
   onComplete: () => void,
   onError: (error: Error) => void
 ): Promise<void> {
-  let lastLength = 0;
-  let requestCompleted = false;
-  const cancelTokenSource = axios.CancelToken.source();
+  let lastText = ''
+  let requestCompleted = false
+  const cancelTokenSource = axios.CancelToken.source()
+  activeChatCancelTokenSource = cancelTokenSource
 
   const requestConfig = {
     method: 'post',
@@ -266,68 +276,69 @@ export async function sendChatMessage(
     responseType: 'text' as const, // 明确指定为文本类型，确保流式响应
     withCredentials: true,
     onDownloadProgress: (progressEvent: any) => {
-      if (requestCompleted) return;
+      if (requestCompleted) return
 
-      // 获取累积的响应文本（纯文本，不带 SSE 格式）
-      const responseText = progressEvent.event?.target?.responseText || '';
+      const responseText = progressEvent.event?.target?.responseText || ''
+      const normalizedText = sanitizeChatStreamText(responseText)
+      const delta = normalizedText.substring(lastText.length)
 
-      console.log('📥 Progress event:', {
-        loaded: progressEvent.loaded,
-        total: progressEvent.total,
-        responseTextLength: responseText.length,
-        lastLength: lastLength,
-        newContent: responseText.substring(lastLength, lastLength + 50)
-      });
-
-      // 参考 deepextract: 检查是否完成
       if (responseText.includes('[DONE]')) {
-        requestCompleted = true;
-        console.log('✅ Stream completed, responseText length:', responseText.length);
-        // 传递原始 responseText，让调用方自己处理清理
-        onChunk(responseText);
-        onComplete();
-        cancelTokenSource.cancel('Stream completed');
-        return;
+        requestCompleted = true
+        if (delta) {
+          onChunk(delta, normalizedText)
+        }
+        lastText = normalizedText
+        onComplete()
+        activeChatCancelTokenSource = null
+        cancelTokenSource.cancel('Stream completed')
+        return
       }
 
-      // 检查是否有错误
       if (responseText.includes('[ERROR]')) {
-        requestCompleted = true;
-        const errorMatch = responseText.match(/\[ERROR\] (.+)/);
-        const errorMsg = errorMatch ? errorMatch[1] : 'Unknown error';
-        console.error('❌ Stream error:', errorMsg);
-        onError(new Error(errorMsg));
-        cancelTokenSource.cancel('Stream error');
-        return;
+        requestCompleted = true
+        const errorMatch = responseText.match(/\[ERROR\] (.+)/)
+        const errorMsg = errorMatch ? errorMatch[1] : 'Unknown error'
+        activeChatCancelTokenSource = null
+        onError(new Error(errorMsg))
+        cancelTokenSource.cancel('Stream error')
+        return
       }
 
-      // 参考 deepextract: 直接传递原始 responseText，实现流式更新
-      if (responseText.length > lastLength) {
-        console.log('📝 Updating, length:', responseText.length, 'preview:', responseText.substring(0, 50));
-        onChunk(responseText);
-        lastLength = responseText.length;
+      if (delta) {
+        onChunk(delta, normalizedText)
+        lastText = normalizedText
       }
     },
     cancelToken: cancelTokenSource.token
-  };
+  }
 
   try {
-    await axios(requestConfig);
+    await axios(requestConfig)
 
-    // 请求正常完成但没有触发 [DONE]
     if (!requestCompleted) {
-      onComplete();
+      onComplete()
     }
   } catch (error: any) {
     if (axios.isCancel(error)) {
-      // 流式请求被正常取消（已完成）
-      console.log('Stream request cancelled normally');
-      return;
+      return
     }
 
     if (!requestCompleted) {
-      console.error('Stream error:', error);
-      onError(error);
+      onError(error instanceof Error ? error : new Error('发送消息失败'))
+    }
+  } finally {
+    if (activeChatCancelTokenSource === cancelTokenSource) {
+      activeChatCancelTokenSource = null
     }
   }
+}
+
+export function stopActiveChatMessage(): boolean {
+  if (!activeChatCancelTokenSource) {
+    return false
+  }
+
+  activeChatCancelTokenSource.cancel('User stopped stream')
+  activeChatCancelTokenSource = null
+  return true
 }

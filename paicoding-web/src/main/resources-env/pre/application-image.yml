@@ -10,3 +10,5 @@ image:
     sk:
     bucket:
     host:
+    region:
+    path-style-access: false

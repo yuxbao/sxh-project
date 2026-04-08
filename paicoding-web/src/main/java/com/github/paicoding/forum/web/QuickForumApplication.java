@@ -52,7 +52,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         }
 )
 public class QuickForumApplication implements WebMvcConfigurer, ApplicationRunner {
-    @Value("${server.port:8081}")
+    @Value("${server.port:8082}")
     private Integer webPort;
 
     @Resource
@@ -78,6 +78,13 @@ public class QuickForumApplication implements WebMvcConfigurer, ApplicationRunne
     public void addCorsMappings(CorsRegistry registry) {
         //项目中的所有接口都支持跨域
         registry.addMapping("/**")
+                .allowedOriginPatterns(
+                        "http://localhost:*",
+                        "http://127.0.0.1:*"
+                )
+                .allowedHeaders("*")
+                .exposedHeaders("*")
+                .allowCredentials(true)
                 .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE");
     }
 
@@ -87,14 +94,14 @@ public class QuickForumApplication implements WebMvcConfigurer, ApplicationRunne
     }
 
     /**
-     * 兼容本地启动时8080端口被占用的场景; 只有dev启动方式才做这个逻辑
+     * 兼容本地启动时默认端口被占用的场景; 只有dev启动方式才做这个逻辑
      *
      * @return
      */
     @Bean
     @ConditionalOnExpression(value = "#{'dev'.equals(environment.getProperty('env.name'))}")
     public TomcatConnectorCustomizer customServerPortTomcatConnectorCustomizer() {
-        // 开发环境时，首先判断8080d端口是否可用；若可用则直接使用，否则选择一个可用的端口号启动
+        // 开发环境时，首先判断默认端口是否可用；若可用则直接使用，否则选择一个可用的端口号启动
         int port = SocketUtil.findAvailableTcpPort(8000, 10000, webPort);
         if (port != webPort) {
             log.info("默认端口号{}被占用，随机启用新端口号: {}", webPort, port);

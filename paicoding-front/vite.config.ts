@@ -1,8 +1,12 @@
 import { fileURLToPath, URL } from 'node:url'
 
+// @ts-ignore
 import { defineConfig } from 'vite'
+// @ts-ignore
 import vue from '@vitejs/plugin-vue'
+// @ts-ignore
 import vueJsx from '@vitejs/plugin-vue-jsx'
+// @ts-ignore
 import VueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vitejs.dev/config/

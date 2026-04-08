@@ -8,10 +8,12 @@ image:
   # 图片访问域名
   cdn-host:
   oss:
-    type: local
-    prefix:
-    endpoint:
-    ak:
-    sk:
-    bucket:
-    host:
+    type: s3
+    prefix: yuxbao-sixianghui-oss/
+    endpoint: https://cca306661d9917b152c671ca2cb7fe55.r2.cloudflarestorage.com
+    ak: 2dd8b3ca55c9f0ff2f2a69e0f12bfba3
+    sk: 00c57ce9c8a1bbb580444326e9cde07a820f4db2f6d5b3ed2ca01638fcf85899
+    bucket: yuxbao-blog-storage
+    host: https://r2-storage.yux-bao.site/
+    region: auto
+    path-style-access: true

@@ -81,7 +81,7 @@ const router = createRouter({
     {
       path: '/chat',
       name: 'chat',
-      component: () => import('@/views/ChatViewV2.vue'),
+      component: () => import('@/views/RedirectToRagChat.vue'),
       meta: {
         loginRequired: true
       }

@@ -6,6 +6,7 @@ import com.github.paicoding.forum.api.model.vo.article.dto.ArticleDTO;
 import com.github.paicoding.forum.api.model.vo.article.dto.CategoryDTO;
 import com.github.paicoding.forum.api.model.vo.recommend.SideBarDTO;
 import com.github.paicoding.forum.api.model.vo.user.dto.UserStatisticInfoDTO;
+import com.github.paicoding.forum.core.async.AsyncUtil;
 import com.github.paicoding.forum.service.article.service.ArticleReadService;
 import com.github.paicoding.forum.service.article.service.CategoryService;
 import com.github.paicoding.forum.service.sidebar.service.SidebarService;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 
 /**
@@ -33,6 +36,8 @@ import java.util.Map;
  */
 @Controller
 public class IndexController extends BaseViewController {
+    private static final Executor ASYNC_EXECUTOR = AsyncUtil::execute;
+
     @Autowired
     private IndexRecommendHelper indexRecommendHelper;
     @Autowired
@@ -64,33 +69,46 @@ public class IndexController extends BaseViewController {
     }
 
     private IndexVo buildIndexVo(String category, Integer pageNum, Integer pageSize) {
-        List<CategoryDTO> categories = categoryService.loadAllCategories();
-        Map<Long, Long> articleCnt = articleReadService.queryArticleCountsByCategory();
-        categories.removeIf(c -> articleCnt.getOrDefault(c.getCategoryId(), 0L) <= 0L);
+        Long userId = ReqInfoContext.getReqInfo() == null ? null : ReqInfoContext.getReqInfo().getUserId();
 
-        CategoryDTO selectedCategory = categories.stream()
-                .filter(c -> c.getCategory().equals(category))
-                .findFirst()
-                .orElse(CategoryDTO.DEFAULT_CATEGORY);
+        CompletableFuture<List<CategoryDTO>> categoriesFuture = CompletableFuture.supplyAsync(categoryService::loadAllCategories, ASYNC_EXECUTOR);
+        CompletableFuture<Map<Long, Long>> articleCntFuture = CompletableFuture.supplyAsync(articleReadService::queryArticleCountsByCategory, ASYNC_EXECUTOR);
+        CompletableFuture<IPage<ArticleDTO>> articlesFuture = CompletableFuture.supplyAsync(
+                () -> articleReadService.queryArticlesByCategoryPagination(pageNum, pageSize, category),
+                ASYNC_EXECUTOR);
+        CompletableFuture<List<SideBarDTO>> sideBarsFuture = CompletableFuture.supplyAsync(sidebarService::queryHomeSidebarList, ASYNC_EXECUTOR);
+        CompletableFuture<UserStatisticInfoDTO> userFuture = userId == null
+                ? CompletableFuture.completedFuture(null)
+                : CompletableFuture.supplyAsync(() -> userService.queryUserInfoWithStatistic(userId), ASYNC_EXECUTOR);
 
-        IPage<ArticleDTO> articles = articleReadService.queryArticlesByCategoryPagination(pageNum, pageSize, category);
+        CompletableFuture<CategoryDTO> selectedCategoryFuture = categoriesFuture.thenCombine(articleCntFuture, (categories, articleCnt) -> {
+            categories.removeIf(c -> articleCnt.getOrDefault(c.getCategoryId(), 0L) <= 0L);
+            return categories.stream()
+                    .filter(c -> c.getCategory().equals(category))
+                    .findFirst()
+                    .orElse(CategoryDTO.DEFAULT_CATEGORY);
+        });
+        CompletableFuture<List<ArticleDTO>> topArticlesFuture = selectedCategoryFuture.thenApplyAsync(indexRecommendHelper::topArticleList, ASYNC_EXECUTOR);
 
-        List<ArticleDTO> topArticles = indexRecommendHelper.topArticleList(selectedCategory);
-        List<SideBarDTO> sideBars = sidebarService.queryHomeSidebarList();
+        // 并行访问
+        CompletableFuture.allOf(
+                categoriesFuture,
+                articlesFuture,
+                sideBarsFuture,
+                topArticlesFuture,
+                userFuture
+        ).join();
 
         IndexVo vo = new IndexVo();
-        vo.setCategories(categories);
+        vo.setCategories(categoriesFuture.join());
+        CategoryDTO selectedCategory = selectedCategoryFuture.join();
         vo.setCurrentCategory(selectedCategory.getCategory());
         vo.setCategoryId(selectedCategory.getCategoryId());
-        vo.setTopArticles(topArticles);
-        vo.setArticles(articles);
-        vo.setSideBarItems(sideBars);
+        vo.setTopArticles(topArticlesFuture.join());
+        vo.setArticles(articlesFuture.join());
+        vo.setSideBarItems(sideBarsFuture.join());
         vo.setHomeCarouselList(Collections.emptyList());
-
-        if (ReqInfoContext.getReqInfo() != null && ReqInfoContext.getReqInfo().getUserId() != null) {
-            UserStatisticInfoDTO user = userService.queryUserInfoWithStatistic(ReqInfoContext.getReqInfo().getUserId());
-            vo.setUser(user);
-        }
+        vo.setUser(userFuture.join());
 
         return vo;
     }

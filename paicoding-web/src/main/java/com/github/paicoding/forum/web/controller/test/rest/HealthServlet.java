@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 
 /**
  * 校验服务健康情况的servlet
- * localhost:8081/check 返回ok
+ * localhost:8082/check 返回ok
  * @author XuYifei
  * @date 2024-07-12
  */

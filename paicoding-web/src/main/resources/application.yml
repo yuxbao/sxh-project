@@ -1,6 +1,6 @@
 
 server:
-  port: 8081
+  port: 8082
   servlet:
     session:
       timeout: 5m # 设置session的有效期为五分钟
@@ -112,3 +112,11 @@ logging:
 online:
   statistics:
     type: redis
+
+sxh:
+  rag:
+    base-url: ${SXH_RAG_BASE_URL:http://localhost:8081}
+    frontend-url: ${SXH_RAG_FRONTEND_URL:http://localhost:9527}
+    frontend-hash-mode: ${SXH_RAG_FRONTEND_HASH_MODE:true}
+    token: ${SXH_RAG_INTERNAL_TOKEN:sxh-rag-internal-token}
+    sync-on-startup: ${SXH_RAG_SYNC_ON_STARTUP:true}

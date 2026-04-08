@@ -15,7 +15,7 @@ view:
     zsxqUrl: ''
     zsxqPosterUrl: ''
     contactMeStarQrCode: https://96e5ee1.webp.li/qrcode.png
-    oss: https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/tech-pai
+    oss: https://r2-storage.yux-bao.site/yuxbao-sixianghui-oss
 
 knife4j:
   production: true # 开启屏蔽文档资源

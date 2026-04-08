@@ -3,23 +3,26 @@ package com.github.paicoding.forum.web.controller.chatv2;
 import com.github.paicoding.forum.api.model.context.ReqInfoContext;
 import com.github.paicoding.forum.api.model.vo.ResVo;
 import com.github.paicoding.forum.api.model.vo.chatv2.*;
+import com.github.paicoding.forum.api.model.vo.user.dto.BaseUserInfoDTO;
 import com.github.paicoding.forum.core.permission.Permission;
 import com.github.paicoding.forum.core.permission.UserRole;
-import com.github.paicoding.forum.service.chatv2.config.ChatV2ConfigProperties;
-import com.github.paicoding.forum.service.chatv2.factory.ChatClientFactory;
 import com.github.paicoding.forum.service.chatv2.repository.entity.ChatHistoryDO;
 import com.github.paicoding.forum.service.chatv2.repository.entity.ChatMessageDO;
 import com.github.paicoding.forum.service.chatv2.service.ChatConversationService;
 import com.github.paicoding.forum.service.chatv2.service.ChatMessageService;
-import com.github.paicoding.forum.service.chatv2.service.StreamingChatService;
+import com.github.paicoding.forum.service.chatv2.service.RagAssistantService;
+import com.github.paicoding.forum.service.rag.RagClient;
+import com.github.paicoding.forum.service.rag.RagSsoLoginReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,11 +38,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChatV2RestController {
 
-    private final ChatClientFactory chatClientFactory;
     private final ChatConversationService conversationService;
     private final ChatMessageService messageService;
-    private final StreamingChatService streamingChatService;
-    private final ChatV2ConfigProperties chatV2Config;
+    private final RagAssistantService ragAssistantService;
+    private final RagClient ragClient;
+
+    @Value("${sxh.rag.frontend-url:http://localhost:9527}")
+    private String ragFrontendUrl;
+
+    @Value("${sxh.rag.frontend-hash-mode:true}")
+    private boolean ragFrontendHashMode;
 
     /**
      * 发送消息（流式响应）
@@ -64,7 +72,7 @@ public class ChatV2RestController {
             // 首次对话，创建新会话
             String modelId = request.getModelId();
             if (modelId == null || modelId.isEmpty()) {
-                modelId = chatV2Config.getDefaultModel();
+                modelId = ragAssistantService.getDefaultModel();
             }
 
             history = conversationService.createConversationWithConversationId(userId, modelId, request.getConversationId());
@@ -79,22 +87,12 @@ public class ChatV2RestController {
             historyId = history.getId();
         }
 
-        // 获取 ChatClient
         String modelId = history.getModelName();
+        String userName = ReqInfoContext.getReqInfo().getUser() != null
+                ? ReqInfoContext.getReqInfo().getUser().getUserName()
+                : String.valueOf(userId);
 
-        if (!chatClientFactory.isModelAvailable(modelId)) {
-            return Flux.just(
-                    "[ERROR] Model not available: " + modelId,
-                    "[DONE]"
-            );
-        }
-
-        ChatClient chatClient = chatClientFactory.getChatClient(modelId);
-
-        // 执行流式聊天（传递 userId 和 modelId 用于 token 配额管理）
-        Long finalHistoryId = historyId;
-        String finalModelId = modelId;
-        return streamingChatService.executeStreamingChat(chatClient, finalHistoryId, userId, finalModelId, request.getMessage())
+        return ragAssistantService.executeStreamingChat(historyId, userId, modelId, userName, request.getMessage())
                 .onErrorResume(error -> {
                     log.error("Error during streaming chat", error);
                     return Flux.just(
@@ -189,12 +187,7 @@ public class ChatV2RestController {
      */
     @GetMapping("/models")
     public ResVo<List<ModelInfoVO>> getModels() {
-        List<ModelInfoVO> models = chatV2Config.getModels().stream()
-                .filter(config -> Boolean.TRUE.equals(config.getEnabled()))
-                .map(this::convertToModelInfoVO)
-                .collect(Collectors.toList());
-
-        return ResVo.ok(models);
+        return ResVo.ok(ragAssistantService.getModels());
     }
 
     /**
@@ -202,7 +195,7 @@ public class ChatV2RestController {
      */
     @GetMapping("/models/default")
     public ResVo<String> getDefaultModel() {
-        return ResVo.ok(chatV2Config.getDefaultModel());
+        return ResVo.ok(ragAssistantService.getDefaultModel());
     }
 
     /**
@@ -214,6 +207,37 @@ public class ChatV2RestController {
         String conversationId = java.util.UUID.randomUUID().toString();
         log.info("Generated new conversationId: {}", conversationId);
         return ResVo.ok(conversationId);
+    }
+
+    @GetMapping("/rag-login-url")
+    @Permission(role = UserRole.LOGIN)
+    public ResVo<String> getRagLoginUrl() {
+        Long userId = ReqInfoContext.getReqInfo().getUserId();
+        BaseUserInfoDTO user = ReqInfoContext.getReqInfo().getUser();
+
+        String userName = user != null && user.getUserName() != null && !user.getUserName().isBlank()
+                ? user.getUserName()
+                : String.valueOf(userId);
+        String avatar = user != null ? user.getPhoto() : null;
+        String role = user != null ? user.getRole() : null;
+
+        String bridgeCode = ragClient.createSsoBridgeCode(new RagSsoLoginReq(
+                userId,
+                userName,
+                userName,
+                avatar,
+                role
+        ));
+
+        String baseUrl = ragFrontendUrl.endsWith("/") ? ragFrontendUrl.substring(0, ragFrontendUrl.length() - 1) : ragFrontendUrl;
+        String encodedBridgeCode = URLEncoder.encode(bridgeCode, StandardCharsets.UTF_8);
+        String redirectUrl;
+        if (ragFrontendHashMode) {
+            redirectUrl = baseUrl + "/#/sxh-bridge?code=" + encodedBridgeCode;
+        } else {
+            redirectUrl = baseUrl + "/sxh-bridge?code=" + encodedBridgeCode;
+        }
+        return ResVo.ok(redirectUrl);
     }
 
     // ========== 转换方法 ==========
@@ -228,12 +252,6 @@ public class ChatV2RestController {
         MessageVO vo = new MessageVO();
         BeanUtils.copyProperties(message, vo);
         vo.setMetadata(message.getMetadataJson());
-        return vo;
-    }
-
-    private ModelInfoVO convertToModelInfoVO(ChatV2ConfigProperties.ModelConfig config) {
-        ModelInfoVO vo = new ModelInfoVO();
-        BeanUtils.copyProperties(config, vo);
         return vo;
     }
 }
