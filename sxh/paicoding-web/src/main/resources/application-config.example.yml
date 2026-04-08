@@ -1,0 +1,15 @@
+view:
+  site:
+    needLoginArticleReadCount: 30 # 需要登录才能阅读的文章阅读次数
+    websiteName: 技术派
+    websiteLogoUrl: https://paicoding.com/img/icon.png
+    websiteFaviconIconUrl: https://paicoding.com/img/icon.png
+    contactMeTitle: 联系我 - 小灰飞
+    contactMeWxQrCode: https://96e5ee1.webp.li/qrcode.png
+    pageSize: 20
+    cdnImgStyle:
+    websiteRecord:  备案号:冀ICP备2023036490号-1
+    wxLoginUrl: http://weixin.qq.com/r/WxwpMefE-rqBraNS90lJ
+    host: http://127.0.0.1:${server.port}
+    welcomeInfo: 欢迎来到技术派 ~~
+    oss: https://r2-storage.yux-bao.site/yuxbao-sixianghui-oss

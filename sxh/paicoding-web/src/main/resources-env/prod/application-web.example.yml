@@ -1,0 +1,18 @@
+log:
+  path: logs # 使用相对路径，容器/当前工作目录下创建 logs
+env:
+  name: dev
+
+
+spring:
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: true # 开启缓存
+
+
+chatgpt:
+  key:
+<REDACTED>

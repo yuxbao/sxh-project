@@ -57,13 +57,41 @@ dist-ssr/
 coverage/
 *.tsbuildinfo
 *.local
+.env
+.env.*
+!.env.example
+!.env.*.example
 
 # Generated frontend files
 components.d.ts
 auto-imports.d.ts
 
+# Local secrets and machine-specific configs
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+sxh-rag/docs/kibana.local.yml
+sxh-rag/src/main/resources/application.yml
+sxh-rag/src/main/resources/application-dev.yml
+sxh-rag/src/main/resources/application-docker.yml
+sxh/paicoding-web/src/main/resources/application.yml
+sxh/paicoding-web/src/main/resources/application-config.yml
+sxh/paicoding-web/src/main/resources/application-email.yml
+sxh/paicoding-web/src/main/resources-env/dev/application-*.yml
+sxh/paicoding-web/src/main/resources-env/pre/application-*.yml
+sxh/paicoding-web/src/main/resources-env/prod/application-*.yml
+sxh/paicoding-web/src/main/resources-env/test/application-*.yml
+!sxh-rag/docs/*.example.yml
+!sxh-rag/src/main/resources/*.example.yml
+!sxh/paicoding-web/src/main/resources/*.example.yml
+!sxh/paicoding-web/src/main/resources-env/dev/*.example.yml
+!sxh/paicoding-web/src/main/resources-env/pre/*.example.yml
+!sxh/paicoding-web/src/main/resources-env/prod/*.example.yml
+!sxh/paicoding-web/src/main/resources-env/test/*.example.yml
+
 # Temp files
 *.swp
 *.swo
 *~
-

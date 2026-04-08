@@ -1,0 +1,24 @@
+image:
+  abs-tmp-path: /tmp/storage/
+  web-img-path: /forum/image/
+  tmp-upload-path: /tmp/forum/
+  cdn-host:
+  oss:
+    type: s3
+    prefix: yuxbao-sixianghui-oss/
+    endpoint: https://cca306661d9917b152c671ca2cb7fe55.r2.cloudflarestorage.com
+    ak: 2dd8b3ca55c9f0ff2f2a69e0f12bfba3
+    sk: 00c57ce9c8a1bbb580444326e9cde07a820f4db2f6d5b3ed2ca01638fcf85899
+    bucket: yuxbao-blog-storage
+    host: https://r2-storage.yux-bao.site/
+    region: auto
+    path-style-access: true
+
+spring:
+  web:
+    resources:
+      # 支持本地图片上传之后的链接，其中 file:///d的用于win系统，后面的file: 适用于mac/linux系统
+      static-locations:
+        - classpath:/static/
+        - file:///d:${image.abs-tmp-path}
+        - file:${image.abs-tmp-path}

@@ -1,0 +1,21 @@
+view:
+  site:
+    websiteName: 思享汇
+    websiteLogoUrl: https://96e5ee1.webp.li/sixianghui_logo.svg
+    websiteFaviconIconUrl: https://96e5ee1.webp.li/icon.png
+    contactMeTitle: 联系我 - 小鲍同学
+    contactMeWxQrCode: https://96e5ee1.webp.li/qrcode.png
+    pageSize: 20
+    needLoginArticleReadCount: 30 # 需要登录才能阅读的文章阅读次数
+    cdnImgStyle:
+    websiteRecord: 备案号:沪ICP备2025147371号
+    wxLoginUrl: http://weixin.qq.com/r/WxwpMefE-rqBraNS90lJ
+    host: https://baoprojects.site
+    welcomeInfo: 欢迎来到思享汇！
+    zsxqUrl: ''
+    zsxqPosterUrl: ''
+    contactMeStarQrCode: https://96e5ee1.webp.li/qrcode.png
+    oss: https://r2-storage.yux-bao.site/yuxbao-sixianghui-oss
+
+knife4j:
+  production: true # 开启屏蔽文档资源
