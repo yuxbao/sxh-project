@@ -1,0 +1,173 @@
+/* 自定义 antd 暗黑模式样式 */
+@dark-main-bg-color: #12161d;
+@dark-bg-color: #191f27;
+@dark-border-color: #2a323d;
+@dark-text-color: #d6dde8;
+@dark-shadow-color: 0 18px 36px rgba(0, 0, 0, 0.35);
+@dark-scrollbar-bg-color: #3b4452;
+@dark-sider-bg: #141922;
+@dark-sider-text: #d5dbe6;
+@dark-sider-text-muted: #93a0b2;
+@dark-sider-active-bg: rgba(87, 196, 184, 0.18);
+@dark-sider-active-text: #dff7f4;
+@dark-sider-border: #2a313a;
+
+:root {
+	--app-main-bg: @dark-main-bg-color;
+	--app-surface-bg: @dark-bg-color;
+	--app-surface-muted-bg: #141922;
+	--app-border-color: @dark-border-color;
+	--app-border-soft: #262f39;
+	--app-text-color: @dark-text-color;
+	--app-text-muted: #93a0b2;
+	--app-card-shadow: @dark-shadow-color;
+	--tabs-border-color: #2b3440;
+	--login-page-bg: linear-gradient(160deg, rgba(12, 16, 24, 0.96) 0%, rgba(16, 24, 33, 0.94) 45%, rgba(18, 27, 37, 0.92) 100%);
+	--login-overlay-primary: rgba(87, 196, 184, 0.2);
+	--login-overlay-secondary: rgba(112, 147, 255, 0.16);
+	--login-shell-bg: rgba(16, 22, 31, 0.82);
+	--login-shell-border: rgba(120, 138, 162, 0.18);
+	--login-shell-shadow: 0 42px 90px rgba(0, 0, 0, 0.42);
+	--login-visual-bg: linear-gradient(135deg, rgba(19, 27, 37, 0.92), rgba(25, 36, 48, 0.92));
+	--login-visual-border: rgba(126, 145, 170, 0.2);
+	--login-card-bg: rgba(22, 29, 39, 0.92);
+	--login-card-shadow: 0 24px 50px rgba(0, 0, 0, 0.42);
+	--login-title-color: #edf4fb;
+	--login-subtitle-color: #9aa8ba;
+	--login-input-icon-color: #93a0b2;
+	--login-input-text-color: #d6dde8;
+	--login-input-border: rgba(126, 145, 170, 0.18);
+	--login-input-bg: rgba(17, 24, 34, 0.92);
+	--login-input-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+	--login-input-placeholder: #74839a;
+	--login-secondary-btn-bg: rgba(31, 39, 51, 0.94);
+	--login-secondary-btn-color: #d6dde8;
+	--login-secondary-btn-border: rgba(126, 145, 170, 0.2);
+}
+
+/* 需要自定义覆盖的样式 */
+body {
+	background-color: @dark-main-bg-color !important;
+	// guide
+	#driver-highlighted-element-stage {
+		background-color: #2f3742 !important;
+	}
+}
+
+/* login container（先固定样式） */
+.login-container {
+	background-color: @dark-main-bg-color !important;
+	.login-box {
+		background-color: rgba(22, 27, 37, 0.86) !important;
+		.login-form {
+			background-color: rgba(24, 30, 40, 0.96) !important;
+			box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45) !important;
+			.login-logo {
+				.logo-text {
+					color: @dark-text-color !important;
+				}
+			}
+			.login-btn {
+				.ant-btn-default {
+					color: @dark-text-color !important;
+				}
+			}
+		}
+	}
+}
+
+/* container */
+.container {
+	--sider-bg: @dark-sider-bg;
+	--sider-text: @dark-sider-text;
+	--sider-text-muted: @dark-sider-text-muted;
+	--sider-active-bg: @dark-sider-active-bg;
+	--sider-active-text: @dark-sider-active-text;
+	--sider-border: @dark-sider-border;
+	--sider-logo-text: @dark-sider-text;
+
+	/* sider */
+	.ant-layout-sider {
+		background-color: var(--sider-bg) !important;
+		border-right: 1px solid var(--sider-border) !important;
+		.ant-menu {
+			background: transparent !important;
+			color: var(--sider-text) !important;
+			&::-webkit-scrollbar {
+				background-color: @dark-bg-color !important;
+			}
+			&::-webkit-scrollbar-thumb {
+				background-color: @dark-scrollbar-bg-color !important;
+			}
+		}
+		.logo-box {
+			border-bottom: 1px solid var(--sider-border) !important;
+		}
+		.ant-menu-item,
+		.ant-menu-submenu-title {
+			color: var(--sider-text) !important;
+		}
+		.ant-menu-item:hover,
+		.ant-menu-submenu-title:hover {
+			color: var(--sider-active-text) !important;
+		}
+		.ant-menu-item-selected {
+			background-color: var(--sider-active-bg) !important;
+			color: var(--sider-active-text) !important;
+		}
+		.ant-menu-item-selected::after {
+			border-right: 3px solid var(--sider-active-text) !important;
+		}
+		.ant-menu-submenu-selected > .ant-menu-submenu-title {
+			color: var(--sider-active-text) !important;
+		}
+		.ant-menu-item:active,
+		.ant-menu-submenu-title:active {
+			background-color: var(--sider-active-bg) !important;
+		}
+	}
+
+	/* layout */
+	.ant-layout {
+		background-color: @dark-main-bg-color !important;
+		.ant-layout-header,
+		.tabs,
+		.footer,
+		.card {
+			background-color: @dark-bg-color !important;
+			border-color: @dark-border-color !important;
+			.text {
+				color: @dark-text-color !important;
+			}
+		}
+		.ant-layout-header {
+			height: 55px;
+			padding: 0 40px 0 20px;
+			.icon-style,
+			.username {
+				color: @dark-text-color !important;
+			}
+		}
+		.footer {
+			a {
+				color: @dark-text-color !important;
+			}
+		}
+		.ant-layout-content {
+			&::-webkit-scrollbar {
+				background-color: @dark-main-bg-color !important;
+			}
+			&::-webkit-scrollbar-thumb {
+				background-color: @dark-scrollbar-bg-color !important;
+			}
+			.card {
+				&::-webkit-scrollbar {
+					background-color: @dark-bg-color !important;
+				}
+				&::-webkit-scrollbar-thumb {
+					background-color: @dark-scrollbar-bg-color !important;
+				}
+			}
+		}
+	}
+}

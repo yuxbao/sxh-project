@@ -1,0 +1,18 @@
+.tag-wrap-out {
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+.tag-wrap {
+    width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tag-list {
+    padding: 20px;
+    background-color: var(--pai-bg-white-fff);
+    border-radius: var(--pai-surface-radius);
+    border: 1px solid var(--pai-border-color-1);
+    box-shadow: var(--pai-surface-shadow);
+}

@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+
+:root {
+	--app-bg: #f5f2ec;
+	--panel-bg: #ffffff;
+	--ink-900: #1f2430;
+	--ink-700: #3e4758;
+	--ink-500: #7a8290;
+	--border-soft: rgba(20, 28, 45, 0.08);
+	--shadow-soft: 0 16px 36px rgba(16, 24, 40, 0.12);
+}
+
+body {
+	font-family: "IBM Plex Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+	color: var(--ink-900);
+	background-color: var(--app-bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: "Fraunces", "PingFang SC", serif;
+	font-weight: 600;
+	color: var(--ink-900);
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* 常用 flex */
+.flx-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.flx-justify-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.flx-align-center {
+	display: flex;
+	align-items: center;
+}
+
+/* 清除浮动 */
+.clearfix::after {
+	display: block;
+	height: 0;
+	overflow: hidden;
+	clear: both;
+	content: "";
+}
+
+/* 文字单行省略号 */
+.sle {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* 文字多行省略号 */
+.mle {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+/* 文字多了自動換行 */
+.break-word {
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+/* page switch animation */
+.fade-enter {
+	opacity: 0;
+	transform: translateX(-30px);
+}
+.fade-enter-active,
+.fade-exit-active {
+	opacity: 1;
+	transition: all 0.2s ease-out;
+	transform: translateX(0);
+}
+.fade-exit {
+	opacity: 0;
+	transform: translateX(30px);
+}
+
+/* scroll bar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	background-color: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+	background-color: #dddee0;
+	border-radius: 20px;
+	box-shadow: inset 0 0 0 #ffffff;
+}
+
+/* card 卡片样式 */
+.card {
+	box-sizing: border-box;
+	padding: 20px 22px;
+	overflow-x: hidden;
+	border: 1px solid var(--border-soft);
+	border-radius: 16px;
+	background-color: var(--panel-bg);
+	box-shadow: var(--shadow-soft);
+}
+
+/* content-box */
+.content-box {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	.text {
+		margin: 30px 0;
+		font-size: 23px;
+		font-weight: 700;
+		text-align: center;
+		a {
+			text-decoration: underline !important;
+		}
+	}
+}
