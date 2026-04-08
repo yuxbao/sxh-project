@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { nextTick } from 'vue';
 import { VueMarkdownIt } from 'vue-markdown-shiki';
 import { formatDate } from '@/utils/common';
 defineOptions({ name: 'ChatMessage' });
@@ -8,6 +6,7 @@ defineOptions({ name: 'ChatMessage' });
 const props = defineProps<{ msg: Api.Chat.Message }>();
 
 const authStore = useAuthStore();
+const displayName = computed(() => authStore.userInfo.displayName || authStore.userInfo.username);
 
 function handleCopy(content: string) {
   navigator.clipboard.writeText(content);
@@ -16,27 +15,17 @@ function handleCopy(content: string) {
 
 const chatStore = useChatStore();
 
-// 存储文件名和对应的事件处理
-const sourceFiles = ref<Array<{fileName: string, id: string}>>([]);
-
-// 处理来源文件链接的函数
 function processSourceLinks(text: string): string {
-  // 匹配 (来源#数字: 文件名) 的正则表达式
   const sourcePattern = /\(来源#(\d+):\s*([^)]+)\)/g;
 
-  return text.replace(sourcePattern, (_match, sourceNum, fileName) => {
-    // 为文件名创建可点击的链接
-    const linkClass = 'source-file-link';
-    const encodedFileName = encodeURIComponent(fileName.trim());
-    const fileId = `source-file-${sourceFiles.value.length}`;
-
-    // 存储文件信息
-    sourceFiles.value.push({
-      fileName: encodedFileName,
-      id: fileId
-    });
-
-    return `(来源#${sourceNum}: <span class="${linkClass}" data-file-id="${fileId}">${fileName}</span>)`;
+  return text.replace(sourcePattern, (_match, sourceNum, fallbackTitle) => {
+    const index = Number(sourceNum);
+    const source = props.msg.sources?.find(item => item.index === index);
+    if (!source?.url && !source?.fileName) {
+      return `(来源#${sourceNum}: ${fallbackTitle.trim()})`;
+    }
+    const title = source?.title?.trim() || fallbackTitle.trim();
+    return `(来源#${sourceNum}: <span class="source-file-link" data-source-index="${index}">${title}</span>)`;
   });
 }
 
@@ -56,34 +45,38 @@ const content = computed(() => {
 function handleContentClick(event: MouseEvent) {
   const target = event.target as HTMLElement;
 
-  // 检查点击的是否是文件链接
   if (target.classList.contains('source-file-link')) {
-    const fileId = target.getAttribute('data-file-id');
-    if (fileId) {
-      const file = sourceFiles.value.find(f => f.id === fileId);
-      if (file) {
-        handleSourceFileClick(file.fileName);
-      }
+    const sourceIndex = Number(target.getAttribute('data-source-index'));
+    const source = props.msg.sources?.find(item => item.index === sourceIndex);
+    if (source) {
+      handleSourceClick(source);
     }
   }
 }
 
-// 处理来源文件点击事件
-async function handleSourceFileClick(fileName: string) {
-  const decodedFileName = decodeURIComponent(fileName);
-  console.log('点击了来源文件:', decodedFileName);
+async function handleSourceClick(source: Api.Chat.Source) {
+  if (source.url) {
+    window.open(source.url, '_blank');
+    return;
+  }
+
+  if (!source.fileName) {
+    window.$message?.warning('暂时没有可跳转的文章来源');
+    return;
+  }
+
+  const fileName = source.fileName;
 
   try {
-    window.$message?.loading(`正在获取文件下载链接: ${decodedFileName}`, {
+    window.$message?.loading(`正在获取文件下载链接: ${fileName}`, {
       duration: 0,
       closable: false
     });
 
-    // 调用文件下载接口
     const { error, data } = await request<Api.Document.DownloadResponse>({
       url: 'documents/download',
       params: {
-        fileName: decodedFileName,
+        fileName,
         token: authStore.token
       },
       baseURL: '/proxy-api'
@@ -97,16 +90,15 @@ async function handleSourceFileClick(fileName: string) {
     }
 
     if (data?.downloadUrl) {
-      // 在新窗口打开下载链接
       window.open(data.downloadUrl, '_blank');
-      window.$message?.success(`文件下载链接已打开: ${decodedFileName}`);
+      window.$message?.success(`文件下载链接已打开: ${fileName}`);
     } else {
       window.$message?.error('未能获取到下载链接');
     }
   } catch (err) {
     window.$message?.destroyAll();
     console.error('文件下载失败:', err);
-    window.$message?.error(`文件下载失败: ${decodedFileName}`);
+    window.$message?.error(`文件下载失败: ${fileName}`);
   }
 }
 </script>
@@ -118,7 +110,7 @@ async function handleSourceFileClick(fileName: string) {
         <SvgIcon icon="ph:user-circle" class="text-icon-large color-white" />
       </NAvatar>
       <div class="flex-col gap-1">
-        <NText class="text-4 font-bold">{{ authStore.userInfo.username }}</NText>
+        <NText class="text-4 font-bold">{{ displayName }}</NText>
         <NText class="text-3 color-gray-500">{{ formatDate(msg.timestamp) }}</NText>
       </div>
     </div>
@@ -127,7 +119,7 @@ async function handleSourceFileClick(fileName: string) {
         <SystemLogo class="text-6 text-white" />
       </NAvatar>
       <div class="flex-col gap-1">
-        <NText class="text-4 font-bold">派聪明</NText>
+        <NText class="text-4 font-bold">思享汇智能助手</NText>
         <NText class="text-3 color-gray-500">{{ formatDate(msg.timestamp) }}</NText>
       </div>
     </div>

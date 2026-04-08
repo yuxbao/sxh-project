@@ -69,7 +69,7 @@ public class OrgTagAuthorizationFilter extends OncePerRequestFilter {
                 } else if (path.contains("/merge")) {
                     operation = "合并分片";
                 } else if (path.contains("/uploads")) {
-                    operation = "获取用户文档";
+                    operation = "获取知识库文档";
                 } else if (path.contains("/search/hybrid")) {
                     operation = "混合检索";
                 } else if ("DELETE".equals(request.getMethod()) && path.matches(".*/documents/[a-fA-F0-9]{32}.*")) {
@@ -83,9 +83,11 @@ public class OrgTagAuthorizationFilter extends OncePerRequestFilter {
                 if (token != null) {
                     String userId = jwtUtils.extractUserIdFromToken(token);
                     String role = jwtUtils.extractRoleFromToken(token);
+                    String orgTags = jwtUtils.extractOrgTagsFromToken(token);
                     if (userId != null) {
                         request.setAttribute("userId", userId);
                         request.setAttribute("role", role);
+                        request.setAttribute("orgTags", orgTags);
                         logger.debug("为{}请求设置userId属性: {}, role: {}", operation, userId, role);
                     } else {
                         logger.warn("{}请求中无法从token提取userId", operation);
@@ -335,4 +337,4 @@ public class OrgTagAuthorizationFilter extends OncePerRequestFilter {
             return isPublic;
         }
     }
-} 
+}

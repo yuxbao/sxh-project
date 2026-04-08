@@ -152,6 +152,27 @@ services:
       timeout: 10s
       retries: 3
 
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: always
+    ports:
+      - "9002:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local-kafka
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=host.docker.internal:9092
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  kibana:
+    image: kibana:8.10.4
+    container_name: kibana
+    restart: always
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./kibana.local.yml:/usr/share/kibana/config/kibana.yml:ro
+
 volumes:
   redis-data:
   mysql-data:

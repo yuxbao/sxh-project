@@ -17,6 +17,9 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Kafka消费者
+ */
 @Service
 @Slf4j
 public class FileProcessingConsumer {

@@ -18,12 +18,24 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(name = "display_name")
+    private String displayName;
+
+    @Column(name = "avatar")
+    private String avatar;
+
     @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @Column(name = "external_source")
+    private String externalSource;
+
+    @Column(name = "external_user_id")
+    private String externalUserId;
 
     @Column(name = "org_tags")
     private String orgTags; // 用户所属组织标签，多个用逗号分隔

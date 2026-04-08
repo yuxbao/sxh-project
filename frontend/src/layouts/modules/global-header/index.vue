@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useFullscreen } from '@vueuse/core';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
@@ -26,6 +27,12 @@ const themeStore = useThemeStore();
 const { isFullscreen, toggle } = useFullscreen();
 
 const isDev = import.meta.env.DEV;
+const sxhHomeUrl = import.meta.env.VITE_SXH_HOME_URL || 'http://localhost:5173';
+const backButtonLabel = computed(() => (appStore.isMobile ? '' : '返回思享汇'));
+
+function backToSxh() {
+  window.location.href = sxhHomeUrl;
+}
 </script>
 
 <template>
@@ -46,6 +53,12 @@ const isDev = import.meta.env.DEV;
     <div class="h-full flex-y-center justify-end rd-full bg-container px-8 shadow-2xl">
       <GlobalSearch />
       <FullScreen v-if="!appStore.isMobile" :full="isFullscreen" @click="toggle" />
+      <NButton quaternary class="mr-4px" :title="'返回思享汇社区'" @click="backToSxh">
+        <template #icon>
+          <SvgIcon icon="ph:arrow-u-up-left-bold" />
+        </template>
+        {{ backButtonLabel }}
+      </NButton>
       <LangSwitch
         v-if="themeStore.header.multilingual.visible"
         :lang="appStore.locale"

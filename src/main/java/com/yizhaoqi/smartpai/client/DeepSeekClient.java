@@ -45,9 +45,10 @@ public class DeepSeekClient {
                              String context,
                              List<Map<String, String>> history,
                              Consumer<String> onChunk,
-                             Consumer<Throwable> onError) {
+                             Consumer<Throwable> onError,
+                             Runnable onComplete) {
         
-        Map<String, Object> request = buildRequest(userMessage, context, history);
+        Map<String, Object> request = buildRequest(userMessage, context, history, true);
         
         webClient.post()
                 .uri("/chat/completions")
@@ -57,13 +58,46 @@ public class DeepSeekClient {
                 .bodyToFlux(String.class)
                 .subscribe(
                     chunk -> processChunk(chunk, onChunk),
-                    onError
+                    onError,
+                    onComplete
                 );
+    }
+
+    public String generateResponse(String userMessage,
+                                   String context,
+                                   List<Map<String, String>> history) {
+        Map<String, Object> request = buildRequest(userMessage, context, history, false);
+
+        String responseBody = webClient.post()
+                .uri("/chat/completions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        if (responseBody == null || responseBody.isEmpty()) {
+            return "";
+        }
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode node = mapper.readTree(responseBody);
+            return node.path("choices")
+                    .path(0)
+                    .path("message")
+                    .path("content")
+                    .asText("");
+        } catch (Exception e) {
+            logger.error("解析非流式 DeepSeek 响应失败: {}", e.getMessage(), e);
+            throw new RuntimeException("解析 DeepSeek 响应失败", e);
+        }
     }
     
     private Map<String, Object> buildRequest(String userMessage, 
                                            String context,
-                                           List<Map<String, String>> history) {
+                                           List<Map<String, String>> history,
+                                           boolean stream) {
         logger.info("构建请求，用户消息：{}，上下文长度：{}，历史消息数：{}", 
                    userMessage, 
                    context != null ? context.length() : 0, 
@@ -72,7 +106,7 @@ public class DeepSeekClient {
         Map<String, Object> request = new java.util.HashMap<>();
         request.put("model", model);
         request.put("messages", buildMessages(userMessage, context, history));
-        request.put("stream", true);
+        request.put("stream", stream);
         // 生成参数
         AiProperties.Generation gen = aiProperties.getGeneration();
         if (gen.getTemperature() != null) {
@@ -100,6 +134,11 @@ public class DeepSeekClient {
         if (rules != null) {
             sysBuilder.append(rules).append("\n\n");
         }
+
+        sysBuilder.append("运行信息：\n")
+                .append("- 身份：思享汇知识助手\n")
+                .append("- 当前聊天模型：").append(model).append("\n")
+                .append("- 记忆范围：仅保留当前会话上下文与系统提供的参考信息，不具备跨会话自我记忆\n\n");
 
         String refStart = promptCfg.getRefStart() != null ? promptCfg.getRefStart() : "<<REF>>";
         String refEnd = promptCfg.getRefEnd() != null ? promptCfg.getRefEnd() : "<<END>>";

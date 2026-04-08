@@ -5,6 +5,7 @@ export const useChatStore = defineStore(SetupStoreId.Chat, () => {
   const input = ref<Api.Chat.Input>({ message: '' });
 
   const list = ref<Api.Chat.Message[]>([]);
+  const activeAssistantMessageId = ref<string>('');
 
   const store = useAuthStore();
 
@@ -24,6 +25,7 @@ export const useChatStore = defineStore(SetupStoreId.Chat, () => {
     input,
     conversationId,
     list,
+    activeAssistantMessageId,
     wsStatus,
     wsData,
     wsSend,

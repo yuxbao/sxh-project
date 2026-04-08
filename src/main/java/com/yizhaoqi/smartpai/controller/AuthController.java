@@ -1,6 +1,7 @@
 package com.yizhaoqi.smartpai.controller;
 
 import com.yizhaoqi.smartpai.exception.CustomException;
+import com.yizhaoqi.smartpai.service.SxhBridgeAuthService;
 import com.yizhaoqi.smartpai.utils.JwtUtils;
 import com.yizhaoqi.smartpai.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private SxhBridgeAuthService sxhBridgeAuthService;
 
     /**
      * 刷新Token接口
@@ -80,7 +84,29 @@ public class AuthController {
     public ResponseEntity<?> customBackendError(@RequestParam String code, @RequestParam String msg) {
         return ResponseEntity.status(Integer.parseInt(code)).body(Map.of("code", Integer.parseInt(code), "message", msg));
     }
+
+    @PostMapping("/sxh/exchange")
+    public ResponseEntity<?> exchangeSxhBridgeCode(@RequestBody BridgeExchangeRequest request) {
+        try {
+            SxhBridgeAuthService.LoginToken loginToken = sxhBridgeAuthService.exchangeBridgeCode(request.code());
+            return ResponseEntity.ok(Map.of(
+                    "code", 200,
+                    "message", "SXH bridge login successful",
+                    "data", Map.of(
+                            "token", loginToken.token(),
+                            "refreshToken", loginToken.refreshToken()
+                    )
+            ));
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatus()).body(Map.of("code", e.getStatus().value(), "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("code", 500, "message", "Internal server error"));
+        }
+    }
 }
 
 // 刷新Token请求记录类
 record RefreshTokenRequest(String refreshToken) {}
+
+record BridgeExchangeRequest(String code) {}

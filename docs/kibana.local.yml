@@ -1,0 +1,14 @@
+server.host: "0.0.0.0"
+server.shutdownTimeout: "5s"
+
+elasticsearch.hosts:
+  - "https://host.docker.internal:9200"
+elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL2NvZGV4LWtpYmFuYTo3dVVJcWE1T1MtLXljaV9zVTdQNXNn"
+elasticsearch.ssl.verificationMode: none
+
+xpack.security.authc.providers:
+  anonymous.anonymous1:
+    order: 0
+    credentials:
+      username: "kibana_anon"
+      password: "PaiSmart2025"

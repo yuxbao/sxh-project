@@ -61,12 +61,12 @@ public class DocumentService {
      * @param fileMd5 文件MD5
      */
     @Transactional
-    public void deleteDocument(String fileMd5, String userId) {
+    public void deleteDocument(String fileMd5) {
         logger.info("开始删除文档: {}", fileMd5);
         
         try {
             // 获取文件信息以获取文件名
-            FileUpload fileUpload = fileUploadRepository.findByFileMd5AndUserId(fileMd5, userId)
+            FileUpload fileUpload = fileUploadRepository.findByFileMd5(fileMd5)
                     .orElseThrow(() -> new RuntimeException("文件不存在"));
             
             // 1. 删除Elasticsearch中的数据
@@ -126,7 +126,8 @@ public class DocumentService {
         
         try {
             // 获取用户有效的组织标签（包含层级关系）
-            User user = userRepository.findByUsername(userId)
+            Long localUserId = Long.valueOf(userId);
+            User user = userRepository.findById(localUserId)
                 .orElseThrow(() -> new RuntimeException("用户不存在: " + userId));
             
             List<String> userEffectiveTags = orgTagCacheService.getUserEffectiveOrgTags(user.getUsername());
@@ -320,4 +321,4 @@ public class DocumentService {
             return String.format("%.1f GB", size / (1024.0 * 1024.0 * 1024.0));
         }
     }
-} 
+}

@@ -29,6 +29,7 @@ public class TokenCacheService {
     private static final String USER_TOKENS_PREFIX = "jwt:user:";
     private static final String REFRESH_PREFIX = "jwt:refresh:";
     private static final String BLACKLIST_PREFIX = "jwt:blacklist:";
+    private static final String SXH_BRIDGE_PREFIX = "sxh:bridge:";
     
     /**
      * 缓存有效token信息
@@ -234,6 +235,32 @@ public class TokenCacheService {
             redisTemplate.opsForSet().remove(key, tokenId);
         } catch (Exception e) {
             logger.error("Failed to remove token from user set: {} - {}", userId, tokenId, e);
+        }
+    }
+
+    public void cacheSxhBridgeCode(String code, Map<String, Object> bridgeInfo, Duration ttl) {
+        try {
+            redisTemplate.opsForValue().set(SXH_BRIDGE_PREFIX + code, bridgeInfo, ttl);
+            logger.debug("Cached sxh bridge code: {}", code);
+        } catch (Exception e) {
+            logger.error("Failed to cache sxh bridge code: {}", code, e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> consumeSxhBridgeCode(String code) {
+        String key = SXH_BRIDGE_PREFIX + code;
+        try {
+            Object cached = redisTemplate.opsForValue().get(key);
+            if (cached == null) {
+                return null;
+            }
+
+            redisTemplate.delete(key);
+            return (Map<String, Object>) cached;
+        } catch (Exception e) {
+            logger.error("Failed to consume sxh bridge code: {}", code, e);
+            return null;
         }
     }
     

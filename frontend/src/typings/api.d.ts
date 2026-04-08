@@ -40,6 +40,8 @@ declare namespace Api {
     interface UserInfo {
       id: number;
       username: string;
+      displayName?: string;
+      avatar?: string;
       role: 'USER' | 'ADMIN';
       orgTags: string[];
       primaryOrg: string;
@@ -119,6 +121,9 @@ declare namespace Api {
       textContent: string;
       score: number;
       fileName: string;
+      title?: string;
+      articleId?: number;
+      articleUrl?: string;
     }
 
     interface UploadState {
@@ -168,6 +173,14 @@ declare namespace Api {
   }
 
   namespace Chat {
+    interface Source {
+      index: number;
+      title: string;
+      url?: string;
+      fileName?: string;
+      articleId?: number;
+    }
+
     interface Input {
       message: string;
       conversationId?: string;
@@ -182,10 +195,12 @@ declare namespace Api {
     }
 
     interface Message {
+      id?: string;
       role: 'user' | 'assistant';
       content: string;
       status?: 'pending' | 'loading' | 'finished' | 'error';
       timestamp?: string;
+      sources?: Source[];
     }
 
     interface Token {

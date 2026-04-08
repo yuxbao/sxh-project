@@ -2,8 +2,10 @@ package com.yizhaoqi.smartpai.controller;
 
 import com.yizhaoqi.smartpai.model.FileUpload;
 import com.yizhaoqi.smartpai.model.OrganizationTag;
+import com.yizhaoqi.smartpai.model.User;
 import com.yizhaoqi.smartpai.repository.FileUploadRepository;
 import com.yizhaoqi.smartpai.repository.OrganizationTagRepository;
+import com.yizhaoqi.smartpai.repository.UserRepository;
 import com.yizhaoqi.smartpai.service.DocumentService;
 import com.yizhaoqi.smartpai.utils.LogUtils;
 import com.yizhaoqi.smartpai.utils.JwtUtils;
@@ -42,6 +44,9 @@ public class DocumentController {
     
     @Autowired
     private OrganizationTagRepository organizationTagRepository;
+
+    @Autowired
+    private UserRepository userRepository;
     
     @Autowired
     private JwtUtils jwtUtils;
@@ -63,9 +68,19 @@ public class DocumentController {
         LogUtils.PerformanceMonitor monitor = LogUtils.startPerformanceMonitor("DELETE_DOCUMENT");
         try {
             LogUtils.logBusiness("DELETE_DOCUMENT", userId, "接收到删除文档请求: fileMd5=%s, role=%s", fileMd5, role);
-            
+
+            // 仅管理员允许删除知识库文件
+            if (!"ADMIN".equals(role)) {
+                LogUtils.logUserOperation(userId, "DELETE_DOCUMENT", fileMd5, "FAILED_PERMISSION_DENIED");
+                monitor.end("删除失败：仅管理员可删除知识库文件");
+                Map<String, Object> response = new HashMap<>();
+                response.put("code", HttpStatus.FORBIDDEN.value());
+                response.put("message", "仅管理员可删除知识库文件");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            }
+
             // 获取文件信息
-            Optional<FileUpload> fileOpt = fileUploadRepository.findByFileMd5AndUserId(fileMd5, userId);
+            Optional<FileUpload> fileOpt = fileUploadRepository.findByFileMd5(fileMd5);
             if (fileOpt.isEmpty()) {
                 LogUtils.logUserOperation(userId, "DELETE_DOCUMENT", fileMd5, "FAILED_NOT_FOUND");
                 monitor.end("删除失败：文档不存在");
@@ -77,19 +92,8 @@ public class DocumentController {
             
             FileUpload file = fileOpt.get();
             
-            // 权限检查：只有文件所有者或管理员可以删除
-            if (!file.getUserId().equals(userId) && !"ADMIN".equals(role)) {
-                LogUtils.logUserOperation(userId, "DELETE_DOCUMENT", fileMd5, "FAILED_PERMISSION_DENIED");
-                LogUtils.logBusiness("DELETE_DOCUMENT", userId, "用户无权删除文档: fileMd5=%s, fileOwner=%s", fileMd5, file.getUserId());
-                monitor.end("删除失败：权限不足");
-                Map<String, Object> response = new HashMap<>();
-                response.put("code", HttpStatus.FORBIDDEN.value());
-                response.put("message", "没有权限删除此文档");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-            }
-            
             // 执行删除操作
-            documentService.deleteDocument(fileMd5, userId);
+            documentService.deleteDocument(fileMd5);
             
             LogUtils.logFileOperation(userId, "DELETE", file.getFileName(), fileMd5, "SUCCESS");
             monitor.end("文档删除成功");
@@ -156,9 +160,14 @@ public class DocumentController {
         
         LogUtils.PerformanceMonitor monitor = LogUtils.startPerformanceMonitor("GET_USER_UPLOADED_FILES");
         try {
-            LogUtils.logBusiness("GET_USER_UPLOADED_FILES", userId, "接收到获取用户上传文件请求");
-            
-            List<FileUpload> files = documentService.getUserUploadedFiles(userId);
+            String orgTags = Optional.ofNullable((String) org.springframework.web.context.request.RequestContextHolder
+                    .currentRequestAttributes()
+                    .getAttribute("orgTags", org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST))
+                    .orElse("");
+
+            LogUtils.logBusiness("GET_USER_UPLOADED_FILES", userId, "接收到获取可访问知识库文件请求");
+
+            List<FileUpload> files = documentService.getAccessibleFiles(userId, orgTags);
             
             // 将FileUpload转换为包含tagName的DTO
             List<Map<String, Object>> fileData = files.stream().map(file -> {
@@ -180,20 +189,20 @@ public class DocumentController {
             }).collect(Collectors.toList());
             
             LogUtils.logUserOperation(userId, "GET_USER_UPLOADED_FILES", "file_list", "SUCCESS");
-            LogUtils.logBusiness("GET_USER_UPLOADED_FILES", userId, "成功获取用户上传文件: fileCount=%d", files.size());
-            monitor.end("获取用户上传文件成功");
+            LogUtils.logBusiness("GET_USER_UPLOADED_FILES", userId, "成功获取可访问知识库文件: fileCount=%d", files.size());
+            monitor.end("获取可访问知识库文件成功");
             
             Map<String, Object> response = new HashMap<>();
             response.put("code", 200);
-            response.put("message", "获取用户上传文件列表成功");
+            response.put("message", "获取可访问知识库文件列表成功");
             response.put("data", fileData);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             LogUtils.logBusinessError("GET_USER_UPLOADED_FILES", userId, "获取用户上传文件失败", e);
-            monitor.end("获取用户上传文件失败: " + e.getMessage());
+            monitor.end("获取可访问知识库文件失败: " + e.getMessage());
             Map<String, Object> response = new HashMap<>();
             response.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.put("message", "获取用户上传文件列表失败: " + e.getMessage());
+            response.put("message", "获取可访问知识库文件列表失败: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -207,25 +216,15 @@ public class DocumentController {
      */
     @GetMapping("/download")
     public ResponseEntity<?> downloadFileByName(
+            jakarta.servlet.http.HttpServletRequest request,
             @RequestParam String fileName,
             @RequestParam(required = false) String token) {
         
         LogUtils.PerformanceMonitor monitor = LogUtils.startPerformanceMonitor("DOWNLOAD_FILE_BY_NAME");
         try {
-            // 验证token并获取用户信息
-            String userId = null;
-            String orgTags = null;
-            
-            if (token != null && !token.trim().isEmpty()) {
-                try {
-                    // 解析JWT token获取用户信息
-                    // 注意：JWT中的sub字段存储用户名，userId字段存储用户ID（但有时可能存储的是用户名）
-                    userId = jwtUtils.extractUsernameFromToken(token);
-                    orgTags = jwtUtils.extractOrgTagsFromToken(token);
-                } catch (Exception e) {
-                    LogUtils.logBusiness("DOWNLOAD_FILE_BY_NAME", "anonymous", "Token解析失败: fileName=%s", fileName);
-                }
-            }
+            AccessContext accessContext = resolveAccessContext(request, token, fileName, "DOWNLOAD_FILE_BY_NAME");
+            String userId = accessContext.userId();
+            String orgTags = accessContext.orgTags();
             
             LogUtils.logBusiness("DOWNLOAD_FILE_BY_NAME", userId != null ? userId : "anonymous", "接收到文件下载请求: fileName=%s", fileName);
             
@@ -332,41 +331,15 @@ public class DocumentController {
      */
     @GetMapping("/preview")
     public ResponseEntity<?> previewFileByName(
+            jakarta.servlet.http.HttpServletRequest request,
             @RequestParam String fileName,
             @RequestParam(required = false) String token) {
         
         LogUtils.PerformanceMonitor monitor = LogUtils.startPerformanceMonitor("PREVIEW_FILE_BY_NAME");
         try {
-            // 验证token并获取用户信息
-            String userId = null;
-            String orgTags = null;
-            
-            // 优先从Spring Security上下文获取已认证的用户信息
-            try {
-                var authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication != null && authentication.isAuthenticated() 
-                    && authentication.getPrincipal() instanceof UserDetails) {
-                    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                    userId = userDetails.getUsername();
-                    // 从userDetails中获取组织标签信息
-                    orgTags = userDetails.getAuthorities().stream()
-                        .map(auth -> auth.getAuthority().replace("ROLE_", ""))
-                        .findFirst()
-                        .orElse(null);
-                }
-            } catch (Exception e) {
-                LogUtils.logBusiness("PREVIEW_FILE_BY_NAME", "anonymous", "Security上下文获取失败: fileName=%s", fileName);
-            }
-            
-            // 如果Security上下文中没有用户信息，尝试从URL参数token中获取
-            if (userId == null && token != null && !token.trim().isEmpty()) {
-                try {
-                    userId = jwtUtils.extractUsernameFromToken(token);
-                    orgTags = jwtUtils.extractOrgTagsFromToken(token);
-                } catch (Exception e) {
-                    LogUtils.logBusiness("PREVIEW_FILE_BY_NAME", "anonymous", "Token解析失败: fileName=%s", fileName);
-                }
-            }
+            AccessContext accessContext = resolveAccessContext(request, token, fileName, "PREVIEW_FILE_BY_NAME");
+            String userId = accessContext.userId();
+            String orgTags = accessContext.orgTags();
             
             LogUtils.logBusiness("PREVIEW_FILE_BY_NAME", userId != null ? userId : "anonymous", "接收到文件预览请求: fileName=%s", fileName);
             
@@ -458,9 +431,49 @@ public class DocumentController {
             monitor.end("预览失败: " + e.getMessage());
             Map<String, Object> response = new HashMap<>();
             response.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.put("message", "文件预览失败: " + e.getMessage()); 
+            response.put("message", "文件预览失败: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    private AccessContext resolveAccessContext(jakarta.servlet.http.HttpServletRequest request, String token, String fileName, String biz) {
+        String resolvedToken = token;
+        if ((resolvedToken == null || resolvedToken.isBlank())) {
+            String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (authorization != null && authorization.startsWith("Bearer ")) {
+                resolvedToken = authorization.substring(7);
+            }
+        }
+
+        if (resolvedToken != null && !resolvedToken.isBlank()) {
+            try {
+                String userId = jwtUtils.extractUserIdFromToken(resolvedToken);
+                String orgTags = jwtUtils.extractOrgTagsFromToken(resolvedToken);
+                if (userId != null && !userId.isBlank()) {
+                    return new AccessContext(userId, orgTags);
+                }
+            } catch (Exception e) {
+                LogUtils.logBusiness(biz, "anonymous", "Token解析失败: fileName=%s", fileName);
+            }
+        }
+
+        try {
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()
+                    && authentication.getPrincipal() instanceof UserDetails userDetails) {
+                User user = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+                if (user != null) {
+                    return new AccessContext(String.valueOf(user.getId()), user.getOrgTags());
+                }
+            }
+        } catch (Exception e) {
+            LogUtils.logBusiness(biz, "anonymous", "Security上下文获取失败: fileName=%s", fileName);
+        }
+
+        return new AccessContext(null, null);
+    }
+
+    private record AccessContext(String userId, String orgTags) {
     }
     
     /**
@@ -487,4 +500,4 @@ public class DocumentController {
             return tagId; // 发生错误时返回原tagId
         }
     }
-} 
+}

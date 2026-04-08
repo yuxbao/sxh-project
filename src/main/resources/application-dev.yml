@@ -4,11 +4,11 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/PaiSmart?useSSL=false&serverTimezone=UTC
     username: root
-    password: 123456
+    password: Baoyu273511a
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -94,7 +94,7 @@ log4j:
 deepseek:
   api:
     url: https://api.deepseek.com/v1
-    key:
+    key: sk-f68c79045b6d42e89f8cc55527e31806
     # DeepSeek API Key
 
 embedding:

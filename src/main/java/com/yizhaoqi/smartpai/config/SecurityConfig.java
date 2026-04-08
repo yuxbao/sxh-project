@@ -47,6 +47,9 @@ public class SecurityConfig {
                             .requestMatchers("/", "/test.html", "/static/test.html", "/static/**", "/*.js", "/*.css", "/*.ico").permitAll()
                             // 允许 WebSocket 连接
                             .requestMatchers("/chat/**", "/ws/**").permitAll()
+                            // 允许内部集成接口，由业务层自行校验内部 token
+                            .requestMatchers("/api/v1/integration/**").permitAll()
+                            .requestMatchers("/api/v1/auth/sxh/exchange").permitAll()
                             // 允许登录注册接口
                             .requestMatchers("/api/v1/users/register", "/api/v1/users/login").permitAll()
                             // 允许测试接口
@@ -56,9 +59,9 @@ public class SecurityConfig {
                             // 对话历史相关接口 - 用户只能查看自己的历史，管理员可以查看所有
                             .requestMatchers("/api/v1/users/conversation/**").hasAnyRole("USER", "ADMIN")
                             // 搜索接口 - 普通用户和管理员都可访问
-                            .requestMatchers("/api/search/**").hasAnyRole("USER", "ADMIN")
+                            .requestMatchers("/api/v1/search/**").hasAnyRole("USER", "ADMIN")
                             // 聊天相关接口 - WebSocket停止Token获取 (允许匿名访问)
-                            .requestMatchers("/api/chat/websocket-token").permitAll()
+                            .requestMatchers("/api/v1/chat/websocket-token").permitAll()
                             // 管理员专属接口 - 知识库管理、系统状态、用户活动监控
                             .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                             // 用户组织标签管理接口
@@ -86,4 +89,3 @@ public class SecurityConfig {
         }
     }
 }
-

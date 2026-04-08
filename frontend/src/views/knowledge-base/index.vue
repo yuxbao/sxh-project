@@ -10,6 +10,7 @@ import UploadDialog from './modules/upload-dialog.vue';
 import SearchDialog from './modules/search-dialog.vue';
 
 const appStore = useAppStore();
+const authStore = useAuthStore();
 
 // 文件预览相关状态
 const previewVisible = ref(false);
@@ -18,6 +19,25 @@ const previewFileName = ref('');
 function apiFn() {
   return fakePaginationRequest<Api.KnowledgeBase.List>({ url: '/documents/uploads' });
 }
+
+const displayRows = computed(() => {
+  const serverRows = data.value.map(item => ({
+    ...item,
+    rowId: item.fileMd5 || item.id,
+    sourceType: 'server'
+  }));
+
+  const serverMd5Set = new Set(serverRows.map(item => item.fileMd5));
+  const localOnlyRows = tasks.value
+    .filter(task => !serverMd5Set.has(task.fileMd5))
+    .map(task => ({
+      ...task,
+      rowId: task.fileMd5 || task.id,
+      sourceType: 'local'
+    }));
+
+  return [...localOnlyRows, ...serverRows];
+});
 
 function renderIcon(fileName: string) {
   const ext = getFileExt(fileName);
@@ -107,16 +127,18 @@ const { columns, columnChecks, data, getData, loading } = useTable({
           >
             预览
           </NButton>
-          <NPopconfirm onPositiveClick={() => handleDelete(row.fileMd5)}>
-            {{
-              default: () => '确认删除当前文件吗？',
-              trigger: () => (
-                <NButton type="error" ghost size="small">
-                  删除
-                </NButton>
-              )
-            }}
-          </NPopconfirm>
+          {authStore.isAdmin ? (
+            <NPopconfirm onPositiveClick={() => handleDelete(row.fileMd5)}>
+              {{
+                default: () => '确认删除当前文件吗？',
+                trigger: () => (
+                  <NButton type="error" ghost size="small">
+                    删除
+                  </NButton>
+                )
+              }}
+            </NPopconfirm>
+          ) : null}
         </div>
       )
     }
@@ -134,29 +156,25 @@ async function getList() {
   // 等待获取最新数据
   await getData();
 
-  if (data.value.length === 0) {
-    tasks.value = [];
-    return;
-  }
+  const localTaskMap = new Map(tasks.value.map(task => [task.fileMd5, task]));
 
-  // 遍历获取到的数据，以处理每个项目
   data.value.forEach(item => {
-    // 检查项目状态是否为已完成
-    if (item.status === UploadStatus.Completed) {
-      // 查找任务列表中是否有匹配的文件MD5
-      const index = tasks.value.findIndex(task => task.fileMd5 === item.fileMd5);
-      // 如果找到匹配项，则更新其状态
-      if (index !== -1) {
-        tasks.value[index].status = UploadStatus.Completed;
-      } else {
-        // 如果没有找到匹配项，则将该项目添加到任务列表中
-        tasks.value.push(item);
-      }
-    } else if (!tasks.value.some(task => task.fileMd5 === item.fileMd5)) {
-      // 如果项目状态不是已完成，并且任务列表中没有相同的文件MD5，则将该项目的状态设置为中断，并添加到任务列表中
-      item.status = UploadStatus.Break;
-      tasks.value.push(item);
-    }
+    const task = localTaskMap.get(item.fileMd5);
+    if (!task) return;
+
+    task.status = item.status;
+    task.progress = item.progress ?? task.progress;
+    task.totalSize = item.totalSize ?? task.totalSize;
+    task.fileName = item.fileName ?? task.fileName;
+    task.createdAt = item.createdAt ?? task.createdAt;
+    task.mergedAt = item.mergedAt ?? task.mergedAt;
+  });
+
+  tasks.value = tasks.value.filter(task => {
+    if (!task.fileMd5) return true;
+    const matched = data.value.find(item => item.fileMd5 === task.fileMd5);
+    if (!matched) return true;
+    return matched.status !== UploadStatus.Completed;
   });
 }
 
@@ -268,7 +286,13 @@ async function onBeforeUpload(
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <NCard title="文件列表" :bordered="false" size="small" class="sm:flex-1-hidden card-wrapper">
       <template #header-extra>
-        <TableHeaderOperation v-model:columns="columnChecks" :loading="loading" @add="handleUpload" @refresh="getList">
+        <TableHeaderOperation
+          v-model:columns="columnChecks"
+          :loading="loading"
+          :addable="authStore.isAdmin"
+          @add="handleUpload"
+          @refresh="getList"
+        >
           <template #prefix>
             <NButton size="small" ghost type="primary" @click="handleSearch">
               <template #icon>
@@ -282,13 +306,13 @@ async function onBeforeUpload(
       <NDataTable
         striped
         :columns="columns"
-        :data="tasks"
+        :data="displayRows"
         size="small"
         :flex-height="!appStore.isMobile"
         :scroll-x="962"
         :loading="loading"
         remote
-        :row-key="row => row.id"
+        :row-key="row => row.rowId"
         :pagination="false"
         class="sm:h-full"
       />

@@ -122,6 +122,17 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'sxh-bridge',
+    path: '/sxh-bridge',
+    component: 'layout.base$view.sxh-bridge',
+    meta: {
+      title: 'sxh-bridge',
+      i18nKey: 'route.sxh-bridge',
+      constant: true,
+      hideInMenu: true
+    }
+  },
+  {
     name: 'user',
     path: '/user',
     component: 'layout.base$view.user',

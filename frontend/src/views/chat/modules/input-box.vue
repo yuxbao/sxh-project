@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const chatStore = useChatStore();
-const { input, list, wsStatus, wsData } = storeToRefs(chatStore);
+const { activeAssistantMessageId, input, list, wsStatus, wsData } = storeToRefs(chatStore);
 
 const latestMessage = computed(() => {
   return list.value[list.value.length - 1] ?? {};
@@ -13,17 +13,41 @@ const isSending = computed(() => {
 });
 
 const sendable = computed(
-  () => (!input.value.message && !isSending) || ['CLOSED', 'CONNECTING'].includes(wsStatus.value)
+  () => (!input.value.message.trim() && !isSending.value) || ['CLOSED', 'CONNECTING'].includes(wsStatus.value)
 );
 
-watch(wsData, val => {
-  const data = JSON.parse(val);
-  const assistant = list.value[list.value.length - 1];
+function createMessageId() {
+  return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
 
-  if (data.type === 'completion' && data.status === 'finished' && assistant.status !== 'error')
-    assistant.status = 'finished';
-  if (data.error) assistant.status = 'error';
-  else if (data.chunk) {
+function getActiveAssistantMessage() {
+  if (!activeAssistantMessageId.value) return null;
+  return list.value.find(item => item.id === activeAssistantMessageId.value && item.role === 'assistant') ?? null;
+}
+
+watch(wsData, val => {
+  if (!val) return;
+
+  const data = JSON.parse(val);
+  const assistant = getActiveAssistantMessage();
+  if (!assistant) return;
+
+  if (data.type === 'completion' && data.status === 'finished') {
+    if (assistant.status !== 'error') {
+      assistant.status = 'finished';
+    }
+    assistant.sources = Array.isArray(data.sources) ? data.sources : assistant.sources;
+    activeAssistantMessageId.value = '';
+    return;
+  }
+
+  if (data.error) {
+    assistant.status = 'error';
+    activeAssistantMessageId.value = '';
+    return;
+  }
+
+  if (data.chunk) {
     assistant.status = 'loading';
     assistant.content += data.chunk;
   }
@@ -37,25 +61,46 @@ const handleSend = async () => {
 
     chatStore.wsSend(JSON.stringify({ type: 'stop', _internal_cmd_token: data.cmdToken }));
 
-    list.value[list.value.length - 1].status = 'finished';
-    if (!latestMessage.value.content) list.value.pop();
+    const assistant = getActiveAssistantMessage();
+    if (assistant) {
+      assistant.status = 'finished';
+      if (!assistant.content) {
+        const index = list.value.findIndex(item => item.id === assistant.id);
+        if (index >= 0) list.value.splice(index, 1);
+      }
+    }
+    activeAssistantMessageId.value = '';
     return;
   }
 
+  const message = input.value.message.trim();
+  if (!message) return;
+
+  const now = new Date().toISOString();
+  const assistantId = createMessageId();
   list.value.push({
-    content: input.value.message,
-    role: 'user'
+    id: createMessageId(),
+    content: message,
+    role: 'user',
+    status: 'finished',
+    timestamp: now
   });
-  chatStore.wsSend(input.value.message);
+  chatStore.wsSend(message);
   list.value.push({
+    id: assistantId,
     content: '',
     role: 'assistant',
-    status: 'pending'
+    status: 'pending',
+    timestamp: now,
+    sources: []
   });
+  activeAssistantMessageId.value = assistantId;
   input.value.message = '';
 };
 
 const inputRef = ref();
+const isComposing = ref(false);
+
 // 手动插入换行符（确保所有浏览器兼容）
 const insertNewline = () => {
   const textarea = inputRef.value;
@@ -77,6 +122,8 @@ const insertNewline = () => {
 // enter 发送
 const handShortcut = (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
+    if (e.isComposing || isComposing.value || e.keyCode === 229) return;
+
     e.preventDefault();
 
     if (!e.shiftKey && !e.ctrlKey) {
@@ -90,9 +137,11 @@ const handShortcut = (e: KeyboardEvent) => {
   <div class="relative w-full b-1 b-#1c1c1c20 bg-#fff p-4 card-wrapper dark:bg-#1c1c1c">
     <textarea
       ref="inputRef"
-      v-model.trim="input.message"
-      placeholder="给 派聪明 发送消息"
+      v-model="input.message"
+      placeholder="给 思享汇智能助手 发送消息"
       class="min-h-10 w-full cursor-text resize-none b-none bg-transparent color-#333 caret-[rgb(var(--primary-color))] outline-none dark:color-#f1f1f1"
+      @compositionstart="isComposing = true"
+      @compositionend="isComposing = false"
       @keydown="handShortcut"
     />
     <div class="flex items-center justify-between pt-2">

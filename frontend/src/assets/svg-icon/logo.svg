@@ -1,1 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.121 7.121c-.566-.567-1.32-.879-2.121-.879s-1.555.312-2.121.879c-.233.233-.546.362-.879.362s-.646-.129-.879-.362C12.755 5.755 10.936 5.003 9 5.003s-3.755.752-5.121 2.118C3.312 7.688 3 8.441 3 9.242s.312 1.555.879 2.121c.566.567 1.32.879 2.121.879V17c0 1.654 1.346 3 3 3s3-1.346 3-3c0 1.654 1.346 3 3 3s3-1.346 3-3v-4.166a7.2 7.2 0 0 0 2.12-1.47c.568-.567.88-1.321.88-2.122s-.312-1.554-.879-2.121m-1.414 2.828A5.2 5.2 0 0 1 16 11.386V17a1 1 0 1 1-2 0v-5.614a5.2 5.2 0 0 1-2.707-1.437A3.2 3.2 0 0 0 10 9.174V17a1 1 0 1 1-2 0V9.173a3.2 3.2 0 0 0-1.293.776a.997.997 0 0 1-1.414 0a1 1 0 0 1 0-1.414C6.314 7.514 7.657 7.003 9 7.003s2.685.511 3.707 1.532A3.24 3.24 0 0 0 15 9.483c.831 0 1.661-.316 2.293-.948a.997.997 0 0 1 1.414 0a1 1 0 0 1 0 1.414"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="sxhBookGlow" x1="18" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b" />
+      <stop offset="0.5" stop-color="#f97316" />
+      <stop offset="1" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="sxhPageShade" x1="26" y1="24" x2="82" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff7ed" />
+      <stop offset="1" stop-color="#fed7aa" />
+    </linearGradient>
+    <linearGradient id="sxhBubbleShade" x1="68" y1="18" x2="102" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="1" stop-color="#ffedd5" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="108" height="108" rx="28" fill="url(#sxhBookGlow)" />
+  <path
+    d="M35 28c-9.4 0-17 7.6-17 17v42c0 9.4 7.6 17 17 17h24c5.1 0 9.9 2.1 13.3 5.8l2.7 2.9V45c0-9.4-7.6-17-17-17H35Z"
+    fill="url(#sxhPageShade)"
+  />
+  <path
+    d="M93 28c9.4 0 17 7.6 17 17v42c0 9.4-7.6 17-17 17H69c-5.1 0-9.9 2.1-13.3 5.8L53 112V45c0-9.4 7.6-17 17-17h23Z"
+    fill="#fff"
+    fill-opacity="0.92"
+  />
+  <path
+    d="M60 39H35c-4.4 0-8 3.6-8 8v34c0 4.4 3.6 8 8 8h19.5c4.3 0 8.4 1.7 11.5 4.8V47c0-4.4-3.6-8-8-8Z"
+    fill="#fff"
+    fill-opacity="0.72"
+  />
+  <path
+    d="M78 40h14c6.6 0 12 5.4 12 12v8.5c0 6.6-5.4 12-12 12H84l-7.8 7.1c-1.3 1.2-3.5.2-3.5-1.6v-5.5H78c-6.6 0-12-5.4-12-12V52c0-6.6 5.4-12 12-12Z"
+    fill="url(#sxhBubbleShade)"
+  />
+  <circle cx="81" cy="56" r="4" fill="#f97316" />
+  <circle cx="91" cy="56" r="4" fill="#f97316" />
+  <circle cx="101" cy="56" r="4" fill="#f97316" />
+  <path d="M36 56h18" stroke="#fb923c" stroke-linecap="round" stroke-width="6" />
+  <path d="M36 70h22" stroke="#fdba74" stroke-linecap="round" stroke-width="6" />
+  <path d="M36 84h16" stroke="#fdba74" stroke-linecap="round" stroke-width="6" />
+</svg>

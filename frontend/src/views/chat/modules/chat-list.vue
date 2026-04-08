@@ -68,7 +68,11 @@ onMounted(() => {
       </Teleport>
       <NSpin :show="loading">
         <VueMarkdownItProvider>
-          <ChatMessage v-for="(item, index) in list" :key="index" :msg="item" />
+          <ChatMessage
+            v-for="(item, index) in list"
+            :key="item.id || `${item.role}-${item.timestamp || 'no-time'}-${index}`"
+            :msg="item"
+          />
         </VueMarkdownItProvider>
       </NSpin>
     </NScrollbar>

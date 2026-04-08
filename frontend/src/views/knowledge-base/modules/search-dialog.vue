@@ -135,7 +135,19 @@ watch(visible, () => {
             </NTag>
           </div>
           <template #footer>
-            <span>来源：{{ item.fileName }}</span>
+            <span>
+              来源：
+              <a
+                v-if="item.articleUrl"
+                :href="item.articleUrl"
+                target="_blank"
+                rel="noreferrer"
+                class="color-primary no-underline hover:underline"
+              >
+                {{ item.title || item.fileName }}
+              </a>
+              <template v-else>{{ item.title || item.fileName }}</template>
+            </span>
           </template>
         </NCard>
       </NScrollbar>

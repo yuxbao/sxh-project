@@ -3,6 +3,8 @@ package com.yizhaoqi.smartpai.controller;
 import com.yizhaoqi.smartpai.exception.CustomException;
 import com.yizhaoqi.smartpai.model.User;
 import com.yizhaoqi.smartpai.repository.UserRepository;
+import com.yizhaoqi.smartpai.service.SxhBridgeAuthService;
+import com.yizhaoqi.smartpai.service.SxhSharedLoginService;
 import com.yizhaoqi.smartpai.service.UserService;
 import com.yizhaoqi.smartpai.utils.JwtUtils;
 import com.yizhaoqi.smartpai.utils.LogUtils;
@@ -30,33 +32,15 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private SxhSharedLoginService sxhSharedLoginService;
+
     // 用户注册接口
     // 接收用户请求体中的用户名和密码，并调用用户服务进行注册
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRequest request) {
-        LogUtils.PerformanceMonitor monitor = LogUtils.startPerformanceMonitor("USER_REGISTER");
-        try {
-            if (request.username() == null || request.username().isEmpty() ||
-                    request.password() == null || request.password().isEmpty()) {
-                LogUtils.logUserOperation("anonymous", "REGISTER", "validation", "FAILED_EMPTY_PARAMS");
-                monitor.end("注册失败：参数为空");
-                return ResponseEntity.badRequest().body(Map.of("code", 400, "message", "Username and password cannot be empty"));
-            }
-            
-            userService.registerUser(request.username(), request.password());
-            LogUtils.logUserOperation(request.username(), "REGISTER", "user_creation", "SUCCESS");
-            monitor.end("注册成功");
-            
-            return ResponseEntity.ok(Map.of("code", 200, "message", "User registered successfully"));
-        } catch (CustomException e) {
-            LogUtils.logBusinessError("USER_REGISTER", request.username(), "用户注册失败: %s", e, e.getMessage());
-            monitor.end("注册失败: " + e.getMessage());
-            return ResponseEntity.status(e.getStatus()).body(Map.of("code", e.getStatus().value(), "message", e.getMessage()));
-        } catch (Exception e) {
-            LogUtils.logBusinessError("USER_REGISTER", request.username(), "用户注册异常: %s", e, e.getMessage());
-            monitor.end("注册异常: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("code", 500, "message", "Internal server error"));
-        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("code", 403, "message", "请前往思享汇注册账号，RAG 侧复用社区用户体系"));
     }
 
     // 用户登录接口
@@ -68,23 +52,16 @@ public class UserController {
             if (request.username() == null || request.username().isEmpty() ||
                     request.password() == null || request.password().isEmpty()) {
                 LogUtils.logUserOperation("anonymous", "LOGIN", "validation", "FAILED_EMPTY_PARAMS");
-                return ResponseEntity.badRequest().body(Map.of("code", 400, "message", "Username and password cannot be empty"));
+                return ResponseEntity.badRequest().body(Map.of("code", 400, "message", "用户名和密码不能为空"));
             }
             
-            String username = userService.authenticateUser(request.username(), request.password());
-            if (username == null) {
-                LogUtils.logUserOperation(request.username(), "LOGIN", "authentication", "FAILED_INVALID_CREDENTIALS");
-                return ResponseEntity.status(401).body(Map.of("code", 401, "message", "Invalid credentials"));
-            }
-            
-            String token = jwtUtils.generateToken(username);
-            String refreshToken = jwtUtils.generateRefreshToken(username);
-            LogUtils.logUserOperation(username, "LOGIN", "token_generation", "SUCCESS");
+            SxhBridgeAuthService.LoginToken loginToken = sxhSharedLoginService.login(request.username(), request.password());
+            LogUtils.logUserOperation(request.username(), "LOGIN", "token_generation", "SUCCESS");
             monitor.end("登录成功");
             
             return ResponseEntity.ok(Map.of("code", 200, "message", "Login successful", "data", Map.of(
-                "token", token,
-                "refreshToken", refreshToken
+                "token", loginToken.token(),
+                "refreshToken", loginToken.refreshToken()
             )));
         } catch (CustomException e) {
             LogUtils.logBusinessError("USER_LOGIN", request.username(), "登录失败: %s", e, e.getMessage());
@@ -93,7 +70,7 @@ public class UserController {
         } catch (Exception e) {
             LogUtils.logBusinessError("USER_LOGIN", request.username(), "登录异常: %s", e, e.getMessage());
             monitor.end("登录异常: " + e.getMessage());
-            return ResponseEntity.status(500).body(Map.of("code", 500, "message", "Internal server error"));
+            return ResponseEntity.status(500).body(Map.of("code", 500, "message", "登录服务异常，请稍后重试"));
         }
     }
 
@@ -116,8 +93,13 @@ public class UserController {
             // 手动构建返回对象，不包含 password 字段
             Map<String, Object> displayUserData = new LinkedHashMap<>();
             displayUserData.put("id", user.getId());
-            displayUserData.put("username", user.getUsername());
+            displayUserData.put("username", user.getDisplayName() != null && !user.getDisplayName().isBlank() ? user.getDisplayName() : user.getUsername());
+            displayUserData.put("loginName", user.getUsername());
+            displayUserData.put("displayName", user.getDisplayName());
+            displayUserData.put("avatar", user.getAvatar());
             displayUserData.put("role", user.getRole());
+            displayUserData.put("externalSource", user.getExternalSource());
+            displayUserData.put("externalUserId", user.getExternalUserId());
             
             // 添加组织标签信息
             if (user.getOrgTags() != null && !user.getOrgTags().isEmpty()) {

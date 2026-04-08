@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue';
-import { loginModuleRecord } from '@/constants/app';
 import { useAuthStore } from '@/store/modules/auth';
-import { useRouterPush } from '@/hooks/common/router';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
-import { $t } from '@/locales';
 
 defineOptions({
   name: 'PwdLogin'
 });
 
 const authStore = useAuthStore();
-const { toggleLoginModule } = useRouterPush();
 const { formRef, validate } = useNaiveForm();
+const sxhHomeUrl = import.meta.env.VITE_SXH_HOME_URL || 'http://localhost:5173';
 
 interface FormModel {
   userName: string;
@@ -20,56 +17,22 @@ interface FormModel {
 }
 
 const model: FormModel = reactive({
-  userName: 'admin',
-  password: 'admin123'
+  userName: '',
+  password: ''
 });
 
 const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
-  // inside computed to make locale reactive, if not apply i18n, you can define it without computed
-  const { formRules } = useFormRules();
+  const { createRequiredRule } = useFormRules();
 
   return {
-    userName: formRules.userName,
-    password: formRules.pwd
+    userName: [createRequiredRule('请输入思享汇用户名')],
+    password: [createRequiredRule('请输入思享汇密码')]
   };
 });
 
 async function handleSubmit() {
   await validate();
   await authStore.login(model.userName, model.password);
-}
-
-type AccountKey = 'admin' | 'user';
-
-interface Account {
-  key: AccountKey;
-  label: string;
-  userName: string;
-  password: string;
-}
-
-const accounts = computed<Account[]>(() => [
-  {
-    key: 'admin',
-    label: $t('page.login.pwdLogin.admin'),
-    userName: 'admin',
-    password: 'admin123'
-  },
-  {
-    key: 'user',
-    label: $t('page.login.pwdLogin.user'),
-    userName: 'testuser',
-    password: 'test123'
-  }
-]);
-
-function handleAccountLogin(account: Account) {
-  // 将账号信息填充到表单中，然后触发正常的验证流程
-  model.userName = account.userName;
-  model.password = account.password;
-  
-  // 调用正常的表单提交流程，确保验证
-  handleSubmit();
 }
 </script>
 
@@ -98,23 +61,13 @@ function handleAccountLogin(account: Account) {
       <NButton type="primary" size="large" round block :loading="authStore.loginLoading" @click="handleSubmit">
         {{ $t('page.login.common.login') }}
       </NButton>
-      <NButton block @click="toggleLoginModule('register')">
-        {{ $t(loginModuleRecord.register) }}
+      <NButton block tag="a" :href="sxhHomeUrl">
+        前往思享汇注册
       </NButton>
 
-      <span class="text-center">
-        登录即代表已阅读并同意我们的
-        <NButton text type="primary">用户协议</NButton>
-        和
-        <NButton text type="primary">隐私政策</NButton>
+      <span class="text-center text-#666 leading-6">
+        请直接使用思享汇社区账号密码登录，登录页不再限制旧 RAG 的用户名和密码格式。
       </span>
-
-      <NDivider class="text-14px text-#666 !m-0">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</NDivider>
-      <div class="flex-center gap-12px">
-        <NButton v-for="item in accounts" :key="item.key" type="primary" @click="handleAccountLogin(item)">
-          {{ item.label }}
-        </NButton>
-      </div>
     </div>
   </NForm>
 </template>

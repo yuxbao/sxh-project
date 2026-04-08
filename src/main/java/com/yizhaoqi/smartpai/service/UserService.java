@@ -372,6 +372,8 @@ public class UserService {
             // 更新缓存
             orgTagCacheService.cacheUserOrgTags(username, orgTags);
         }
+
+        orgTags = new ArrayList<>(new java.util.LinkedHashSet<>(orgTags));
         
         if (primaryOrg == null || primaryOrg.isEmpty()) {
             primaryOrg = user.getPrimaryOrg();
@@ -803,4 +805,3 @@ public class UserService {
         return result;
     }
 }
-

@@ -13,6 +13,7 @@ defineOptions({
 const authStore = useAuthStore();
 const { routerPushByKey, toLogin } = useRouterPush();
 const { SvgIconVNode } = useSvgIcon();
+const displayName = computed(() => authStore.userInfo.displayName || authStore.userInfo.username);
 
 function loginOrRegister() {
   toLogin();
@@ -73,7 +74,7 @@ function handleDropdown(key: DropdownKey) {
     <div>
       <ButtonIcon>
         <SvgIcon icon="ph:user-circle" class="text-icon-large" />
-        <span class="text-16px font-medium">{{ authStore.userInfo.username }}</span>
+        <span class="text-16px font-medium">{{ displayName }}</span>
       </ButtonIcon>
     </div>
   </NDropdown>

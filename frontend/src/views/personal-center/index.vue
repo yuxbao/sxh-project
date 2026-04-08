@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { userInfo } = storeToRefs(useAuthStore());
+const displayName = computed(() => userInfo.value.displayName || userInfo.value.username);
 
 const tags = ref<Api.OrgTag.Mine>({
   orgTags: [],
@@ -55,7 +56,7 @@ const setPrimaryOrg = async () => {
             <NAvatar size="large">
               <icon-solar:user-circle-linear class="text-icon-large" />
             </NAvatar>
-            <div>{{ userInfo.username }}</div>
+            <div>{{ displayName }}</div>
           </div>
         </template>
         <NScrollbar class="max-h-60vh">

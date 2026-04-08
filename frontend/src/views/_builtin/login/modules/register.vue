@@ -1,97 +1,30 @@
 <script setup lang="ts">
-import { $t } from '@/locales';
-
 defineOptions({
   name: 'Register'
 });
 
 const { toggleLoginModule } = useRouterPush();
-const { formRef, validate } = useNaiveForm();
-
-interface FormModel {
-  username: string;
-  password: string;
-  confirmPassword: string;
-}
-
-const model: FormModel = reactive({
-  username: '',
-  password: '',
-  confirmPassword: ''
-});
-
-const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
-  const { formRules, createConfirmPwdRule } = useFormRules();
-
-  return {
-    username: formRules.userName,
-    password: formRules.pwd,
-    confirmPassword: createConfirmPwdRule(model.password)
-  };
-});
-
-const loading = ref(false);
-async function handleSubmit() {
-  await validate();
-  loading.value = true;
-  const { error } = await fetchRegister(model.username, model.password);
-  if (!error) {
-    window.$message?.success('注册成功');
-    toggleLoginModule('pwd-login');
-  }
-  loading.value = false;
-}
+const sxhHomeUrl = import.meta.env.VITE_SXH_HOME_URL || 'http://localhost:5173';
 </script>
 
 <template>
-  <NForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
-    <NFormItem path="username">
-      <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')">
-        <template #prefix>
-          <icon-ant-design:user-outlined />
-        </template>
-      </NInput>
-    </NFormItem>
-    <NFormItem path="password">
-      <NInput
-        v-model:value="model.password"
-        type="password"
-        show-password-on="click"
-        :placeholder="$t('page.login.common.passwordPlaceholder')"
-      >
-        <template #prefix>
-          <icon-ant-design:key-outlined />
-        </template>
-      </NInput>
-    </NFormItem>
-    <NFormItem path="confirmPassword">
-      <NInput
-        v-model:value="model.confirmPassword"
-        type="password"
-        show-password-on="click"
-        :placeholder="$t('page.login.common.confirmPasswordPlaceholder')"
-      >
-        <template #prefix>
-          <icon-ant-design:key-outlined />
-        </template>
-      </NInput>
-    </NFormItem>
+  <NSpace vertical :size="18" class="w-full">
+    <NAlert type="info" :show-icon="false">
+      思享汇 RAG 不单独维护注册用户，账号体系与思享汇社区 `user` 表共用。
+    </NAlert>
     <NSpace vertical :size="18" class="w-full">
-      <NButton type="primary" size="large" round block :loading="loading" @click="handleSubmit">
-        {{ $t('page.login.common.register') }}
+      <NButton type="primary" size="large" round block tag="a" :href="sxhHomeUrl">
+        前往思享汇注册
       </NButton>
       <NButton block @click="toggleLoginModule('pwd-login')">
-        {{ $t('page.login.common.back') }}
+        返回登录
       </NButton>
     </NSpace>
 
     <div class="mt-4 text-center">
-      注册即代表已阅读并同意我们的
-      <NButton text type="primary">用户协议</NButton>
-      和
-      <NButton text type="primary">隐私政策</NButton>
+      注册完成后，返回本页即可直接使用思享汇账号登录。
     </div>
-  </NForm>
+  </NSpace>
 </template>
 
 <style scoped></style>
