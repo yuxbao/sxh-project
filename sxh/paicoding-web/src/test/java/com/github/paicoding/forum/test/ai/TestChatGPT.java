@@ -8,6 +8,11 @@ import java.net.Proxy;
 public class TestChatGPT {
     public static void main(String[] args) {
         // export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+        String apiKey = System.getenv("OPENAI_API_KEY");
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new IllegalStateException("OPENAI_API_KEY is required");
+        }
+
         //国内需要代理
         // Proxy proxy = Proxys.http("127.0.0.1", 7892);
         Proxy proxy = Proxys.http("10.3.4.136", 7892);
@@ -15,8 +20,7 @@ public class TestChatGPT {
         // Proxy proxy = Proxys.socks5("127.0.0.1", 1080);
 
         ChatGPT chatGPT = ChatGPT.builder()
-//                .apiKey("<REDACTED_OPENAI_KEY>")
-                .apiKey("<REDACTED_OPENAI_KEY>")
+                .apiKey(apiKey)
                 .proxy(proxy)
                 .apiHost("https://api.openai.com/") //反向代理地址
                 .build()
