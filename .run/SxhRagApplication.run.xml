@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SxhRagApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ALTERNATIVE_JRE_PATH" value="/Users/baoyuxiang/Library/Java/JavaVirtualMachines/corretto-17.0.14/Contents/Home" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sxh-rag" />
+    <module name="sxh-rag" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.yizhaoqi.sxh.rag.SxhRagApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.yizhaoqi.sxh.rag.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

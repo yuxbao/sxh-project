@@ -179,7 +179,7 @@
 
 ### 启动前端查看效果
 ```bash
-cd pai-coding-front
+cd sxh-front
 npm run dev
 ```
 

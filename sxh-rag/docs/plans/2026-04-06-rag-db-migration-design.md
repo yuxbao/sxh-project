@@ -2,10 +2,10 @@
 
 ## 目标
 
-- 保留 `PaiSmart` 作为 `sxh-rag` 独立库。
-- `sxh-rag` 只共享 `pai_coding.user` 做登录认证，不迁移 `sxh` 主库业务表。
-- 为 `PaiSmart` 提供可重复执行的一键迁移命令。
-- 只保留 `sxh-rag` 当前真实依赖的表，删除无关测试表和脏表。
+- 保留 `sxh_rag` 作为 `sxh-rag` 独立库。
+- `sxh-rag` 只共享 `sxh.user` 做登录认证，不迁移 `sxh` 主库业务表。
+- 为 `sxh_rag` 提供可重复执行的一键迁移命令。
+- 只保留 `sxh_rag` 当前真实依赖的表，删除无关测试表和脏表。
 
 ## 方案
 
@@ -14,7 +14,7 @@
 1. 固定 SQL
    使用 `docs/databases/migrate-rag-schema.sql` 作为权威结构定义，负责建表、补列、补索引、补外键。
 2. 白名单清理
-   使用 `scripts/migrate-rag-db.sh` 在备份后清理 `PaiSmart` 中不属于 RAG 的表。
+   使用 `scripts/migrate-rag-db.sh` 在备份后清理 `sxh_rag` 中不属于 RAG 的表。
 3. 启动校验
    将 Hibernate 从 `ddl-auto=update` 改为 `ddl-auto=validate`，避免运行时悄悄改表。
 
@@ -46,5 +46,5 @@
 ## 风险控制
 
 - 迁移前自动执行 `mysqldump` 备份。
-- 只清理 `PaiSmart` 当前库，不触碰 `pai_coding`。
+- 只清理 `sxh_rag` 当前库，不触碰 `sxh`。
 - 删除范围基于白名单，不做模糊匹配。

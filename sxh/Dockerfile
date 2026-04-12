@@ -3,7 +3,7 @@ LABEL author="baoyuxiang"
 
 WORKDIR /app
 
-COPY paicoding-web-0.0.1-SNAPSHOT.jar app.jar
+COPY sxh-web-0.0.1-SNAPSHOT.jar app.jar
 
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

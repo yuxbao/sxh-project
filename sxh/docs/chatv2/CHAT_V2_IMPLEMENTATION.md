@@ -16,8 +16,8 @@
 
 **文件位置：**
 ```
-paicoding-web/src/main/resources/liquibase/data/update_schema_251116_chat_v2.sql
-paicoding-service/src/main/java/com/github/paicoding/forum/service/chatv2/repository/
+sxh-web/src/main/resources/liquibase/data/update_schema_251116_chat_v2.sql
+sxh-service/src/main/java/com/github/sxh/forum/service/chatv2/repository/
 ```
 
 #### 2. 配置管理
@@ -84,14 +84,14 @@ chat-v2:
 ### 1. 安装前端依赖
 
 ```bash
-cd pai-coding-front
+cd sxh-front
 npm install marked
 npm install @types/marked --save-dev
 ```
 
 ### 2. 配置环境变量
 
-在 `paicoding-web/src/main/resources-env/dev/application-ai.yml` 中设置 API Keys：
+在 `sxh-web/src/main/resources-env/dev/application-ai.yml` 中设置 API Keys：
 
 ```bash
 # 方式1：通过环境变量
@@ -106,7 +106,7 @@ export DEEPSEEK_API_KEY="your_deepseek_api_key"
 
 #### 后端
 ```bash
-cd paicoding-web
+cd sxh-web
 mvn clean install
 mvn spring-boot:run
 ```
@@ -115,7 +115,7 @@ mvn spring-boot:run
 
 #### 前端
 ```bash
-cd pai-coding-front
+cd sxh-front
 npm install
 npm run dev
 ```
@@ -141,7 +141,7 @@ npm run dev
 ### 后端文件
 
 ```
-paicoding-service/src/main/java/com/github/paicoding/forum/service/chatv2/
+sxh-service/src/main/java/com/github/sxh/forum/service/chatv2/
 ├── config/
 │   └── ChatV2ConfigProperties.java
 ├── factory/
@@ -159,17 +159,17 @@ paicoding-service/src/main/java/com/github/paicoding/forum/service/chatv2/
     ├── ChatMessageService.java
     └── StreamingChatService.java
 
-paicoding-api/src/main/java/com/github/paicoding/forum/api/model/vo/chatv2/
+sxh-api/src/main/java/com/github/sxh/forum/api/model/vo/chatv2/
 ├── ChatSendReqVO.java
 ├── ConversationVO.java
 ├── MessageVO.java
 ├── ModelInfoVO.java
 └── UpdateTitleReqVO.java
 
-paicoding-web/src/main/java/com/github/paicoding/forum/web/controller/chatv2/
+sxh-web/src/main/java/com/github/sxh/forum/web/controller/chatv2/
 └── ChatV2RestController.java
 
-paicoding-web/src/main/resources/
+sxh-web/src/main/resources/
 ├── liquibase/
 │   ├── changelog/000_initial_schema.xml (已更新)
 │   └── data/update_schema_251116_chat_v2.sql
@@ -179,7 +179,7 @@ paicoding-web/src/main/resources/
 ### 前端文件
 
 ```
-pai-coding-front/src/
+sxh-front/src/
 ├── stores/
 │   └── chatStore.ts
 ├── views/

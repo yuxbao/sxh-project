@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="QuickForumApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="dev" />
+    <option name="ALTERNATIVE_JRE_PATH" value="/Users/baoyuxiang/Library/Java/JavaVirtualMachines/ms-21.0.9/Contents/Home" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sxh" />
+    <module name="sxh-web" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.sxh.forum.web.QuickForumApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.github.sxh.forum.web.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

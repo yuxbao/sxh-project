@@ -10,7 +10,7 @@
 ## 一、配套服务
  
 1. **前后端分离网址**：[http://www.xuyifei.site](http://www.xuyifei.site)
-2. **技术派管理端源码**：[paicoding-admin](https://github.com/itwanger/paicoding-admin)
+2. **技术派管理端源码**：[sxh-admin](https://github.com/itwanger/sxh-admin)
 3. **Vue3前端重构的前端源码**：现已合并到管理端项目中，但仍然是前后端分离模式。
 
 ## 二、项目介绍
@@ -27,8 +27,8 @@
 
 #### 后台社区系统
 
-- 项目仓库（GitHub）：[https://github.com/itwanger/paicoding-admin](https://github.com/itwanger/paicoding-admin)
-- 项目仓库（码云）：[https://gitee.com/itwanger/paicoding-admin](https://gitee.com/itwanger/paicoding-admin)
+- 项目仓库（GitHub）：[https://github.com/itwanger/sxh-admin](https://github.com/itwanger/sxh-admin)
+- 项目仓库（码云）：[https://gitee.com/itwanger/sxh-admin](https://gitee.com/itwanger/sxh-admin)
 - 项目演示地址：[https://paicoding.com/admin-view](https://paicoding.com/admin/)
 
 ![](https://cdn.tobebetterjavaer.com/images/20230602/83139e13a4784c0fbf0adedd8e287c5b.png)
@@ -38,16 +38,16 @@
 
 ```
 paicoding
-├── paicoding-front -- Vue3实现的前端模块
-├── paicoding-api -- 定义一些通用的枚举、实体类，定义 DO\DTO\VO 等
-├── paicoding-core -- 核心工具/组件相关模块，如工具包 util， 通用的组件都放在这个模块（以包路径对模块功能进行拆分，如搜索、缓存、推荐等）
-├── paicoding-service -- 服务模块，业务相关的主要逻辑，DB 的操作都在这里
-├── paicoding-web -- Web模块、HTTP入口、项目启动入口，包括权限身份校验、全局异常处理等
+├── sxh-front -- Vue3实现的前端模块
+├── sxh-api -- 定义一些通用的枚举、实体类，定义 DO\DTO\VO 等
+├── sxh-core -- 核心工具/组件相关模块，如工具包 util， 通用的组件都放在这个模块（以包路径对模块功能进行拆分，如搜索、缓存、推荐等）
+├── sxh-service -- 服务模块，业务相关的主要逻辑，DB 的操作都在这里
+├── sxh-web -- Web模块、HTTP入口、项目启动入口，包括权限身份校验、全局异常处理等
 ```
 
 #### 环境配置说明
 
-资源配置都放在 `paicoding-web` 模块的资源路径下，通过maven的env进行环境选择切换
+资源配置都放在 `sxh-web` 模块的资源路径下，通过maven的env进行环境选择切换
 
 当前提供了四种开发环境
 

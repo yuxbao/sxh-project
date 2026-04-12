@@ -13,12 +13,12 @@
 
 | 服务 | 控制台地址 | 用户名 | 密码 |
 |------|-----------|--------|------|
-| MinIO | http://localhost:19001 | admin | PaiSmart2025 |
+| MinIO | http://localhost:19001 | admin | SxhRag2025 |
 | Kafka UI | http://localhost:9002 | - | - |
 | Kibana | http://localhost:5601 | - | - |
-| Elasticsearch | http://localhost:9200 | elastic | PaiSmart2025 |
-| MySQL | localhost:3306 | root | PaiSmart2025 |
-| Redis | localhost:6379 | - | PaiSmart2025 |
+| Elasticsearch | http://localhost:9200 | elastic | SxhRag2025 |
+| MySQL | localhost:3306 | root | SxhRag2025 |
+| Redis | localhost:6379 | - | SxhRag2025 |
 
 ### 启动 Docker 服务
 

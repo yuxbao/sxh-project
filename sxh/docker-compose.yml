@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  paicoding:
+  sxh:
     build: .
-    container_name: paicoding
+    container_name: sxh
     restart: always
     ports:
       - "8082:8082"
     environment:
       - SERVER_PORT=8082
       # 连接宿主机 MySQL
-      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/pai_coding?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/sxh?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Baoyu273511a
       # 连接宿主机 Redis
@@ -25,6 +25,6 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=admin
       - SPRING_RABBITMQ_PASSWORD=admin
-      - SPRING_RABBITMQ_VIRTUAL_HOST=/pai_coding
+      - SPRING_RABBITMQ_VIRTUAL_HOST=/sxh
     extra_hosts:
       - "host.docker.internal:host-gateway"

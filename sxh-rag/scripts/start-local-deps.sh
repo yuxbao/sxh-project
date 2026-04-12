@@ -81,7 +81,7 @@ start_mysql() {
   fi
 
   retry_until "MySQL" 120 mysqladmin ping -h 127.0.0.1 -uroot "-p$MYSQL_PASSWORD" --silent
-  mysql -h 127.0.0.1 -uroot "-p$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS PaiSmart DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+  mysql -h 127.0.0.1 -uroot "-p$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS sxh_rag DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 }
 
 start_redis() {
@@ -200,7 +200,7 @@ start_es() {
 }
 
 start_mysql
-mysql -h 127.0.0.1 -uroot "-p$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS PaiSmart DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -h 127.0.0.1 -uroot "-p$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS sxh_rag DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 start_redis
 start_minio
 start_kafka

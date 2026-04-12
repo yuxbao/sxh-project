@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SRC_DB="${SRC_DB:-PaiSmart}"
-DST_DB="${DST_DB:-pai_coding}"
+SRC_DB="${SRC_DB:-sxh_rag}"
+DST_DB="${DST_DB:-sxh}"
 MYSQL_HOST="${MYSQL_HOST:-127.0.0.1}"
 MYSQL_PORT="${MYSQL_PORT:-3306}"
 MYSQL_USER="${MYSQL_USER:-root}"

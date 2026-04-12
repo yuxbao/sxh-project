@@ -1,4 +1,4 @@
-# 思享汇 (PaiSmart) - 首页
+# 思享汇 (sxh-rag) - 首页
 
 ## 项目简介
 
@@ -76,8 +76,8 @@ homepage/
 1. **克隆项目**
 
    ```bash
-   git clone https://github.com/itwanger/PaiSmart.git
-   cd PaiSmart/homepage
+   git clone https://github.com/itwanger/sxh-rag.git
+   cd sxh-rag/homepage
    ```
 
 2. **安装依赖**
@@ -145,7 +145,7 @@ particlesJS('particles-js', {
 
 ## 联系方式
 
-- **项目主页**：<https://github.com/itwanger/PaiSmart>
+- **项目主页**：<https://github.com/itwanger/sxh-rag>
 - **作者**：沉默王二
 - **微信**：qing_gee
 - **知识星球**：<https://javabetter.cn/zhishixingqiu/>

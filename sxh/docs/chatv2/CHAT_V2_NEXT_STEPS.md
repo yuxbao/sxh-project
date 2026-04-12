@@ -23,7 +23,7 @@
 ### 1. 安装前端依赖
 
 ```bash
-cd pai-coding-front
+cd sxh-front
 npm install marked
 npm install @types/marked --save-dev
 ```
@@ -37,7 +37,7 @@ export DEEPSEEK_API_KEY="sk-xxxxxxxxxxxxxxxxxx"
 ```
 
 **选项 B：直接修改配置文件**
-编辑 `paicoding-web/src/main/resources-env/dev/application-ai.yml`，将 API Key 占位符替换为实际的 Key：
+编辑 `sxh-web/src/main/resources-env/dev/application-ai.yml`，将 API Key 占位符替换为实际的 Key：
 
 ```yaml
 chat-v2:
@@ -65,7 +65,7 @@ chat-v2:
 
 #### 启动后端
 ```bash
-cd /Users/xuyifei/repos/pai_coding
+cd /Users/xuyifei/repos/sxh
 mvn spring-boot:run
 ```
 
@@ -73,7 +73,7 @@ mvn spring-boot:run
 
 #### 启动前端
 ```bash
-cd /Users/xuyifei/repos/pai_coding/pai-coding-front
+cd /Users/xuyifei/repos/sxh/sxh-front
 npm install  # 如果还未安装依赖
 npm run dev
 ```
@@ -103,7 +103,7 @@ npm run dev
 2. 检查 `application.yml` 中的 `spring.liquibase.enabled: true`
 3. 手动执行 SQL 脚本：
 ```bash
-mysql -u your_user -p your_database < paicoding-web/src/main/resources/liquibase/data/update_schema_251116_chat_v2.sql
+mysql -u your_user -p your_database < sxh-web/src/main/resources/liquibase/data/update_schema_251116_chat_v2.sql
 ```
 
 ### 问题 2：API Key 未配置
@@ -119,7 +119,7 @@ mysql -u your_user -p your_database < paicoding-web/src/main/resources/liquibase
 
 **解决：**
 ```bash
-cd pai-coding-front
+cd sxh-front
 npm install marked
 npm install @types/marked --save-dev
 ```
@@ -142,7 +142,7 @@ npm install @types/marked --save-dev
 
 ```bash
 # 1. 安装前端依赖
-cd /Users/xuyifei/repos/pai_coding/pai-coding-front
+cd /Users/xuyifei/repos/sxh/sxh-front
 npm install marked
 npm install @types/marked --save-dev
 
@@ -151,11 +151,11 @@ export QWEN_API_KEY="sk-xxxxxxxxxxxxxxxxxx"
 export DEEPSEEK_API_KEY="sk-xxxxxxxxxxxxxxxxxx"
 
 # 3. 启动后端（在项目根目录）
-cd /Users/xuyifei/repos/pai_coding
+cd /Users/xuyifei/repos/sxh
 mvn spring-boot:run
 
 # 4. 启动前端（新终端窗口）
-cd /Users/xuyifei/repos/pai_coding/pai-coding-front
+cd /Users/xuyifei/repos/sxh/sxh-front
 npm run dev
 ```
 
@@ -192,7 +192,7 @@ public List<Message> get(String conversationId) {
 ```java
 @MapperScan(basePackages = {
     // ... 其他包 ...
-    "com.github.paicoding.forum.service.chatv2.repository.mapper",
+    "com.github.sxh.forum.service.chatv2.repository.mapper",
 })
 ```
 

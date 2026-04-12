@@ -6,7 +6,7 @@ defineOptions({
 
 <template>
   <DarkModeContainer class="h-full flex-center">
-    <a href="https://github.com/itwanger/PaiSmart.git" target="_blank" rel="noopener noreferrer">
+    <a href="https://github.com/itwanger/sxh-rag.git" target="_blank" rel="noopener noreferrer">
       Copyright MIT © 2025 思享汇
     </a>
   </DarkModeContainer>

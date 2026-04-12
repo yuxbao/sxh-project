@@ -1,8 +1,8 @@
-思享汇（PaiSmart）是一个企业级的 AI 知识库管理系统，采用检索增强生成（RAG）技术，提供智能文档处理和检索能力。
+思享汇（sxh-rag）是一个企业级的 AI 知识库管理系统，采用检索增强生成（RAG）技术，提供智能文档处理和检索能力。
 
 ## 数据库迁移
 
-`sxh-rag` 默认使用独立的 `PaiSmart` 数据库，只共享 `sxh` 主库的 `user` 表做登录认证。
+`sxh-rag` 默认使用独立的 `sxh_rag` 数据库，只共享 `sxh` 主库的 `user` 表做登录认证。
 
 推荐在启动后端前先执行一键迁移：
 
@@ -12,16 +12,16 @@
 
 这个命令会自动完成 3 件事：
 
-- 备份当前 `PaiSmart` 数据库到 `logs/db-backups/`
-- 补齐 `sxh-rag` 当前需要的表结构、字段、索引和外键
-- 删除 `PaiSmart` 中不在白名单内的无关表
+- 备份当前 `sxh_rag` 数据库到 `logs/db-backups/`
+- 补齐 `sxh_rag` 当前需要的表结构、字段、索引和外键
+- 删除 `sxh_rag` 中不在白名单内的无关表
 
 可覆盖的环境变量：
 
 ```bash
 RAG_DB_HOST=localhost
 RAG_DB_PORT=3306
-RAG_DB_NAME=PaiSmart
+RAG_DB_NAME=sxh_rag
 RAG_DB_USER=root
 RAG_DB_PASSWORD=Baoyu273511a
 RAG_DB_DROP_UNKNOWN=true
@@ -59,8 +59,8 @@ RAG_DB_DROP_UNKNOWN=true
 后端的整体项目结构：
 
 ```bash
-src/main/java/com/yizhaoqi/smartpai/
-├── SmartPaiApplication.java      # 主应用程序入口
+src/main/java/com/yizhaoqi/sxh/rag/
+├── SxhRagApplication.java      # 主应用程序入口
 ├── client/                       # 外部API客户端
 ├── config/                       # 配置类
 ├── consumer/                     # Kafka消费者

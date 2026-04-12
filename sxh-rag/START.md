@@ -1,4 +1,4 @@
-# PaiSmart 启动说明
+# sxh-rag 启动说明
 
 本文档基于当前仓库配置整理，适合本地开发启动。
 
@@ -14,7 +14,7 @@
 
 - 启动 MySQL、Redis、MinIO、Kafka、Elasticsearch
 - 等待依赖服务就绪
-- 自动创建 `PaiSmart` 数据库
+- 自动创建 `sxh_rag` 数据库
 - 自动创建 MinIO 的 `uploads` bucket
 - 在同一个终端里同时输出后端和前端日志
 
@@ -39,7 +39,7 @@
 
 - 复用已在运行的本机服务
 - 自动启动本机 MySQL、Redis、MinIO、Kafka、Elasticsearch
-- 自动创建 `PaiSmart` 数据库
+- 自动创建 `sxh_rag` 数据库
 - 自动创建 MinIO 的 `uploads` bucket
 - 自动创建 Kafka topics
 - 在同一个终端里同时输出后端和前端日志
@@ -88,10 +88,10 @@ docker-compose -f docs/docker-compose.yaml up -d
 
 ## 2. 创建 MySQL 数据库
 
-`docker-compose` 里只启动了 MySQL，没有自动创建 `PaiSmart` 数据库，所以第一次启动前需要手动创建一次：
+`docker-compose` 里只启动了 MySQL，没有自动创建 `sxh_rag` 数据库，所以第一次启动前需要手动创建一次：
 
 ```bash
-docker exec -it mysql mysql -uroot -pPaiSmart2025 -e "CREATE DATABASE IF NOT EXISTS PaiSmart DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+docker exec -it mysql mysql -uroot -pSxhRag2025 -e "CREATE DATABASE IF NOT EXISTS sxh_rag DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 ```
 
 ## 3. 创建 MinIO Bucket
@@ -103,14 +103,14 @@ docker exec -it mysql mysql -uroot -pPaiSmart2025 -e "CREATE DATABASE IF NOT EXI
 ```text
 http://localhost:19001
 用户名：admin
-密码：PaiSmart2025
+密码：SxhRag2025
 Bucket：uploads
 ```
 
 方式二：如果你本机装了 `mc`，可以直接执行：
 
 ```bash
-mc alias set local http://localhost:19000 admin PaiSmart2025
+mc alias set local http://localhost:19000 admin SxhRag2025
 mc mb local/uploads
 ```
 

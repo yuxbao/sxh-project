@@ -1,0 +1,12 @@
+package com.yizhaoqi.sxh.rag.repository;
+
+import com.yizhaoqi.sxh.rag.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByExternalSourceAndExternalUserId(String externalSource, String externalUserId);
+}

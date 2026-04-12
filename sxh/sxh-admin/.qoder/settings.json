@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "ask": [
+      "Read(!/Users/itwanger/Documents/GitHub/sxh-admin/**)",
+      "Edit(!/Users/itwanger/Documents/GitHub/sxh-admin/**)"
+    ],
+    "allow": [
+      "Read(/Users/itwanger/Documents/GitHub/sxh-admin/**)",
+      "Edit(/Users/itwanger/Documents/GitHub/sxh-admin/**)"
+    ]
+  },
+  "memoryImport": {},
+  "monitoring": {}
+}
