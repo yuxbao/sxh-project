@@ -1,43 +1,12 @@
 一个基于 Spring Boot3、MyBatis-Plus、MySQL、Redis、ElasticSearch、MongoDB、Docker、RabbitMQ 等技术栈实现的社区系统，采用主流的互联网技术架构、全新的UI设计、支持一键源码部署，拥有完整的文章&教程发布/搜索/评论/统计流程等。
 <br><br>
 
-## 写在前面
-
-> 这个版本是将原本技术派经过二次开发，将前端使用vue3重写，并且将后端技术栈升级到Spring Boot3之后的版本，同时对项目进行了一些优化，使得项目更加适合二次开发。
-> 
-> 值得注意的是后端部分接口可能看起来有部分重复，这是因为兼容了直接使用原本Thymleaf中的实现，从而可以对比两种实现
-
-## 一、配套服务
- 
-1. **前后端分离网址**：[http://www.xuyifei.site](http://www.xuyifei.site)
-2. **技术派管理端源码**：[sxh-admin](https://github.com/itwanger/sxh-admin)
-3. **Vue3前端重构的前端源码**：现已合并到管理端项目中，但仍然是前后端分离模式。
-
-## 二、项目介绍
-
-### 项目演示
-
-#### 前台社区系统
-
-- 项目仓库（GitHub）：[https://github.com/XuYi-fei/Coder-s-platform](https://github.com/XuYi-fei/Coder-s-platform)
-- 项目仓库（码云）：[https://gitee.com/XuYi-fei/Coder-s-platform](https://gitee.com/XuYi-fei/Coder-s-platform)
-- 前后端分离版本项目演示地址：[http://www.xuyifei.site](http://www.xuyifei.site)
-
-![](https://cdn.tobebetterjavaer.com/images/20230602/d7d341c557e7470d9fb41245e5bb4209.png)
-
-#### 后台社区系统
-
-- 项目仓库（GitHub）：[https://github.com/itwanger/sxh-admin](https://github.com/itwanger/sxh-admin)
-- 项目仓库（码云）：[https://gitee.com/itwanger/sxh-admin](https://gitee.com/itwanger/sxh-admin)
-- 项目演示地址：[https://paicoding.com/admin-view](https://paicoding.com/admin/)
-
-![](https://cdn.tobebetterjavaer.com/images/20230602/83139e13a4784c0fbf0adedd8e287c5b.png)
-
+## 项目介绍
 
 ### 组织结构
 
 ```
-paicoding
+sxh
 ├── sxh-front -- Vue3实现的前端模块
 ├── sxh-api -- 定义一些通用的枚举、实体类，定义 DO\DTO\VO 等
 ├── sxh-core -- 核心工具/组件相关模块，如工具包 util， 通用的组件都放在这个模块（以包路径对模块功能进行拆分，如搜索、缓存、推荐等）
@@ -77,7 +46,7 @@ mvn clean install -DskipTests=true -Pprod
 
 #### 前端工程结构说明
 
-见[前端Vue版本](https://github.com/XuYi-fei/Coder-s-Corner)
+见 `sxh-front` 模块。
 
 ### 技术选型
 
@@ -114,7 +83,7 @@ mvn clean install -DskipTests=true -Pprod
 |        讯飞星火         | 讯飞星火大模型              | [https://www.xfyun.cn/doc/spark/Web.html](https://www.xfyun.cn/doc/spark/Web.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)                   |
 
 
-## 三、环境搭建
+## 环境搭建
 
 ### 开发工具
 
@@ -160,6 +129,3 @@ mvn clean install -DskipTests=true -Pprod
 
 > [环境搭建 & 基于源码的部署教程](docs/安装环境.md)
 > [服务器启动教程](docs/服务器启动教程.md)
-
-
-

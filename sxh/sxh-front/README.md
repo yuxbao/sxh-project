@@ -1,37 +1,15 @@
 ## 写在前面
 
-本项目是技术派项目的一个重构版本，搭配使用Spring Boot3重构的后端食用
-
-## 配套服务
-
-1. **前后端分离网址**：[https://www.xuyifei.site](http://www.xuyifei.site)
-2. **技术派管理端源码**：[sxh-admin](https://github.com/itwanger/sxh-admin)
+本模块是社区系统的 Vue3 前端工程，配合后端服务一起使用。
 
 ## 项目介绍
-
-### 项目演示
-
-### 前台用Vue3重构后的效果
-
-可以直接浏览本人的[上线网站](https://www.xuyifei.site)（求各位不要进行攻击，友好交流，本人还只是个学森）
 
 部分效果如下：
 
 - 首页
-![](https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/tech-pai-1.png)
-![](https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/tech-pai-2.png)
 - 教程（专栏）页
-![](https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/tech-pai-3.png)
 - 大模型对话
-![](https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/tech-pai-4.png)
 - 更新计划
-![](https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/tech-pai-5.png)
-
-### 代码展示
-
-![](https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/tech-pai-front-code-1.png)
-![](https://xuyifei-oss.oss-cn-beijing.aliyuncs.com/commons/tech-pai-front-code-2.png)
-
 
 ## 项目结构
 
@@ -44,7 +22,7 @@ src
 ├── http -- 包含两部分，一部分是用于网络通信时，对后端响应做的类型定义；另一部分是用于发起请求的axios实例和函数
 ├── plugins -- Web模块、HTTP入口、项目启动入口，包括权限身份校验、全局异常处理等
 ├── router -- vue router的配置
-├── stores -- 目前只是用于存储后端发挥的global信息，详见技术派的后端实现中的GlobalInfoVo
+├── stores -- 目前只是用于存储后端返回的global信息，详见后端全局信息实现中的GlobalInfoVo
 ├── util -- 封装了一些工具函数
 ├── view -- 具体的不同vue页面
 
